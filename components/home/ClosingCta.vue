@@ -21,7 +21,7 @@
 
                 <div class="mt-10 flex flex-wrap items-center justify-center gap-7">
                     <CtaButton label="Apply now" href="https://easyalgos.ai/" variant="white" />
-                    <a href="#how" class="ea-textlink group text-white">
+                    <a href="#join" class="ea-textlink group text-white">
                         <span class="relative">
                             See how to join
                             <span class="absolute -bottom-0.5 left-0 h-px w-0 bg-white/50 transition-all duration-300 ease-smooth group-hover:w-full" />

@@ -1,5 +1,6 @@
 <script setup lang="ts">
-// EasyAlgos home page — thin assembler; each section is self-contained.
+// EasyAlgos home page v2 ("living financial documents") — thin assembler;
+// each section is a self-contained financial artifact turned instrument.
 useHead({ bodyAttrs: { class: 'antialiased' } })
 </script>
 
@@ -9,14 +10,15 @@ useHead({ bodyAttrs: { class: 'antialiased' } })
         <SiteHeader />
         <main>
             <HeroSection />
-            <KeyMetrics />
-            <ProblemSection />
-            <WhatYouGet />
-            <PartnersStrip />
+            <TickerStrip />
+            <ReceiptSection />
+            <ModelSection />
+            <CollectionSection />
             <VerifiedResults />
-            <TestimonialsSection />
-            <PricingSection />
-            <HowToJoin />
+            <ServicesIndex />
+            <StoriesSection />
+            <TermsSection />
+            <JoinTimeline />
             <ClosingCta />
         </main>
         <SiteFooter />

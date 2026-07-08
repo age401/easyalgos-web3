@@ -11,6 +11,9 @@ data-as-decoration).
 - **Design system**: [DESIGN_SYSTEM.md](DESIGN_SYSTEM.md) — tokens, type scale,
   motion and component inventory. Utilities are the IC Precision `icp-*` classes
   promoted to `ea-*` with identical values.
+- **Versions**: the current page is v2 ("living financial documents" — every
+  module is a financial artifact turned instrument). v1, the faithful port of
+  the IC Precision module system, is preserved on the `v1-home` branch.
 
 ## Develop
 

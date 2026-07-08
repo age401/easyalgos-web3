@@ -350,6 +350,97 @@
         50% { opacity: 0.12; transform: scale(1.9); }
     }
 
+    /* ------------------------------------- "Living documents" (v2) -- */
+    /* Ticker tape: the track holds the chip list twice; sliding -50% loops
+       seamlessly. Pauses on hover. */
+    .ea-tape {
+        overflow: hidden;
+    }
+    .ea-tape__track {
+        display: flex;
+        width: max-content;
+        animation: eaTape 48s linear infinite;
+    }
+    .ea-tape:hover .ea-tape__track {
+        animation-play-state: paused;
+    }
+    @keyframes eaTape {
+        to { transform: translateX(-50%); }
+    }
+
+    /* Receipt strike-through: draws left -> right once the owning .reveal
+       element becomes visible. */
+    .ea-strike {
+        position: relative;
+        white-space: nowrap;
+    }
+    .ea-strike::after {
+        content: '';
+        position: absolute;
+        left: -3px;
+        right: -3px;
+        top: 52%;
+        height: 2px;
+        background: rgba(47, 42, 74, 0.62);
+        transform: scaleX(0);
+        transform-origin: left;
+        transition: transform 0.7s theme('transitionTimingFunction.smooth');
+        transition-delay: calc(var(--reveal-delay, 0ms) + 450ms);
+    }
+    .is-visible .ea-strike::after {
+        transform: scaleX(1);
+    }
+
+    /* Value-flow connectors: dashes drift along the path (dasharray 4+8=12,
+       offset -12 per cycle -> seamless). */
+    .ea-flow-dash {
+        stroke-dasharray: 4 8;
+        animation: eaFlowDash 1.4s linear infinite;
+    }
+    @keyframes eaFlowDash {
+        to { stroke-dashoffset: -12; }
+    }
+
+    /* Monthly-returns heatmap: cells pop in, staggered via --hm-delay, once the
+       dark band activates the container. */
+    .ea-heatmap .hm-cell {
+        opacity: 0;
+        transform: scale(0.5);
+        border-radius: 3px;
+        transition: opacity 0.5s ease, transform 0.5s theme('transitionTimingFunction.smooth');
+        transition-delay: var(--hm-delay, 0ms);
+    }
+    .ea-heatmap.is-active .hm-cell {
+        opacity: 1;
+        transform: none;
+    }
+
+    /* Hero settlement ledger: rows slide in at the top, the rest shuffle down. */
+    .ledger-move {
+        transition: transform 0.5s theme('transitionTimingFunction.smooth');
+    }
+    .ledger-enter-active {
+        transition: opacity 0.45s ease, transform 0.45s theme('transitionTimingFunction.smooth');
+    }
+    .ledger-enter-from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    .ledger-leave-active {
+        position: absolute;
+        opacity: 0;
+    }
+
+    /* Rotating pull-quote progress segment. */
+    .ea-progress-fill {
+        transform-origin: left;
+        animation: eaProgressFill var(--quote-dur, 6s) linear forwards;
+    }
+    @keyframes eaProgressFill {
+        from { transform: scaleX(0); }
+        to { transform: scaleX(1); }
+    }
+
     /* ------------------------------------------ Vue <Transition> -- */
     .fade-enter-active,
     .fade-leave-active {

@@ -235,6 +235,34 @@ disclaimer band (12px Roboto, `Tinted/400`).
 
 ---
 
+## 6b. Module library v2 — "living financial documents"
+
+The shipped home page (v2) keeps every §1–§5 foundation and the §6 primitives
+(eyebrow, CTA, pill, framed panel, hairlines, dark band) but composes them into
+a new module family: **each section is a familiar financial artifact rendered
+as a working instrument.** The v1 modules (bento grid, metrics strip, edge
+chart, plan cards, divided steps) remain valid system components — recover them
+from the `v1-home` git branch.
+
+| Module | Artifact | Mechanics |
+|---|---|---|
+| **Settlement ledger** (`HeroSection`) | Clearing feed | Framed panel with column-headed trade rows; new rows tick in every ~2.6s via `TransitionGroup` (`ledger-*` classes). SSR renders a fixed slice; mutation starts post-mount. Footer: 0% commission + gradient session P/L. |
+| **Performance tape** (`TickerStrip`) | Stock ticker | `.ea-tape` — list rendered twice, track slides −50% on a 48s loop, pauses on hover. Chips: live dot + EA name + MTD figure. |
+| **Invoice** (`ReceiptSection`) | Itemized receipt | Dashed rules, dotted leaders, line items whose prices strike through on reveal (`.ea-strike`, +450ms after the row's `--reveal-delay`), gradient `$0.00` total, rotated gradient-framed stamp, CSS barcode. Rotation must live *inside* the `v-reveal` wrapper (`.reveal` owns `transform`). |
+| **Value-flow diagram** (`ModelSection`) | Structure chart | Three node cards joined by `.ea-flow-dash` connectors (drifting SVG dashes, horizontal → vertical below `tablet-md`); "our only revenue" chip on the middle node; border-left alignment callout. |
+| **Fund factsheets** (`CollectionSection`) | Fund one-pager | Card: name + collection/style micro-label, AlgoScore (gradient figure `/10`), seeded-LCG equity sparkline (pre-rendered to `v-html`), tenure + verified footer. Hover: −4px lift + `shadow-card-m`. |
+| **Audit heatmap** (`MonthlyHeatmap` in the dark band) | Contribution grid | One cell per month since 2017, green intensity by return, ~10% reds kept deliberately ("a track record with no losses isn't a track record"). `.ea-heatmap` cells pop in staggered (`--hm-delay` ≈ 9ms/cell) when the band activates; summary stats computed from the same seeded series. |
+| **Schedule of services** (`ServicesIndex`) | Contract schedule | Sticky section header left; indexed hairline rows right (number / title / clause / icon bubble), row hover tints `Tinted/25`. |
+| **Rotating pull-quote** (`StoriesSection`) | Editorial spread | One quote at a time (Poppins Medium 24–34px), 6.5s auto-advance, `01/05` counter, clickable progress rail with gradient `.ea-progress-fill`. |
+| **Term sheet** (`TermsSection`) | Deal terms table | Single comparison table: plan headers carry the required balance; Pro column tinted with a gradient top bar; `$0` cost row in gradient; CTA row closes the document. Horizontal-scrolls below ~800px. |
+| **Timeline** (`JoinTimeline`) | Project plan | Three stations on a hairline rail (vertical rail on mobile), step 1 accented `Blue/600`; single CTA + "no card, ever" reassurance line. |
+
+Seeded-data rule: any generated series (sparklines, heatmap) uses a
+module-scope LCG with a fixed seed — never `Math.random()` — so SSR and client
+render identically and displayed stats can be derived from the same array.
+
+---
+
 ## 7. Iconography & imagery
 
 - **Feature icons**: 32×32 line icons, stroke 1.6 round-capped, primary `#51567A`,

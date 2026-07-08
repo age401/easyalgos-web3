@@ -1,10 +1,10 @@
 <script setup lang="ts">
 // Topbar: EasyAlgos wordmark, centered anchor nav, Log in + Apply CTA + language.
 const links = [
-    { label: 'Why EasyAlgos', href: '#problem' },
-    { label: 'What you get', href: '#features' },
+    { label: 'The model', href: '#model' },
+    { label: 'Collection', href: '#collection' },
     { label: 'Results', href: '#results' },
-    { label: 'Pricing', href: '#pricing' },
+    { label: 'Terms', href: '#terms' },
 ]
 </script>
 
