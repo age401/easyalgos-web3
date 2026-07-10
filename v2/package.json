@@ -1,0 +1,20 @@
+{
+    "name": "easyalgos-home-v2",
+    "private": true,
+    "type": "module",
+    "description": "EasyAlgos home page (v2 — \"The Ledger\") — institutional redesign of easyalgos.ai",
+    "scripts": {
+        "dev": "nuxt dev",
+        "build": "nuxt build",
+        "generate": "nuxt generate",
+        "preview": "nuxt preview",
+        "postinstall": "nuxt prepare"
+    },
+    "devDependencies": {
+        "@nuxtjs/tailwindcss": "^6.12.2",
+        "nuxt": "^3.14.0",
+        "tailwindcss": "^3.4.15",
+        "vue": "^3.5.13",
+        "vue-router": "^4.4.5"
+    }
+}
