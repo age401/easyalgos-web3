@@ -1,8 +1,8 @@
 {
-  "name": "easyalgos-web3",
+  "name": "easyalgos-home-v1",
   "private": true,
   "type": "module",
-  "description": "EasyAlgos — home page redesign (corporate-financial aesthetic, extends the IC Precision design system)",
+  "description": "EasyAlgos home page (v1 — \"living financial documents\") — corporate-financial redesign extending the IC Precision design system",
   "scripts": {
     "dev": "nuxt dev",
     "build": "nuxt build",
