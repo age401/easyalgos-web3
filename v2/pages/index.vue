@@ -9,6 +9,8 @@ useHead({ bodyAttrs: { class: 'antialiased' } })
         <SiteHeader />
         <main>
             <HeroSection />
+            <ProblemSphereSection />
+            <SolutionsStackSection />
             <ProofStrip />
             <ModelSection />
             <TrackRecordSection />
