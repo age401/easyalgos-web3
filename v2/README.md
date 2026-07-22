@@ -39,8 +39,9 @@ existing brand library (Poppins / Roboto, EasyAlgos tokens).
   record and old-ecosystem sections hold the viewport; the header inverts with it
 - `useRevealOnce` — one-shot entrance that never replays on scroll-back
   (the solutions cards)
-- A hand-rolled three.js scene for the fractured sphere — dynamically imported
-  client-side, paused off-screen, see [SPHERE.md](SPHERE.md)
+- A hand-rolled three.js scene for the Stellar core particle cluster —
+  dynamically imported client-side, paused off-screen, see
+  [STELLAR_CORE.md](STELLAR_CORE.md)
 - SVG equity-curve draw-in gated on the dark band (`pathLength` normalised)
 - Hero statement sparkline draws once after full page load
   (`usePlayOnceAfterLoad`)
@@ -54,7 +55,7 @@ existing brand library (Poppins / Roboto, EasyAlgos tokens).
 | Section | Content |
 | --- | --- |
 | `HeroSection` | Statement headline + member-statement document visual |
-| `ProblemSphereSection` | The old ecosystem — dark band + WebGL fractured sphere ([SPHERE.md](SPHERE.md)) |
+| `OldEcosystemSection` | The old ecosystem — dark band + the Stellar core WebGL cluster ([STELLAR_CORE.md](STELLAR_CORE.md)) |
 | `SolutionsStackSection` | The whole system — five pillar cards that slide in from the sides |
 | `ProofStrip` | Four figures, annual-report style |
 | `ModelSection` | 01 / The model — why access is free (aligned incentives) |

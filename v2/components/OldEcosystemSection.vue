@@ -1,14 +1,12 @@
 <script setup lang="ts">
 // The old ecosystem: background flips white -> ink on scroll-in (reuses
 // useDarkBand, the same triggered, non-scrubbed transition as the "Track
-// record" section below), wrapped around the fractured-sphere WebGL stage.
+// record" section below), wrapped around the Stellar core WebGL stage.
 //
-// Which fracture treatment renders is a single constant — swap it for any id
-// in utils/sphereVariants, or compare them all at /sphere-lab.
+// The stage renders on a transparent clear, so it sits on the band's own ink
+// rather than carrying a backdrop of its own.
 const sectionRef = ref<HTMLElement | null>(null)
 const { dark } = useDarkBand(sectionRef)
-
-const variant = getVariant(DEFAULT_VARIANT_ID)
 </script>
 
 <template>
@@ -35,7 +33,7 @@ const variant = getVariant(DEFAULT_VARIANT_ID)
             </div>
 
             <div class="mt-20 tablet-md:mt-24">
-                <ProblemSphere :variant="variant" />
+                <StellarCore />
             </div>
         </div>
     </section>

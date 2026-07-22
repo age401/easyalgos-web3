@@ -8,8 +8,7 @@
         "build": "nuxt build",
         "generate": "nuxt generate",
         "preview": "nuxt preview",
-        "postinstall": "nuxt prepare",
-        "gen:sphere": "node scripts/gen-sphere-multi.mjs"
+        "postinstall": "nuxt prepare"
     },
     "devDependencies": {
         "@nuxtjs/tailwindcss": "^6.12.2",
