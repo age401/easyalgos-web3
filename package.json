@@ -1,8 +1,8 @@
 {
-    "name": "easyalgos-home-v2",
+    "name": "easyalgos-home",
     "private": true,
     "type": "module",
-    "description": "EasyAlgos home page (v2 — \"The Ledger\") — institutional redesign of easyalgos.ai",
+    "description": "EasyAlgos home page (\"The Ledger\") — institutional redesign of easyalgos.ai",
     "scripts": {
         "dev": "nuxt dev",
         "build": "nuxt build",
