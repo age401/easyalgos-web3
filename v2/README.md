@@ -36,7 +36,11 @@ existing brand library (Poppins / Roboto, EasyAlgos tokens).
 - `v-reveal` directive — IntersectionObserver fade/rise with stagger delays
 - Line-mask hero headline reveal on load (`.is-loaded`)
 - `useDarkBand` — whole-page background shift (white → ink) while the track
-  record section holds the viewport; the fixed header inverts with it
+  record and old-ecosystem sections hold the viewport; the header inverts with it
+- `useRevealOnce` — one-shot entrance that never replays on scroll-back
+  (the solutions cards)
+- A hand-rolled three.js scene for the fractured sphere — dynamically imported
+  client-side, paused off-screen, see [SPHERE.md](SPHERE.md)
 - SVG equity-curve draw-in gated on the dark band (`pathLength` normalised)
 - Hero statement sparkline draws once after full page load
   (`usePlayOnceAfterLoad`)
@@ -50,6 +54,8 @@ existing brand library (Poppins / Roboto, EasyAlgos tokens).
 | Section | Content |
 | --- | --- |
 | `HeroSection` | Statement headline + member-statement document visual |
+| `ProblemSphereSection` | The old ecosystem — dark band + WebGL fractured sphere ([SPHERE.md](SPHERE.md)) |
+| `SolutionsStackSection` | The whole system — five pillar cards that slide in from the sides |
 | `ProofStrip` | Four figures, annual-report style |
 | `ModelSection` | 01 / The model — why access is free (aligned incentives) |
 | `TrackRecordSection` | 02 / The record — dark band + verified equity chart |
