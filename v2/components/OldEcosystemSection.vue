@@ -13,7 +13,7 @@ const { dark } = useDarkBand(sectionRef)
     <section
         id="ecosystem"
         ref="sectionRef"
-        :class="['relative transition-colors duration-[1300ms] ease-smooth', dark ? 'bg-Ink/950' : 'bg-white']"
+        :class="['relative transition-colors duration-[1300ms] ease-smooth', dark ? 'bg-[#171717]' : 'bg-white']"
     >
         <div
             class="eal-container py-24 transition-opacity duration-700 ease-smooth tablet-md:py-32"
