@@ -387,6 +387,24 @@
         to { opacity: 1; }
     }
 
+    /* ------------------------------------- Solutions stack entrance -- */
+    /* One-shot slide-in (useRevealOnce): each card travels in from
+       --stack-x/--stack-y and settles into the row once `.is-visible` lands.
+       transform/opacity only. */
+    .stack-card {
+        transition: transform 900ms theme('transitionTimingFunction.smooth'),
+                    opacity 900ms theme('transitionTimingFunction.smooth');
+        transition-delay: var(--stack-delay, 0ms);
+    }
+    .js .stack-card {
+        opacity: 0;
+        transform: translate3d(var(--stack-x, 0px), var(--stack-y, 0px), 0);
+    }
+    .stack-card.is-visible {
+        opacity: 1;
+        transform: none;
+    }
+
     /* ------------------------------------------ Vue <Transition> -- */
     .fade-enter-active,
     .fade-leave-active {
@@ -422,7 +440,8 @@
     }
     .reveal,
     .reveal-fade,
-    .hero-fade {
+    .hero-fade,
+    .stack-card {
         opacity: 1 !important;
         transform: none !important;
     }
