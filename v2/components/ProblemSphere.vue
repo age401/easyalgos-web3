@@ -89,6 +89,17 @@ function buildSphere() {
 
     const { body: bodyMat, edge: edgeMat } = makeMaterials()
 
+    // Opaque core, so plates can stay thin without exposing the shell interior
+    // through the steps between them. One cheap draw instead of deep prisms.
+    if (variant.core) {
+        const coreMat = new THREE.MeshStandardMaterial({
+            color: 0x0c2a2b,
+            roughness: 0.95,
+            metalness: 0,
+        })
+        group.add(new THREE.Mesh(new THREE.SphereGeometry(variant.core, 48, 32), coreMat))
+    }
+
     if (animatesShards) {
         // Each shard is its own object so it can tumble about its own anchor.
         shardMeshes = shardData.map((shard) => {
@@ -126,7 +137,7 @@ function buildSphere() {
         const mergedEdges: number[] = []
         for (const shard of shardData) {
             const [ax, ay, az] = shard.anchor
-            const o = shard.explode
+            const o = shard.radialOffset
             for (let i = 0; i < shard.positions.length; i += 3) {
                 merged.push(shard.positions[i] + ax * o, shard.positions[i + 1] + ay * o, shard.positions[i + 2] + az * o)
             }
@@ -158,14 +169,16 @@ function buildScene() {
     camera.position.set(0, 0, 6) // real distance is set per-size in sizeStage()
     camera.lookAt(0, 0, 0)
 
-    // Modest ambient keeps shadowed facets legible on black; a bright teal key
-    // from the upper-left gives each facet its own value so the fracture reads
-    // as faceted volume; a dim cool fill recovers the terminator.
-    scene.add(new THREE.AmbientLight(0x3a635f, 0.8))
-    const key = new THREE.DirectionalLight(0x9defe0, 2.3)
-    key.position.set(-3, 3.5, 4)
+    // Ambient keeps shadowed faces legible on black; a teal key from the upper
+    // left gives each face its own value so the fracture reads as volume; a dim
+    // cool fill recovers the terminator. Variants that carry no edge strokes
+    // lean harder on this contrast, so the mix is per-variant.
+    const light = props.variant.light ?? DEFAULT_LIGHT
+    scene.add(new THREE.AmbientLight(0x3a635f, light.ambient))
+    const key = new THREE.DirectionalLight(0x9defe0, light.key)
+    key.position.set(...light.keyPos)
     scene.add(key)
-    const fill = new THREE.DirectionalLight(0x2f6a86, 0.65)
+    const fill = new THREE.DirectionalLight(0x2f6a86, light.fill)
     fill.position.set(3, -2, 2)
     scene.add(fill)
 
@@ -255,7 +268,7 @@ function drawFrame(elapsed: number, forceLabelsVisible = false) {
                 Math.cos(t * 0.83 + phase) * variant.drift,
                 Math.sin(t * 1.17 + phase) * variant.drift * 0.6
             )
-            const breathe = 1 + shard.explode + Math.sin(t * 0.9 + phase) * 0.02
+            const breathe = 1 + shard.radialOffset + Math.sin(t * 0.9 + phase) * 0.02
             holder.position.set(
                 shard.anchor[0] * breathe,
                 shard.anchor[1] * breathe,
@@ -275,9 +288,9 @@ function drawFrame(elapsed: number, forceLabelsVisible = false) {
         const shard = labelShards[i]
         if (!el || !shard) return
 
-        // Anchor sits on the shard's surface, including any explode offset, so
+        // Anchor sits on the shard's surface, including any radial offset, so
         // the leader line still touches the shard it belongs to.
-        const r = 1 + shard.explode
+        const r = 1 + shard.radialOffset
         const world = _v.tmp!.set(shard.anchor[0] * r, shard.anchor[1] * r, shard.anchor[2] * r)
             .applyQuaternion(group!.quaternion)
         const depth = world.z // > 0 == facing the camera (camera sits on +z)

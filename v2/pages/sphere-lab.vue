@@ -53,8 +53,12 @@ useHead({
                     <div class="flex gap-1.5"><dt>inset</dt><dd class="text-white/80">{{ variant.inset }}</dd></div>
                     <div class="flex gap-1.5"><dt>thickness</dt><dd class="text-white/80">{{ variant.thickness }}</dd></div>
                     <div class="flex gap-1.5"><dt>explode</dt><dd class="text-white/80">{{ variant.explode }}</dd></div>
+                    <div class="flex gap-1.5"><dt>spread</dt><dd class="text-white/80">{{ variant.radialSpread ?? 0 }}</dd></div>
                     <div class="flex gap-1.5"><dt>drift</dt><dd class="text-white/80">{{ variant.drift }}</dd></div>
                     <div class="flex gap-1.5"><dt>noise</dt><dd class="text-white/80">{{ variant.noise ? `${variant.noise.amp} @ ${variant.noise.freq}` : 'none' }}</dd></div>
+                    <div class="flex gap-1.5"><dt>jagged</dt><dd class="text-white/80">{{ variant.jagged ? `${variant.jagged.segments}seg @ ${variant.jagged.amp}` : 'none' }}</dd></div>
+                    <div class="flex gap-1.5"><dt>flat</dt><dd class="text-white/80">{{ variant.flatten ? 'yes' : 'no' }}</dd></div>
+                    <div class="flex gap-1.5"><dt>edges</dt><dd class="text-white/80">{{ variant.edges ? 'yes' : 'no' }}</dd></div>
                     <div class="flex gap-1.5"><dt>subdiv</dt><dd class="text-white/80">{{ variant.subdiv }}</dd></div>
                 </dl>
             </div>
