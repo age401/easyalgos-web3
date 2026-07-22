@@ -11,7 +11,9 @@
 // shards merged into a single mesh + single LineSegments — 2 draw calls no
 // matter how many shards. Only drift variants pay for per-shard objects.
 import type * as THREE_NS from 'three'
-import type { SphereVariant, ShardGeometry, ParticleLayer } from '~/utils/sphereVariants'
+import type {
+    SphereVariant, ShardGeometry, ParticleLayer, FollowConfig, OrbitConfig,
+} from '~/utils/sphereVariants'
 
 const props = withDefaults(defineProps<{ variant?: SphereVariant }>(), {
     variant: () => getVariant(DEFAULT_VARIANT_ID),
@@ -93,8 +95,20 @@ let shardData: ShardGeometry[] = []
 let labelShards: ShardGeometry[] = []
 let animatesShards = false
 
-// Particle-orb strata that rotate relative to the sphere's own spin.
-let particleSpinGroups: { holder: THREE_NS.Group; spin: number }[] = []
+// Particle-orb strata. Each turns about its own axis relative to the sphere's
+// spin, and may additionally chase the invisible orbiting target.
+interface Stratum {
+    holder: THREE_NS.Group
+    axis: THREE_NS.Vector3
+    spin: number
+    follow: FollowConfig | null
+    /** Orthonormal basis of the orbit plane, for evaluating the tug direction
+     *  without building a quaternion every frame. Only set when it follows. */
+    tugU: THREE_NS.Vector3 | null
+    tugV: THREE_NS.Vector3 | null
+}
+let strata: Stratum[] = []
+let orbit: OrbitConfig | null = null
 // Every grain material, so the per-frame loop phase and the per-resize point
 // scale can be pushed to all of them at once.
 let particleMaterials: THREE_NS.ShaderMaterial[] = []
@@ -115,6 +129,42 @@ let disposed = false
 function smoothstep(edge0: number, edge1: number, x: number) {
     const t = Math.min(1, Math.max(0, (x - edge0) / (edge1 - edge0)))
     return t * t * (3 - 2 * t)
+}
+
+/** A first-order lag's steady-state response to one sinusoidal component of the
+ *  target's surge: same frequency, amplitude cut by 1/sqrt(1 + (wT)^2) and phase
+ *  pulled back by atan(wT).
+ *
+ *  Solved in closed form rather than integrated. A simulated follower would
+ *  still be settling when the loop wraps, and every periodic term here has to
+ *  land back where it started or the 16s seam shows. It also means the harmonic
+ *  is attenuated and delayed more than the fundamental for free — which is why
+ *  one `lag` number per stratum is enough to give each its own velocity curve
+ *  instead of the same curve at two amplitudes. */
+function laggedSurge(amp: number, cycles: number, lag: number, loop: number) {
+    const w = Math.PI * 2 * cycles
+    return (amp / Math.hypot(1, w * lag)) * Math.sin(w * loop - Math.atan(w * lag))
+}
+
+/** How far ahead of a constant rate a stratum currently believes the target is.
+ *  Fundamental plus skewed harmonic, both through the same lag. */
+function followSurge(cfg: OrbitConfig, follow: FollowConfig, loop: number) {
+    const amp = cfg.surge * follow.gain
+    return (
+        laggedSurge(amp, cfg.cycles, follow.lag, loop) +
+        laggedSurge(amp * cfg.skew, cfg.cycles * 2, follow.lag, loop)
+    )
+}
+
+/** Two unit vectors spanning the plane normal to `n`. The seed is picked to be
+ *  the axis `n` leans on least, so the cross product stays well conditioned. */
+function planeBasis(n: THREE_NS.Vector3) {
+    const seed = Math.abs(n.x) < 0.9
+        ? new THREE!.Vector3(1, 0, 0)
+        : new THREE!.Vector3(0, 1, 0)
+    const u = new THREE!.Vector3().crossVectors(seed, n).normalize()
+    const v = new THREE!.Vector3().crossVectors(n, u).normalize()
+    return { u, v }
 }
 
 function makeMaterials() {
@@ -188,6 +238,10 @@ function buildParticleSphere(cells: (typeof SPHERE_CELL_SETS)[number], labelIdx:
         positions: [], edges: [], anchor: cells[i].s, radialOffset: 0.06, driftPhase: 0,
     }))
 
+    orbit = particles.orbit ?? null
+    const orbitAxis = orbit ? new THREE!.Vector3(...orbit.axis).normalize() : null
+    const orbitPlane = orbitAxis ? planeBasis(orbitAxis) : null
+
     orb.layers.forEach((layerGeometry, layerIndex) => {
         const layer = particles.layers[layerIndex]
         const geometry = new THREE!.BufferGeometry()
@@ -200,7 +254,21 @@ function buildParticleSphere(cells: (typeof SPHERE_CELL_SETS)[number], labelIdx:
         const holder = new THREE!.Group()
         holder.add(new THREE!.Points(geometry, makeParticleMaterial(layer, particles.depthFade ?? 0)))
         group!.add(holder)
-        if (layer.spin) particleSpinGroups.push({ holder, spin: layer.spin })
+
+        // A follower turns about the orbit axis, so its surge carries it around
+        // the target's own plane rather than just modulating the sphere's spin.
+        const follow = layer.follow ?? null
+        let stratumAxis = axis!
+        if (layer.axis) stratumAxis = new THREE!.Vector3(...layer.axis).normalize()
+        else if (follow && orbitAxis) stratumAxis = orbitAxis
+        strata.push({
+            holder,
+            axis: stratumAxis,
+            spin: layer.spin,
+            follow,
+            tugU: follow?.tug && orbitPlane ? orbitPlane.u : null,
+            tugV: follow?.tug && orbitPlane ? orbitPlane.v : null,
+        })
     })
 
     if (orb.links.length) {
@@ -216,8 +284,9 @@ function buildParticleSphere(cells: (typeof SPHERE_CELL_SETS)[number], labelIdx:
         group!.add(new THREE!.LineSegments(linkGeometry, linkMaterial))
     }
 
-    // The core halo rides inside the group, so the sphere's own rotation is
-    // what walks it through the volume — no separate animation for it.
+    // The halo is parented to the stratum it belongs to, so it inherits that
+    // stratum's chase — otherwise the grains sprint away from their own glow.
+    // Falling back to the group keeps it riding the sphere's plain rotation.
     if (particles.glow) {
         coreGlowTexture = makeGlowTexture()
         coreGlowOpacity = particles.glow.opacity
@@ -232,7 +301,8 @@ function buildParticleSphere(cells: (typeof SPHERE_CELL_SETS)[number], labelIdx:
         )
         coreGlow.position.set(...particles.glow.center)
         coreGlow.scale.setScalar(particles.glow.size)
-        group!.add(coreGlow)
+        const host = particles.glow.layer !== undefined ? strata[particles.glow.layer]?.holder : null
+        ;(host ?? group!).add(coreGlow)
     }
 }
 
@@ -376,7 +446,8 @@ function disposeSceneObjects() {
     scene = null
     group = null
     shardMeshes = []
-    particleSpinGroups = []
+    strata = []
+    orbit = null
     particleMaterials = []
 }
 
@@ -429,7 +500,11 @@ function onResize() {
     })
 }
 
-const _v = { tmp: null as THREE_NS.Vector3 | null, glow: null as THREE_NS.Vector3 | null }
+const _v = {
+    tmp: null as THREE_NS.Vector3 | null,
+    glow: null as THREE_NS.Vector3 | null,
+    tug: null as THREE_NS.Vector3 | null,
+}
 function drawFrame(elapsed: number, forceLabelsVisible = false) {
     if (!THREE || !renderer || !scene || !camera || !group || !axis) return
     const variant = props.variant
@@ -446,18 +521,36 @@ function drawFrame(elapsed: number, forceLabelsVisible = false) {
         : elapsed * ANGULAR_SPEED
     group.setRotationFromAxisAngle(axis, angle)
 
-    // Layered parallax for particle orbs: each stratum adds its own rotation
-    // about the same axis, on top of the group's spin.
-    for (const stratum of particleSpinGroups) {
-        stratum.holder.setRotationFromAxisAngle(axis, angle * stratum.spin)
+    // Layered parallax for particle orbs: each stratum adds its own steady
+    // rotation on top of the group's spin, and a following stratum adds the
+    // lagged surge of the invisible target plus a sway toward where it thinks
+    // that target currently is. The two together are what read as chasing
+    // something rather than as strata geared to each other.
+    for (const stratum of strata) {
+        const surge = orbit && stratum.follow ? followSurge(orbit, stratum.follow, loop) : 0
+        stratum.holder.setRotationFromAxisAngle(stratum.axis, angle * stratum.spin + surge)
+
+        if (orbit && stratum.follow?.tug && stratum.tugU && stratum.tugV) {
+            if (!_v.tug) _v.tug = new THREE.Vector3()
+            // The tug angle carries the same surge as the rotation, so a
+            // stratum's sway and its spin-up stay in step with each other.
+            const theta = Math.PI * 2 * orbit.rate * loop + surge
+            stratum.holder.position
+                .copy(_v.tug.copy(stratum.tugU).multiplyScalar(Math.cos(theta))
+                    .addScaledVector(stratum.tugV, Math.sin(theta)))
+                .multiplyScalar(stratum.follow.tug)
+        }
     }
     for (const material of particleMaterials) material.uniforms.uLoop.value = loop
 
     // The halo can't dim itself the way the grains do in the vertex shader, so
-    // its depth term is applied here — same curve, same signed world z.
+    // its depth term is applied here — same curve, same signed world z. It is
+    // parented to a stratum that moves independently of the group, so its world
+    // position has to come from the graph rather than from the group's rotation.
     if (coreGlow && particles?.glow) {
         if (!_v.glow) _v.glow = new THREE.Vector3()
-        const world = _v.glow.set(...particles.glow.center).applyQuaternion(group.quaternion)
+        group.updateMatrixWorld(true)
+        const world = coreGlow.getWorldPosition(_v.glow)
         const front = smoothstep(-1.25, 1.25, world.z)
         const depth = 1 - (particles.depthFade ?? 0) * (1 - front)
         const breathe = 1 + 0.12 * Math.sin(loop * Math.PI * 2)

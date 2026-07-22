@@ -130,10 +130,56 @@ export interface TwinkleConfig {
     cycles: number
 }
 
+/** The invisible object the inner strata chase. It runs around its orbit plane
+ *  at a rate that swells and ebbs rather than holding constant; that surge —
+ *  not the target itself, which is never drawn — is what the followers respond
+ *  to, and it is the whole reason the inner clouds don't read as gears. */
+export interface OrbitConfig {
+    /** Normal of the orbit plane. Followers turn about this axis instead of the
+     *  sphere's own, so a surge cuts *across* the global rotation rather than
+     *  just speeding it up and slowing it down. */
+    axis: Vec3
+    /** Peak angular lead over a constant rate, in radians. */
+    surge: number
+    /** Sprints per loop. Whole numbers only, or the motion jumps at the wrap. */
+    cycles: number
+    /** Second-harmonic content, as a fraction of `surge`. A pure sine swells and
+     *  ebbs symmetrically; the harmonic skews it into a quicker dart and a
+     *  longer glide — the hummingbird shape, without the abrupt stop. */
+    skew: number
+    /** Orbits per loop, which is what walks the positional tug around the
+     *  plane. Whole numbers only. */
+    rate: number
+}
+
+/** How one stratum responds to the orbiting target. */
+export interface FollowConfig {
+    /** Share of the target's surge this stratum takes on. */
+    gain: number
+    /** Response lag, in loops, as a first-order lag. It delays the surge and
+     *  softens it — and it cuts the harmonic much harder than the fundamental,
+     *  so two strata differing only here end up on visibly different velocity
+     *  curves rather than the same curve at two amplitudes. */
+    lag: number
+    /** Sideways sway toward where this stratum believes the target is, in
+     *  sphere radii. Rotation alone reads as spin; the sway is what sells a
+     *  pull toward something. */
+    tug: number
+}
+
+/** Strays seeded past a stratum's container sphere, so its boundary reads as a
+ *  tendency rather than a wall. */
+export interface OutlierConfig {
+    count: number
+    /** Furthest stray, as a multiple of `rMax`. */
+    reach: number
+}
+
 /** One stratum of a particle orb — a band of points between two radii. */
 export interface ParticleLayer {
     count: number
-    /** Radial band, in sphere radii. rMin 0 fills a volume; rMin ~ rMax is a shell. */
+    /** Radial band, in sphere radii. rMin 0 fills a volume; rMin ~ rMax is a shell.
+     *  Together with `center` this is the stratum's invisible container sphere. */
     rMin: number
     rMax: number
     /** Point diameter in world units (the sphere has radius 1). */
@@ -156,6 +202,20 @@ export interface ParticleLayer {
     falloff?: number
     /** Per-point size variance, 0 (uniform) to 1 (full range). */
     sizeJitter?: number
+    /** How strongly grain size tracks distance across the stratum's own band:
+     *  `0.6` makes rim grains 1.6x and inner grains 0.4x. Negative inverts it.
+     *  Independent of `count`, so a stratum can be dense-but-fine in the middle
+     *  and sparse-but-coarse at its boundary. */
+    edgeSize?: number
+    /** The same gradient applied to brightness. Positive lights the boundary;
+     *  negative lets an outer stratum dissolve instead of ending on a rim. */
+    edgeBright?: number
+    outliers?: OutlierConfig | null
+    /** Rotation axis for this stratum's own spin. Defaults to the orbit axis
+     *  when it follows, and to the sphere's spin axis otherwise. */
+    axis?: Vec3
+    /** Chase the config's orbiting target on top of the steady `spin`. */
+    follow?: FollowConfig | null
     twinkle?: TwinkleConfig | null
 }
 
@@ -182,8 +242,12 @@ export interface ParticleConfig {
     depthFade?: number
     /** Soft additive halo at `center`, drawn as a camera-facing sprite. Points
      *  can't make a smooth bloom — a large one would exceed the `gl_PointSize`
-     *  ceiling most GPUs enforce — so the core glow is its own object. */
-    glow?: { center: Vec3; size: number; opacity: number } | null
+     *  ceiling most GPUs enforce — so the core glow is its own object.
+     *  `layer` parents it to that stratum, so the halo travels with the grains
+     *  it belongs to instead of sitting still while they chase the target. */
+    glow?: { center: Vec3; size: number; opacity: number; layer?: number } | null
+    /** The invisible orbiting target that `follow` strata chase. */
+    orbit?: OrbitConfig | null
 }
 
 export const DEFAULT_LIGHT: LightConfig = {
@@ -245,9 +309,15 @@ export interface SphereVariant {
  *  the component's rotation axis (~[0.33, 0.90, 0.21]): the further off-axis it
  *  is, the wider the arc it sweeps and the stronger the parallax. */
 const STELLAR_CORE: Vec3 = [0.3, 0.06, 0.22]
-/** The body clusters on the same line but nearer the middle, so the density
- *  gradient runs continuously from the core out rather than sitting in a lump. */
-const HALF_STELLAR_CORE: Vec3 = [0.15, 0.03, 0.11]
+/** The middle stratum leans the same way but only slightly, so the three
+ *  container spheres nest off-centre instead of sitting concentric. */
+const STELLAR_MID: Vec3 = [0.1, 0.02, 0.07]
+/** Normal of the plane the invisible target orbits on, well off the sphere's
+ *  own spin axis so a surge cuts across the rotation rather than along it. */
+const STELLAR_ORBIT_AXIS: Vec3 = [0.62, -0.28, 0.73]
+/** The outer field ignores the target and drifts about its own axis instead —
+ *  a different direction from everything else, which is what separates it. */
+const STELLAR_DRIFT_AXIS: Vec3 = [0.86, -0.22, 0.46]
 
 export const SPHERE_VARIANTS: SphereVariant[] = [
     {
@@ -337,45 +407,69 @@ export const SPHERE_VARIANTS: SphereVariant[] = [
     {
         id: 'stellar-core',
         name: 'Stellar core',
-        blurb: 'Monochrome dust on pure black — a luminous off-centre core drifting through a thinning outer shell.',
+        blurb: 'Monochrome dust on pure black — three nested populations, the inner two chasing an invisible orbiting target.',
         cells: 32, inset: 1, thickness: 0, explode: 0, drift: 0, noise: null, subdiv: 0, edges: false,
         // A piece, not a diagram: no labels, no leader lines, no page colour.
         labels: false,
         backdrop: '#000000',
         particles: {
-            loopMs: 8000,
-            // Four loops per revolution: the spin stays slow (~11°/s) while
-            // every modulation still closes on the 8s loop.
-            loopsPerTurn: 4,
+            // A 16s loop at two loops per revolution: the piece still repeats
+            // every 32s, but the sprints now have room to breathe. On the old
+            // 8s loop the same surge amplitude peaked at roughly twice the
+            // angular rate and read as a twitch rather than a chase.
+            loopMs: 16000,
+            loopsPerTurn: 2,
             depthFade: 0.66,
-            glow: { center: STELLAR_CORE, size: 1.3, opacity: 0.34 },
+            glow: { center: STELLAR_CORE, size: 1.25, opacity: 0.3, layer: 0 },
+            orbit: {
+                axis: STELLAR_ORBIT_AXIS,
+                // Sized so the fastest stratum never quite reverses: its steady
+                // rate is ~0.245 rad/s and the surge subtracts at most ~0.2,
+                // so the core coasts almost to a stop and then runs.
+                surge: 0.26,
+                cycles: 2,
+                skew: 0.4,
+                rate: 1,
+            },
             layers: [
-                // The core: a tight, bright knot held off the rotation axis, so
-                // turning the orb walks it from front to back and gives the
-                // whole cloud its parallax.
+                // 1. The core. A small container sphere held off the rotation
+                //    axis, with grains growing and brightening toward its
+                //    boundary — so the knot reads as a lit shell of dust rather
+                //    than a solid dot, and the boundary is legible without ever
+                //    drawing it. Reacts to the target hardest and soonest.
                 {
-                    count: 300, rMin: 0, rMax: 0.5, falloff: 0.65, center: STELLAR_CORE,
-                    size: 0.032, sizeJitter: 0.45, opacity: 1, spin: 0, shade: 0.28,
+                    count: 320, rMin: 0, rMax: 0.44, falloff: 0.42, center: STELLAR_CORE,
+                    size: 0.03, sizeJitter: 0.4, edgeSize: 0.62, edgeBright: 0.42,
+                    opacity: 0.85, spin: 0.25, shade: 0.3,
                     twinkle: { amp: 0.3, cycles: 3 },
+                    outliers: { count: 7, reach: 1.9 },
+                    follow: { gain: 1, lag: 0.03, tug: 0.1 },
                 },
-                // The body: most of the mass, still leaning toward the core, so
-                // density falls off continuously rather than in a step.
+                // 2. The second band: most of the mass, a gap clear of the core
+                //    so the two densities read as separate populations. Wide
+                //    size and brightness variance, and it takes the same surge
+                //    at a fraction of the gain and four times the lag — visibly
+                //    trailing the core rather than mirroring it.
                 {
-                    count: 1200, rMin: 0, rMax: 0.95, falloff: 0.45, center: HALF_STELLAR_CORE,
-                    size: 0.023, sizeJitter: 0.5, opacity: 0.8, spin: 0, shade: 0.55,
+                    count: 700, rMin: 0.46, rMax: 0.9, center: STELLAR_MID,
+                    size: 0.021, sizeJitter: 0.62, edgeSize: 0.22, edgeBright: -0.18,
+                    opacity: 0.72, spin: 0.12, shade: 0.62,
                     twinkle: { amp: 0.45, cycles: 3 },
+                    outliers: { count: 10, reach: 1.45 },
+                    follow: { gain: 0.62, lag: 0.13, tug: 0.055 },
                 },
-                // The edge: a sparse band that lets the silhouette dissolve
-                // instead of ending on a rim.
+                // 3. The outer field: sparser, finer and dimmer toward its own
+                //    boundary so the silhouette dissolves. Deaf to the target —
+                //    one slow steady drift about its own axis, which is what
+                //    makes the inner two look like they're reacting to
+                //    something.
                 {
-                    count: 240, rMin: 0.85, rMax: 1.3, size: 0.021, sizeJitter: 0.4,
-                    opacity: 0.5, spin: 0, shade: 0.6, twinkle: { amp: 0.55, cycles: 2 },
-                },
-                // Far motes, counter-turning at the same rate (spin -2 nets -1),
-                // so the outermost dust reads as detached from the body.
-                {
-                    count: 130, rMin: 1.18, rMax: 1.45, size: 0.019, sizeJitter: 0.4,
-                    opacity: 0.32, spin: -2, shade: 0.6, twinkle: { amp: 0.6, cycles: 1 },
+                    count: 520, rMin: 0.95, rMax: 1.32,
+                    size: 0.017, sizeJitter: 0.45, edgeSize: -0.3, edgeBright: -0.34,
+                    opacity: 0.42, spin: -0.6, shade: 0.62,
+                    twinkle: { amp: 0.55, cycles: 2 },
+                    outliers: { count: 14, reach: 1.55 },
+                    axis: STELLAR_DRIFT_AXIS,
                 },
             ],
         },
@@ -593,7 +687,22 @@ export function buildParticleOrb(config: ParticleConfig): ParticleOrbGeometry {
         // radii shorter and so packs the layer in toward its centre.
         const falloff = layer.falloff ?? 1 / 3
         const sizeJitter = layer.sizeJitter ?? 0
+        const edgeSize = layer.edgeSize ?? 0
+        const edgeBright = layer.edgeBright ?? 0
         const cycles = layer.twinkle?.cycles ?? 0
+        const span = layer.rMax - layer.rMin
+
+        // Which points escape the container sphere. Spread across the spiral
+        // index rather than taken off the end of it: spiralDirection walks y
+        // monotonically from pole to pole, so a contiguous tail would drop every
+        // stray in the same hemisphere.
+        const strays = new Set<number>()
+        if (layer.outliers && layer.outliers.count > 0) {
+            for (let k = 0; k < layer.outliers.count; k++) {
+                strays.add(Math.min(layer.count - 1, Math.round(((k + 0.5) * layer.count) / layer.outliers.count)))
+            }
+        }
+
         for (let i = 0; i < layer.count; i++) {
             const direction = spiralDirection(i, layer.count, layerIndex + 1)
             // Nudge the direction so the spiral's lattice regularity dissolves
@@ -606,16 +715,30 @@ export function buildParticleOrb(config: ParticleConfig): ParticleOrbGeometry {
             // Volume layers (rMin 0) distribute by the falloff exponent; bands
             // spread linearly through their thickness.
             const u = hash3(i, layerIndex, 53)
-            const radius = layer.rMin === 0
+            let radius = layer.rMin === 0
                 ? layer.rMax * Math.pow(u, falloff)
-                : layer.rMin + (layer.rMax - layer.rMin) * u
+                : layer.rMin + span * u
+            // Position across the stratum's own band, read before any stray
+            // push so a stray keeps the look of the boundary it escaped from
+            // rather than extrapolating the gradient off the end of it.
+            const t = span > 0 ? Math.min(1, Math.max(0, (radius - layer.rMin) / span)) : 1
+            if (strays.has(i)) {
+                radius = layer.rMax * (1 + (layer.outliers!.reach - 1) * hash3(i, layerIndex, 131))
+            }
             positions.push(
                 cx + jittered[0] * radius,
                 cy + jittered[1] * radius,
                 cz + jittered[2] * radius
             )
-            shades.push(1 - layer.shade * hash3(i, layerIndex, 71))
-            sizes.push(layer.size * (1 + (hash3(i, layerIndex, 89) - 0.5) * 2 * sizeJitter))
+            // The gradients run 1-edge at the middle to 1+edge at the boundary,
+            // so a stratum can be fine and dim where it is dense and coarse and
+            // bright where it thins out — or the reverse.
+            shades.push((1 - layer.shade * hash3(i, layerIndex, 71)) * (1 - edgeBright + 2 * edgeBright * t))
+            sizes.push(
+                layer.size *
+                    (1 - edgeSize + 2 * edgeSize * t) *
+                    (1 + (hash3(i, layerIndex, 89) - 0.5) * 2 * sizeJitter)
+            )
             // Whole cycles only — a fractional rate would jump at the wrap.
             rates.push(cycles ? 1 + Math.floor(hash3(i, layerIndex, 97) * cycles) : 0)
             phases.push(hash3(i, layerIndex, 103) * Math.PI * 2)

@@ -52,7 +52,7 @@ layer stays thin.
 | `combination` | Denser fracture, slabs, slight drift, rough skin |
 | `constellation-orb` | A silver particle field webbed into constellations (see below) |
 | `fractured-shell` | **Current default.** Torn-edged flat plates seated at different depths, no gaps, no strokes, read purely by light |
-| `stellar-core` | A star cluster on pure black — dense luminous core, thinning edge, no labels (see below) |
+| `stellar-core` | A star cluster on pure black — three nested populations chasing an invisible orbiting target, no labels (see below) |
 
 Compare them at **`/sphere-lab`** (unlinked, `noindex`).
 
@@ -72,24 +72,53 @@ on black).
   `rMin > 0` is a shell instead. Directions come from a salted golden-angle
   spiral plus hash jitter — deterministic, so an orb never reshuffles between
   mounts.
+- **The container sphere.** A layer's `center` + `rMax` is an invisible boundary,
+  and `edgeSize` / `edgeBright` are what make it legible without drawing it:
+  both run `1 - edge` at the middle to `1 + edge` at the boundary. Positive
+  values give a stratum that is fine and dim where it is dense and coarse and
+  bright where it thins — a lit shell. Negative values dissolve the silhouette
+  instead. The gradients are independent of `count`, so density and grain size
+  are separate decisions.
+- **Outliers.** `outliers` seeds a few strays past `rMax`, out to `reach × rMax`,
+  so a boundary reads as a tendency rather than a wall. They are spread across
+  the spiral index rather than taken off the end of it — `spiralDirection` walks
+  y monotonically from pole to pole, so a contiguous tail would drop every stray
+  in the same hemisphere.
 - **The dense core.** An off-centre `center` is what makes a bright knot *drift*:
   on the axis it would just spin in place. The further off the rotation axis it
   sits, the wider the arc it sweeps. `glow` adds a camera-facing sprite halo at
   that point — points can't make a smooth bloom, since a large enough one would
-  blow past the `gl_PointSize` ceiling most GPUs enforce.
+  blow past the `gl_PointSize` ceiling most GPUs enforce. Set `glow.layer` to
+  parent the halo to a stratum, or the grains sprint away from their own glow.
 - **Constellation web.** Star pairs closer than `linkDistance` get a line,
   capped at `maxLinks` per point so dense patches stay a web, not a mesh. Omit
   `linkLayer` for no web at all.
-- **Motion.** Per-layer `spin` rotates a stratum relative to the sphere's own
-  spin, so a layer's net rate is `1 + spin` — `-2` is a counter-turn at equal
-  speed, `0` rides along. The differing rates are what make an orb read as a
-  volume rather than a textured ball.
+- **Steady motion.** Per-layer `spin` rotates a stratum relative to the sphere's
+  own spin, so a layer's net rate is `1 + spin` — `-2` is a counter-turn at equal
+  speed, `0` rides along. `axis` gives a stratum its own rotation axis, which is
+  how one group drifts in a visibly different direction from the rest. The
+  differing rates are what make an orb read as a volume rather than a textured
+  ball.
+- **Chasing a target.** `orbit` defines an invisible object circling the centre,
+  and a layer's `follow` says how it reacts. This is what buys motion that reads
+  as *alive* instead of geared: the target's angular position surges rather than
+  advancing evenly (`surge` radians, `cycles` sprints per loop), and `skew` adds
+  second-harmonic content so a sprint is a quick dart and a long glide rather
+  than a symmetric sine swell. Each follower takes `gain` of that surge through a
+  first-order lag of `lag` loops, and sways `tug` sphere-radii toward where it
+  believes the target currently is. Two strata differing only in `lag` end up on
+  genuinely different velocity curves, not the same curve at two amplitudes —
+  the lag cuts and delays the harmonic far harder than the fundamental. Followers
+  turn about the *orbit* axis, so a surge cuts across the global rotation instead
+  of just modulating it. `stellar-core` runs its core at a 7.7× speed swing
+  peaking 0.56s ahead of the middle band's 2.0× swing; neither ever reverses.
 - **The loop.** `loopMs` puts a variant on a fixed period: each grain twinkles a
-  whole number of cycles per loop and the glow breathes once, so nothing jumps
-  at the wrap. `loopsPerTurn` sets how many loops a full revolution takes, which
-  is what lets the spin stay slow while the loop stays short — `stellar-core`
-  runs an 8s loop at 4 loops per turn, so the whole piece repeats every 32s.
-  Variants without `loopMs` keep the open-ended ~70s rotation.
+  whole number of cycles per loop, the glow breathes once, and every surge term
+  is a whole number of cycles, so nothing jumps at the wrap. `loopsPerTurn` sets
+  how many loops a full revolution takes, which is what lets the spin stay slow
+  while the loop stays short — `stellar-core` runs a 16s loop at 2 loops per
+  turn, so the whole piece repeats every 32s. Variants without `loopMs` keep the
+  open-ended ~70s rotation.
 - **Rendering.** One `ShaderMaterial` per layer. Grains carry their own size,
   brightness, twinkle rate and phase as vertex attributes, so the twinkle and
   the depth shading cost nothing per frame on the CPU. The fragment shader
