@@ -13,7 +13,7 @@ import type { SphereCell } from './sphereFragments'
 //   explode   — push shards outward along their normal (with per-shard drift)
 //   noise     — displace the surface radially for a rocky, irregular skin
 
-type Vec3 = [number, number, number]
+export type Vec3 = [number, number, number]
 
 const sub = (a: Vec3, b: Vec3): Vec3 => [a[0] - b[0], a[1] - b[1], a[2] - b[2]]
 const add = (a: Vec3, b: Vec3): Vec3 => [a[0] + b[0], a[1] + b[1], a[2] + b[2]]
@@ -120,6 +120,72 @@ export interface LightConfig {
     keyPos: [number, number, number]
 }
 
+/** Per-point brightness modulation. Cycles are whole numbers of oscillations
+ *  per loop, so every grain returns to its starting brightness on the wrap —
+ *  that is what keeps the animation seamless. */
+export interface TwinkleConfig {
+    /** Modulation depth, 0 (steady) to 1 (full swing). */
+    amp: number
+    /** Fastest twinkle, in cycles per loop. Each point draws 1..cycles. */
+    cycles: number
+}
+
+/** One stratum of a particle orb — a band of points between two radii. */
+export interface ParticleLayer {
+    count: number
+    /** Radial band, in sphere radii. rMin 0 fills a volume; rMin ~ rMax is a shell. */
+    rMin: number
+    rMax: number
+    /** Point diameter in world units (the sphere has radius 1). */
+    size: number
+    opacity: number
+    /** Rotation relative to the sphere's own spin — negative counter-rotates.
+     *  Layers turning at different rates give the depth parallax that makes the
+     *  orb read as a volume instead of a textured ball. Whole numbers keep the
+     *  stratum in step with the loop; `-2` is a counter-turn at equal speed. */
+    spin: number
+    /** Per-point brightness variance, 0 (uniform) to 1 (full range). */
+    shade: number
+    /** Point the layer clusters around, in sphere radii. Default is the centre.
+     *  An off-centre value is what lets a dense core drift through the volume
+     *  as the orb turns, instead of sitting on the rotation axis unmoved. */
+    center?: Vec3
+    /** Radial density exponent for volume layers (`rMin: 0`). `1/3` spreads
+     *  points evenly through the volume; higher values pack them toward
+     *  `center` and thin out the edge. Ignored for bands. */
+    falloff?: number
+    /** Per-point size variance, 0 (uniform) to 1 (full range). */
+    sizeJitter?: number
+    twinkle?: TwinkleConfig | null
+}
+
+/** A sphere drawn as layered points instead of fracture plates. */
+export interface ParticleConfig {
+    layers: ParticleLayer[]
+    /** Index of the layer whose points carry constellation links; omit for none. */
+    linkLayer?: number
+    /** Maximum chord distance between linked points, in sphere radii. */
+    linkDistance?: number
+    /** Per-point cap so the web stays sparse instead of becoming a mesh. */
+    maxLinks?: number
+    linkOpacity?: number
+    /** Loop period in ms. Every periodic term — twinkle, glow pulse — is a whole
+     *  multiple of it, so the piece repeats exactly. Omit to fall back to the
+     *  component's default continuous rotation. */
+    loopMs?: number
+    /** Loops per full revolution. `1` turns once per loop; higher values keep
+     *  the spin slow while the loop stays short (the whole piece then repeats
+     *  every `loopMs * loopsPerTurn`). */
+    loopsPerTurn?: number
+    /** How far the back of the cloud dims, 0 (flat) to 1 (black). Additive
+     *  points have no occlusion of their own, so this is what supplies depth. */
+    depthFade?: number
+    /** Soft additive halo at `center`, drawn as a camera-facing sprite. Points
+     *  can't make a smooth bloom — a large one would exceed the `gl_PointSize`
+     *  ceiling most GPUs enforce — so the core glow is its own object. */
+    glow?: { center: Vec3; size: number; opacity: number } | null
+}
+
 export const DEFAULT_LIGHT: LightConfig = {
     ambient: 0.8,
     key: 2.3,
@@ -160,12 +226,28 @@ export interface SphereVariant {
     core?: number | null
     /** Per-variant lighting override; falls back to DEFAULT_LIGHT. */
     light?: LightConfig
+    /** When set, the sphere renders as a particle orb and every plate knob
+     *  above is inert (cells still picks the label-anchor pattern). */
+    particles?: ParticleConfig | null
+    /** Draw the six pinned concern labels. Default true; a variant meant to be
+     *  read as a standalone piece rather than a diagram turns them off. */
+    labels?: boolean
+    /** CSS colour the lab seats this variant on. Default is the ink band. */
+    backdrop?: string
     /** Triangle subdivisions before displacement. Only meaningful with noise,
      *  and only allowed when thickness is 0 (subdividing the cap would leave
      *  the extruded side walls without matching vertices). */
     subdiv: number
     edges: boolean
 }
+
+/** Where the bright knot of `stellar-core` sits. Deliberately almost square to
+ *  the component's rotation axis (~[0.33, 0.90, 0.21]): the further off-axis it
+ *  is, the wider the arc it sweeps and the stronger the parallax. */
+const STELLAR_CORE: Vec3 = [0.3, 0.06, 0.22]
+/** The body clusters on the same line but nearer the middle, so the density
+ *  gradient runs continuously from the core out rather than sitting in a lump. */
+const HALF_STELLAR_CORE: Vec3 = [0.15, 0.03, 0.11]
 
 export const SPHERE_VARIANTS: SphereVariant[] = [
     {
@@ -201,6 +283,31 @@ export const SPHERE_VARIANTS: SphereVariant[] = [
         noise: { amp: 0.04, freq: 3.0, octaves: 3 }, subdiv: 0, edges: true,
     },
     {
+        id: 'constellation-orb',
+        name: 'Constellation orb',
+        blurb: 'The sphere as a silver particle field — a constellation web over a slow-turning core of dust.',
+        // Plate knobs are inert here; `cells` only picks the label-anchor pattern.
+        cells: 32, inset: 1, thickness: 0, explode: 0, drift: 0, noise: null, subdiv: 0, edges: false,
+        particles: {
+            layers: [
+                // Dust shell — the orb's body: fine grains in a slightly thick band.
+                { count: 1800, rMin: 0.94, rMax: 1.03, size: 0.012, opacity: 0.6, spin: 0, shade: 0.6 },
+                // Stars — sparse bright points that carry the constellation web.
+                { count: 140, rMin: 1.0, rMax: 1.02, size: 0.03, opacity: 0.95, spin: 0, shade: 0.35 },
+                // Infinity core — a counter-rotating inner cloud.
+                { count: 260, rMin: 0, rMax: 0.55, size: 0.016, opacity: 0.5, spin: -0.5, shade: 0.65 },
+                // Halo — a faint, slow outer drift for depth.
+                { count: 110, rMin: 1.12, rMax: 1.5, size: 0.016, opacity: 0.24, spin: 0.25, shade: 0.5 },
+            ],
+            linkLayer: 1,
+            // Short reach and a low per-star cap keep the web reading as
+            // constellations rather than a wireframe globe.
+            linkDistance: 0.42,
+            maxLinks: 2,
+            linkOpacity: 0.26,
+        },
+    },
+    {
         id: 'fractured-shell',
         name: 'Fractured shell',
         blurb: 'Torn-edged plates seated at different depths — no gaps, no strokes, read purely by light.',
@@ -226,6 +333,52 @@ export const SPHERE_VARIANTS: SphereVariant[] = [
         // the lit faces separate sharply from the shadowed ones. With no edge
         // strokes, this contrast is the only thing describing the form.
         light: { ambient: 0.46, key: 4.3, fill: 0.28, keyPos: [-4.5, 4.2, 2.6] },
+    },
+    {
+        id: 'stellar-core',
+        name: 'Stellar core',
+        blurb: 'Monochrome dust on pure black — a luminous off-centre core drifting through a thinning outer shell.',
+        cells: 32, inset: 1, thickness: 0, explode: 0, drift: 0, noise: null, subdiv: 0, edges: false,
+        // A piece, not a diagram: no labels, no leader lines, no page colour.
+        labels: false,
+        backdrop: '#000000',
+        particles: {
+            loopMs: 8000,
+            // Four loops per revolution: the spin stays slow (~11°/s) while
+            // every modulation still closes on the 8s loop.
+            loopsPerTurn: 4,
+            depthFade: 0.66,
+            glow: { center: STELLAR_CORE, size: 1.3, opacity: 0.34 },
+            layers: [
+                // The core: a tight, bright knot held off the rotation axis, so
+                // turning the orb walks it from front to back and gives the
+                // whole cloud its parallax.
+                {
+                    count: 300, rMin: 0, rMax: 0.5, falloff: 0.65, center: STELLAR_CORE,
+                    size: 0.032, sizeJitter: 0.45, opacity: 1, spin: 0, shade: 0.28,
+                    twinkle: { amp: 0.3, cycles: 3 },
+                },
+                // The body: most of the mass, still leaning toward the core, so
+                // density falls off continuously rather than in a step.
+                {
+                    count: 1200, rMin: 0, rMax: 0.95, falloff: 0.45, center: HALF_STELLAR_CORE,
+                    size: 0.023, sizeJitter: 0.5, opacity: 0.8, spin: 0, shade: 0.55,
+                    twinkle: { amp: 0.45, cycles: 3 },
+                },
+                // The edge: a sparse band that lets the silhouette dissolve
+                // instead of ending on a rim.
+                {
+                    count: 240, rMin: 0.85, rMax: 1.3, size: 0.021, sizeJitter: 0.4,
+                    opacity: 0.5, spin: 0, shade: 0.6, twinkle: { amp: 0.55, cycles: 2 },
+                },
+                // Far motes, counter-turning at the same rate (spin -2 nets -1),
+                // so the outermost dust reads as detached from the body.
+                {
+                    count: 130, rMin: 1.18, rMax: 1.45, size: 0.019, sizeJitter: 0.4,
+                    opacity: 0.32, spin: -2, shade: 0.6, twinkle: { amp: 0.6, cycles: 1 },
+                },
+            ],
+        },
     },
 ]
 
@@ -392,4 +545,112 @@ export function buildVariantShards(variant: SphereVariant, cells: SphereCell[]):
             driftPhase: shardRandom(centre, 2) * Math.PI * 2,
         }
     })
+}
+
+/* -------------------------------------------------- particle orb ------ */
+
+export interface ParticleLayerGeometry {
+    /** Flat xyz triples, absolute sphere-space coordinates. */
+    positions: number[]
+    /** Per-point brightness in [1 - shade, 1], same order as positions. */
+    shades: number[]
+    /** Per-point diameter in world units. */
+    sizes: number[]
+    /** Per-point twinkle: whole cycles per loop (0 = steady) and a start phase
+     *  in radians, so grains don't pulse in unison. */
+    rates: number[]
+    phases: number[]
+}
+
+export interface ParticleOrbGeometry {
+    layers: ParticleLayerGeometry[]
+    /** Constellation web as line-segment pairs, absolute coordinates. */
+    links: number[]
+}
+
+/** Golden-angle spiral direction i of n — even coverage with no clustering at
+ *  the poles, and deterministic, so the orb never reshuffles between mounts.
+ *  `salt` de-phases the spiral so separate layers don't stack their points. */
+function spiralDirection(i: number, n: number, salt: number): Vec3 {
+    const golden = Math.PI * (3 - Math.sqrt(5))
+    const y = n > 1 ? 1 - (i / (n - 1)) * 2 : 0
+    const ring = Math.sqrt(Math.max(0, 1 - y * y))
+    const theta = golden * i + salt * 2.399
+    return [Math.cos(theta) * ring, y, Math.sin(theta) * ring]
+}
+
+/** Build every layer of a particle orb, plus the constellation links.
+ *  Pure math on deterministic sequences — same config, same orb. */
+export function buildParticleOrb(config: ParticleConfig): ParticleOrbGeometry {
+    const layers: ParticleLayerGeometry[] = config.layers.map((layer, layerIndex) => {
+        const positions: number[] = []
+        const shades: number[] = []
+        const sizes: number[] = []
+        const rates: number[] = []
+        const phases: number[] = []
+        const [cx, cy, cz] = layer.center ?? [0, 0, 0]
+        // 1/3 is the exponent that fills a volume evenly; anything larger draws
+        // radii shorter and so packs the layer in toward its centre.
+        const falloff = layer.falloff ?? 1 / 3
+        const sizeJitter = layer.sizeJitter ?? 0
+        const cycles = layer.twinkle?.cycles ?? 0
+        for (let i = 0; i < layer.count; i++) {
+            const direction = spiralDirection(i, layer.count, layerIndex + 1)
+            // Nudge the direction so the spiral's lattice regularity dissolves
+            // into something that reads as scattered rather than woven.
+            const jittered = unit([
+                direction[0] + (hash3(i, layerIndex, 11) - 0.5) * 0.22,
+                direction[1] + (hash3(i, layerIndex, 23) - 0.5) * 0.22,
+                direction[2] + (hash3(i, layerIndex, 37) - 0.5) * 0.22,
+            ])
+            // Volume layers (rMin 0) distribute by the falloff exponent; bands
+            // spread linearly through their thickness.
+            const u = hash3(i, layerIndex, 53)
+            const radius = layer.rMin === 0
+                ? layer.rMax * Math.pow(u, falloff)
+                : layer.rMin + (layer.rMax - layer.rMin) * u
+            positions.push(
+                cx + jittered[0] * radius,
+                cy + jittered[1] * radius,
+                cz + jittered[2] * radius
+            )
+            shades.push(1 - layer.shade * hash3(i, layerIndex, 71))
+            sizes.push(layer.size * (1 + (hash3(i, layerIndex, 89) - 0.5) * 2 * sizeJitter))
+            // Whole cycles only — a fractional rate would jump at the wrap.
+            rates.push(cycles ? 1 + Math.floor(hash3(i, layerIndex, 97) * cycles) : 0)
+            phases.push(hash3(i, layerIndex, 103) * Math.PI * 2)
+        }
+        return { positions, shades, sizes, rates, phases }
+    })
+
+    // Constellation web: join star pairs closer than linkDistance, capped per
+    // point so dense patches stay a web instead of collapsing into a mesh.
+    const links: number[] = []
+    const linkLayer = config.linkLayer ?? -1
+    if (linkLayer >= 0 && linkLayer < layers.length) {
+        const stars = layers[linkLayer].positions
+        const starCount = stars.length / 3
+        const linkCounts = new Array<number>(starCount).fill(0)
+        const linkDistance = config.linkDistance ?? 0
+        const maxLinks = config.maxLinks ?? 0
+        const maxDistanceSq = linkDistance * linkDistance
+        for (let a = 0; a < starCount; a++) {
+            for (let b = a + 1; b < starCount; b++) {
+                if (linkCounts[a] >= maxLinks) break
+                if (linkCounts[b] >= maxLinks) continue
+                const dx = stars[a * 3] - stars[b * 3]
+                const dy = stars[a * 3 + 1] - stars[b * 3 + 1]
+                const dz = stars[a * 3 + 2] - stars[b * 3 + 2]
+                if (dx * dx + dy * dy + dz * dz > maxDistanceSq) continue
+                links.push(
+                    stars[a * 3], stars[a * 3 + 1], stars[a * 3 + 2],
+                    stars[b * 3], stars[b * 3 + 1], stars[b * 3 + 2]
+                )
+                linkCounts[a]++
+                linkCounts[b]++
+            }
+        }
+    }
+
+    return { layers, links }
 }

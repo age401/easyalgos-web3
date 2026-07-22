@@ -50,11 +50,57 @@ layer stays thin.
 | `exploded-drift` | Plates thrown outward at varying distance, tumbling |
 | `surface-noise` | Subdivided and displaced — a cracked rock |
 | `combination` | Denser fracture, slabs, slight drift, rough skin |
+| `constellation-orb` | A silver particle field webbed into constellations (see below) |
 | `fractured-shell` | **Current default.** Torn-edged flat plates seated at different depths, no gaps, no strokes, read purely by light |
+| `stellar-core` | A star cluster on pure black — dense luminous core, thinning edge, no labels (see below) |
 
 Compare them at **`/sphere-lab`** (unlinked, `noindex`).
 
 Change what the home page uses via `DEFAULT_VARIANT_ID` in `sphereVariants.ts`.
+
+## The particle orbs
+
+Setting `particles` swaps plates for points. Every plate knob is then inert
+except `cells`, which still picks the label-anchor pattern. Two presets use it:
+`constellation-orb` (a webbed silver field) and `stellar-core` (a star cluster
+on black).
+
+- **Layers.** Each `ParticleLayer` is a cloud of points around `center`
+  (default: the middle). `rMin: 0` fills a volume out to `rMax`, distributed by
+  the `falloff` exponent — `1/3` spreads points evenly through the volume, and
+  anything higher packs them toward `center` and thins the edge. A band with
+  `rMin > 0` is a shell instead. Directions come from a salted golden-angle
+  spiral plus hash jitter — deterministic, so an orb never reshuffles between
+  mounts.
+- **The dense core.** An off-centre `center` is what makes a bright knot *drift*:
+  on the axis it would just spin in place. The further off the rotation axis it
+  sits, the wider the arc it sweeps. `glow` adds a camera-facing sprite halo at
+  that point — points can't make a smooth bloom, since a large enough one would
+  blow past the `gl_PointSize` ceiling most GPUs enforce.
+- **Constellation web.** Star pairs closer than `linkDistance` get a line,
+  capped at `maxLinks` per point so dense patches stay a web, not a mesh. Omit
+  `linkLayer` for no web at all.
+- **Motion.** Per-layer `spin` rotates a stratum relative to the sphere's own
+  spin, so a layer's net rate is `1 + spin` — `-2` is a counter-turn at equal
+  speed, `0` rides along. The differing rates are what make an orb read as a
+  volume rather than a textured ball.
+- **The loop.** `loopMs` puts a variant on a fixed period: each grain twinkles a
+  whole number of cycles per loop and the glow breathes once, so nothing jumps
+  at the wrap. `loopsPerTurn` sets how many loops a full revolution takes, which
+  is what lets the spin stay slow while the loop stays short — `stellar-core`
+  runs an 8s loop at 4 loops per turn, so the whole piece repeats every 32s.
+  Variants without `loopMs` keep the open-ended ~70s rotation.
+- **Rendering.** One `ShaderMaterial` per layer. Grains carry their own size,
+  brightness, twinkle rate and phase as vertex attributes, so the twinkle and
+  the depth shading cost nothing per frame on the CPU. The fragment shader
+  builds each grain procedurally from `gl_PointCoord` — a tight bright centre
+  plus a wide faint skirt — which is enough to read as bloom with no texture and
+  no post-processing pass. Additive, `depthWrite` off, untouched by the scene
+  lights. `depthFade` dims the back of the cloud: additive points occlude
+  nothing, so it is the only thing supplying depth once the orb turns.
+- **Not a diagram.** `labels: false` drops the six pinned concerns and their
+  leader lines; `backdrop` gives the lab a colour to seat the variant on. Both
+  exist for `stellar-core`, which is meant to be read as a piece.
 
 ## Re-baking the fracture pattern
 

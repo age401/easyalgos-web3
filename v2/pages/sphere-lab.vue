@@ -18,9 +18,9 @@ useHead({
             <p class="eal-eyebrow eal-eyebrow--invert">Internal</p>
             <h1 class="eal-h2 mt-4 !text-white">Fractured sphere &mdash; variants</h1>
             <p class="mt-4 max-w-[38rem] font-franklin text-[15px] leading-[1.65] text-Tinted/300">
-                Five procedural treatments of the same baked Voronoi fracture. Geometry rebuilds on
-                switch; everything else &mdash; lighting, labels, camera fit &mdash; is identical
-                between them.
+                Procedural treatments of the same sphere &mdash; fracture presets over the baked
+                Voronoi pattern, plus a particle orb. Geometry rebuilds on switch; everything
+                else &mdash; labels, camera fit, rotation &mdash; is identical between them.
             </p>
 
             <!-- Switcher -->
@@ -60,10 +60,14 @@ useHead({
                     <div class="flex gap-1.5"><dt>flat</dt><dd class="text-white/80">{{ variant.flatten ? 'yes' : 'no' }}</dd></div>
                     <div class="flex gap-1.5"><dt>edges</dt><dd class="text-white/80">{{ variant.edges ? 'yes' : 'no' }}</dd></div>
                     <div class="flex gap-1.5"><dt>subdiv</dt><dd class="text-white/80">{{ variant.subdiv }}</dd></div>
+                    <div class="flex gap-1.5"><dt>particles</dt><dd class="text-white/80">{{ variant.particles ? variant.particles.layers.reduce((total, layer) => total + layer.count, 0) : 'none' }}</dd></div>
+                    <div class="flex gap-1.5"><dt>loop</dt><dd class="text-white/80">{{ variant.particles?.loopMs ? `${variant.particles.loopMs / 1000}s × ${variant.particles.loopsPerTurn ?? 1} per turn` : 'open' }}</dd></div>
                 </dl>
             </div>
 
-            <div class="mt-6">
+            <!-- Variants that carry their own backdrop are judged on it rather
+                 than on the ink band the rest of the page uses. -->
+            <div class="mt-6" :style="{ background: variant.backdrop ?? 'transparent' }">
                 <ProblemSphere :variant="variant" />
             </div>
         </div>

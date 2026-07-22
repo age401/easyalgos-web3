@@ -11,7 +11,7 @@
 // shards merged into a single mesh + single LineSegments — 2 draw calls no
 // matter how many shards. Only drift variants pay for per-shard objects.
 import type * as THREE_NS from 'three'
-import type { SphereVariant, ShardGeometry } from '~/utils/sphereVariants'
+import type { SphereVariant, ShardGeometry, ParticleLayer } from '~/utils/sphereVariants'
 
 const props = withDefaults(defineProps<{ variant?: SphereVariant }>(), {
     variant: () => getVariant(DEFAULT_VARIANT_ID),
@@ -30,6 +30,54 @@ const LABEL_WIDTH = 200
 const CAMERA_FOV = 32
 const SPHERE_FILL = 0.62 // sphere diameter as a fraction of the stage's smaller side
 const REDUCED_MOTION_POSE = 5200 // fixed elapsed-ms giving a well-composed static pose
+const PARTICLE_COLOR = 0xeef3ff // silver-white; the particle orbs are monochrome
+
+// Grains are drawn as shaded points rather than three's PointsMaterial so each
+// one can carry its own size, twinkle and depth brightness on the GPU — a few
+// thousand vertex-colour updates per frame on the CPU would not be free, and
+// square unlit dots don't read as glowing dust.
+const PARTICLE_VERT = `
+attribute float aShade;
+attribute float aSize;
+attribute float aRate;
+attribute float aPhase;
+uniform float uPointScale;
+uniform float uLoop;
+uniform float uTwinkle;
+uniform float uDepthFade;
+varying float vBright;
+void main() {
+    vec4 world = modelMatrix * vec4(position, 1.0);
+    vec4 mv = viewMatrix * world;
+    gl_Position = projectionMatrix * mv;
+    // Perspective size attenuation, in device pixels. Clamped because plenty of
+    // GPUs cap gl_PointSize an order of magnitude below what a near, large
+    // grain would ask for, and a silent clamp is worse than a deliberate one.
+    gl_PointSize = clamp(aSize * uPointScale / -mv.z, 1.0, 64.0);
+    // Whole cycles per loop, so every grain is back where it started on the wrap.
+    float twinkle = 1.0 + uTwinkle * sin(6.28318530718 * aRate * uLoop + aPhase);
+    // The camera sits on +z looking at the origin, so world.z is signed depth.
+    // Additive points occlude nothing, so dimming the far half is the only
+    // thing that makes the cloud read as a volume once it turns.
+    float front = smoothstep(-1.25, 1.25, world.z);
+    vBright = max(aShade * twinkle * mix(1.0 - uDepthFade, 1.0, front), 0.0);
+}
+`
+
+const PARTICLE_FRAG = `
+uniform vec3 uColor;
+uniform float uOpacity;
+varying float vBright;
+void main() {
+    // Two exponents of the same radial falloff: a tight bright centre plus a
+    // wide faint skirt. That is enough to read as bloom, with no texture and
+    // no post-processing pass.
+    float r = length(gl_PointCoord - vec2(0.5)) * 2.0;
+    if (r > 1.0) discard;
+    float falloff = 1.0 - r;
+    gl_FragColor = vec4(uColor, (pow(falloff, 1.7) + pow(falloff, 0.6) * 0.4) * uOpacity * vBright);
+}
+`
 
 let THREE: typeof THREE_NS | null = null
 let renderer: THREE_NS.WebGLRenderer | null = null
@@ -44,6 +92,16 @@ let shardMeshes: THREE_NS.Object3D[] = []
 let shardData: ShardGeometry[] = []
 let labelShards: ShardGeometry[] = []
 let animatesShards = false
+
+// Particle-orb strata that rotate relative to the sphere's own spin.
+let particleSpinGroups: { holder: THREE_NS.Group; spin: number }[] = []
+// Every grain material, so the per-frame loop phase and the per-resize point
+// scale can be pushed to all of them at once.
+let particleMaterials: THREE_NS.ShaderMaterial[] = []
+let coreGlow: THREE_NS.Sprite | null = null
+let coreGlowTexture: THREE_NS.Texture | null = null
+let coreGlowOpacity = 0
+let pointScale = 1
 
 let rafId = 0
 let startTime = 0
@@ -74,18 +132,127 @@ function makeMaterials() {
     return { body, edge }
 }
 
+function makeParticleMaterial(layer: ParticleLayer, depthFade: number) {
+    const material = new THREE!.ShaderMaterial({
+        vertexShader: PARTICLE_VERT,
+        fragmentShader: PARTICLE_FRAG,
+        uniforms: {
+            uColor: { value: new THREE!.Color(PARTICLE_COLOR) },
+            uOpacity: { value: layer.opacity },
+            uTwinkle: { value: layer.twinkle?.amp ?? 0 },
+            uDepthFade: { value: depthFade },
+            uPointScale: { value: pointScale },
+            uLoop: { value: 0 },
+        },
+        transparent: true,
+        blending: THREE!.AdditiveBlending,
+        // Additive glows shouldn't occlude each other; depth writes off also
+        // spares the sort artifacts of thousands of blended points.
+        depthWrite: false,
+    })
+    particleMaterials.push(material)
+    return material
+}
+
+/** A soft radial falloff painted once into a canvas. Sprites need a map, and
+ *  the gradient is smoother than anything a stack of points can build. */
+function makeGlowTexture() {
+    const size = 128
+    const canvas = document.createElement('canvas')
+    canvas.width = size
+    canvas.height = size
+    const ctx = canvas.getContext('2d')!
+    const gradient = ctx.createRadialGradient(size / 2, size / 2, 0, size / 2, size / 2, size / 2)
+    gradient.addColorStop(0, 'rgba(255,255,255,1)')
+    gradient.addColorStop(0.12, 'rgba(244,248,255,0.5)')
+    gradient.addColorStop(0.36, 'rgba(228,238,255,0.13)')
+    gradient.addColorStop(1, 'rgba(214,230,255,0)')
+    ctx.fillStyle = gradient
+    ctx.fillRect(0, 0, size, size)
+    return new THREE!.CanvasTexture(canvas)
+}
+
+// Particle path: the sphere as layered points instead of fracture plates —
+// grains carrying their own size, twinkle and depth brightness, optionally a
+// constellation web, optionally a sprite halo for the core.
+function buildParticleSphere(cells: (typeof SPHERE_CELL_SETS)[number], labelIdx: number[]) {
+    const particles = props.variant.particles!
+    const orb = buildParticleOrb(particles)
+
+    shardData = []
+    shardMeshes = []
+    animatesShards = false
+    // Labels anchor to the same cell seeds the plate variants use, lifted just
+    // clear of the star shell so leader lines start on the surface.
+    labelShards = labelIdx.map((i) => ({
+        positions: [], edges: [], anchor: cells[i].s, radialOffset: 0.06, driftPhase: 0,
+    }))
+
+    orb.layers.forEach((layerGeometry, layerIndex) => {
+        const layer = particles.layers[layerIndex]
+        const geometry = new THREE!.BufferGeometry()
+        geometry.setAttribute('position', new THREE!.Float32BufferAttribute(layerGeometry.positions, 3))
+        geometry.setAttribute('aShade', new THREE!.Float32BufferAttribute(layerGeometry.shades, 1))
+        geometry.setAttribute('aSize', new THREE!.Float32BufferAttribute(layerGeometry.sizes, 1))
+        geometry.setAttribute('aRate', new THREE!.Float32BufferAttribute(layerGeometry.rates, 1))
+        geometry.setAttribute('aPhase', new THREE!.Float32BufferAttribute(layerGeometry.phases, 1))
+
+        const holder = new THREE!.Group()
+        holder.add(new THREE!.Points(geometry, makeParticleMaterial(layer, particles.depthFade ?? 0)))
+        group!.add(holder)
+        if (layer.spin) particleSpinGroups.push({ holder, spin: layer.spin })
+    })
+
+    if (orb.links.length) {
+        const linkGeometry = new THREE!.BufferGeometry()
+        linkGeometry.setAttribute('position', new THREE!.Float32BufferAttribute(orb.links, 3))
+        const linkMaterial = new THREE!.LineBasicMaterial({
+            color: 0xbfd0dd,
+            transparent: true,
+            opacity: particles.linkOpacity ?? 0.25,
+            blending: THREE!.AdditiveBlending,
+            depthWrite: false,
+        })
+        group!.add(new THREE!.LineSegments(linkGeometry, linkMaterial))
+    }
+
+    // The core halo rides inside the group, so the sphere's own rotation is
+    // what walks it through the volume — no separate animation for it.
+    if (particles.glow) {
+        coreGlowTexture = makeGlowTexture()
+        coreGlowOpacity = particles.glow.opacity
+        coreGlow = new THREE!.Sprite(
+            new THREE!.SpriteMaterial({
+                map: coreGlowTexture,
+                transparent: true,
+                opacity: coreGlowOpacity,
+                blending: THREE!.AdditiveBlending,
+                depthWrite: false,
+            })
+        )
+        coreGlow.position.set(...particles.glow.center)
+        coreGlow.scale.setScalar(particles.glow.size)
+        group!.add(coreGlow)
+    }
+}
+
 function buildSphere() {
     if (!THREE || !scene) return
     const variant = props.variant
     const cells = SPHERE_CELL_SETS[variant.cells]
-
-    shardData = buildVariantShards(variant, cells)
     const labelIdx = resolveLabelCells(cells)
-    labelShards = labelIdx.map((i) => shardData[i])
-    animatesShards = variant.drift > 0
 
     group = new THREE.Group()
     scene.add(group)
+
+    if (variant.particles) {
+        buildParticleSphere(cells, labelIdx)
+        return
+    }
+
+    shardData = buildVariantShards(variant, cells)
+    labelShards = labelIdx.map((i) => shardData[i])
+    animatesShards = variant.drift > 0
 
     const { body: bodyMat, edge: edgeMat } = makeMaterials()
 
@@ -201,9 +368,16 @@ function disposeSceneObjects() {
         if (Array.isArray(mat)) mat.forEach((m) => m.dispose())
         else mat?.dispose?.()
     })
+    // Textures aren't reachable from a material's own dispose(), so the glow
+    // map has to be released by hand or it leaks on every variant switch.
+    coreGlowTexture?.dispose()
+    coreGlowTexture = null
+    coreGlow = null
     scene = null
     group = null
     shardMeshes = []
+    particleSpinGroups = []
+    particleMaterials = []
 }
 
 function sizeStage() {
@@ -228,6 +402,12 @@ function sizeStage() {
     camera.position.z = stageH / (Math.tan(vFov / 2) * SPHERE_FILL * Math.min(stageW, stageH))
     camera.updateProjectionMatrix()
 
+    // Device pixels per world unit at unit depth — the shader divides it by the
+    // point's view depth to get gl_PointSize, so a grain's `size` stays a real
+    // world diameter and its pixel size tracks the sphere across viewports.
+    pointScale = 0.5 * stageH * dpr * camera.projectionMatrix.elements[5]
+    for (const material of particleMaterials) material.uniforms.uPointScale.value = pointScale
+
     const overlay = overlayRef.value
     if (overlay) {
         overlay.width = Math.round(stageW * dpr)
@@ -249,12 +429,40 @@ function onResize() {
     })
 }
 
-const _v = { tmp: null as THREE_NS.Vector3 | null }
+const _v = { tmp: null as THREE_NS.Vector3 | null, glow: null as THREE_NS.Vector3 | null }
 function drawFrame(elapsed: number, forceLabelsVisible = false) {
     if (!THREE || !renderer || !scene || !camera || !group || !axis) return
     const variant = props.variant
-    const angle = elapsed * ANGULAR_SPEED
+    const particles = variant.particles
+
+    // Variants with a loop period drive everything off it: the spin takes a
+    // whole number of loops per revolution and every modulation is a whole
+    // number of cycles per loop, so the piece repeats exactly. Everything else
+    // keeps the open-ended slow rotation.
+    const loopMs = particles?.loopMs ?? 0
+    const loop = loopMs ? (elapsed % loopMs) / loopMs : 0
+    const angle = loopMs
+        ? (elapsed / (loopMs * (particles!.loopsPerTurn ?? 1))) * Math.PI * 2
+        : elapsed * ANGULAR_SPEED
     group.setRotationFromAxisAngle(axis, angle)
+
+    // Layered parallax for particle orbs: each stratum adds its own rotation
+    // about the same axis, on top of the group's spin.
+    for (const stratum of particleSpinGroups) {
+        stratum.holder.setRotationFromAxisAngle(axis, angle * stratum.spin)
+    }
+    for (const material of particleMaterials) material.uniforms.uLoop.value = loop
+
+    // The halo can't dim itself the way the grains do in the vertex shader, so
+    // its depth term is applied here — same curve, same signed world z.
+    if (coreGlow && particles?.glow) {
+        if (!_v.glow) _v.glow = new THREE.Vector3()
+        const world = _v.glow.set(...particles.glow.center).applyQuaternion(group.quaternion)
+        const front = smoothstep(-1.25, 1.25, world.z)
+        const depth = 1 - (particles.depthFade ?? 0) * (1 - front)
+        const breathe = 1 + 0.12 * Math.sin(loop * Math.PI * 2)
+        coreGlow.material.opacity = coreGlowOpacity * depth * breathe
+    }
 
     // Per-shard tumble + gentle radial breathing, for drift variants only.
     if (animatesShards && shardMeshes.length) {
@@ -281,6 +489,8 @@ function drawFrame(elapsed: number, forceLabelsVisible = false) {
 
     if (!overlayCtx) return
     overlayCtx.clearRect(0, 0, stageW, stageH)
+    // Label-less variants stand on their own — no pins, no leader lines.
+    if (variant.labels === false) return
     if (!_v.tmp) _v.tmp = new THREE.Vector3()
 
     SPHERE_LABELS.forEach((label, i) => {
@@ -402,7 +612,7 @@ onBeforeUnmount(() => {
         <canvas ref="overlayRef" class="pointer-events-none absolute inset-0 h-full w-full" aria-hidden="true" />
 
         <div
-            v-for="(label, i) in SPHERE_LABELS"
+            v-for="(label, i) in (variant.labels === false ? [] : SPHERE_LABELS)"
             :key="label.role + label.question"
             :ref="(el) => (labelEls[i] = el as HTMLElement | null)"
             class="pointer-events-none absolute left-0 top-0 w-[200px] opacity-0 will-change-transform"
