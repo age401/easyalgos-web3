@@ -1,0 +1,263 @@
+{
+    "common": {
+        "skipToContent": "Skip to content",
+        "applyNow": "Apply now",
+        "learnMore": "Learn more",
+        "logIn": "Log in",
+        "for": "For",
+        "traders": "Traders",
+        "developers": "Developers",
+        "openMenu": "Open menu",
+        "closeMenu": "Close menu",
+        "playVideo": "Play video",
+        "previous": "Previous",
+        "next": "Next",
+        "goToStep": "Go to step {n}"
+    },
+    "nav": {
+        "expertAdvisors": "Expert Advisors",
+        "easyvps": "EasyVPS",
+        "icprecision": "ICPrecision",
+        "research": "Research"
+    },
+    "hero": {
+        "titleLine1": "Access top-rated",
+        "titleLine2": "Expert Advisors,",
+        "titleLine3": "without paying",
+        "titleLine4": "for them",
+        "leadLine1": "The Expert Advisors trading industry was broken.",
+        "leadLine2": "Welcome to how it should have always been.",
+        "partners": "#1 algo-trading partner",
+        "cardsLabel": "A selection of Expert Advisors available on EasyAlgos"
+    },
+    "card": {
+        "algoScore": "AlgoScore",
+        "excellent": "Excellent",
+        "accountGrowth": "Account growth",
+        "monthlyGain": "Monthly gain",
+        "dailyGain": "Daily gain",
+        "maximumDrawdown": "Maximum drawdown",
+        "monthsInProfit": "Months in profit",
+        "yearsTracked": "Years tracked",
+        "listPrice": "List price",
+        "developer": "Developer",
+        "eaOfTheMonth": "EA of the month",
+        "trackRecord": "Track Record"
+    },
+    "trustpilot": {
+        "excellent": "Excellent",
+        "basedOn": "{rating} out of 5 based on",
+        "reviews": "{count} reviews",
+        "srLabel": "Rated Excellent, {rating} out of 5, based on {count} Trustpilot reviews"
+    },
+    "problem": {
+        "eyebrow": "The problem",
+        "titleLine1": "Everything you needed",
+        "titleLine2": "to trade with Expert Advisors...",
+        "titleAccent": "was in different places"
+    },
+    "solution": {
+        "eyebrow": "The solution",
+        "titleLine1": "Now it's finally...",
+        "titleAccent": "all in one place"
+    },
+    "roles": {
+        "trader": "Trader",
+        "developer": "Developer",
+        "broker": "Broker",
+        "vps": "VPS Provider",
+        "community": "Community",
+        "analytics": "Analytics"
+    },
+    "accolades": {
+        "tradersLabel": "traders choose us",
+        "volumeValue": "Billions",
+        "volumeLabel": "in monthly traded volumes"
+    },
+    "whatYouGet": {
+        "eyebrow": "What you get",
+        "titleLine1": "Expert Advisors + everything",
+        "titleAccent": "to succeed with them",
+        "items": {
+            "expertAdvisors": {
+                "title": "Expert Advisors",
+                "description": "Curated selection of the best Expert Advisors in the market."
+            },
+            "analytics": {
+                "title": "Simple analytics",
+                "description": "Track account and per-EA performance from one clear dashboard."
+            },
+            "history": {
+                "title": "Trading history",
+                "description": "Every trade recorded and searchable, with a profit and loss calendar."
+            },
+            "backtesting": {
+                "title": "Back-testing data",
+                "description": "Verified back-tests so you know how a strategy behaved before you run it."
+            },
+            "easyvps": {
+                "title": "EasyVPS",
+                "description": "A performance-optimized VPS with your Expert Advisors already installed."
+            },
+            "ai": {
+                "title": "AI technology",
+                "description": "Research and models that sharpen the strategies behind every Expert Advisor."
+            },
+            "forecasts": {
+                "title": "AI market forecasts",
+                "description": "Forward-looking market reads to give you context on every trading condition."
+            },
+            "support": {
+                "title": "Remote support",
+                "description": "Remote-desktop assistance from the team whenever the setup needs a hand."
+            },
+            "community": {
+                "title": "Community",
+                "description": "A community of traders and developers building on the same platform."
+            }
+        }
+    },
+    "howItWorks": {
+        "eyebrow": "How it works",
+        "titleLine1": "Get started in four simple steps.",
+        "titleAccent": "No buying, downloading or installing",
+        "steps": {
+            "connect": {
+                "title": "Connect your account",
+                "description": "Once approved, access your user dashboard and link your MetaTrader account securely in a few clicks."
+            },
+            "vps": {
+                "title": "Get your EasyVPS",
+                "description": "Powered by ForexVPS.net, with all the Expert Advisors already installed and configured, ready to go."
+            },
+            "deploy": {
+                "title": "Drag & drop the Expert Advisors",
+                "description": "Choose from a catalogue of 20+ premium Expert Advisors, and drop it on your trading charts."
+            },
+            "results": {
+                "title": "Get ready to be amazed",
+                "description": "Sit back and let our Expert Advisors do the heavy lifting, while you track your results through the user dashboard."
+            }
+        }
+    },
+    "testimonials": {
+        "srLabel": "What partners say about EasyAlgos",
+        "items": {
+            "icmarkets": {
+                "quote": "EasyAlgos is a great opportunity if you want to trade some of the top Expert Advisors without paying for them.",
+                "name": "ICMarkets",
+                "role": "Global Forex Broker - Since 2007"
+            },
+            "forexvps": {
+                "quote": "EasyAlgos has been a great partner to work with, and we're proud to support their traders with VPS infrastructure they need to run their strategies around the clock.",
+                "name": "Kim Shearer - CMO",
+                "role": "ForexVPS.net"
+            },
+            "developer": {
+                "quote": "As an EA developer, I've been really impressed with EasyAlgos since I started offering my Expert Advisors on their platform. The submission and verification process is fast and professional, with clear guidelines and responsive support; and the EasyVPS setup lets my EAs run smoothly out of the box.",
+                "name": "Wim Schrynemakers",
+                "role": "EA Developer - Malta"
+            }
+        }
+    },
+    "pricing": {
+        "eyebrow": "The only catch",
+        "titleAccent": "You don't pay",
+        "titleRest": "you qualify.",
+        "leadLine1": "No license payments. No subscriptions. No hidden fees.",
+        "leadLine2": "Just meet the minimum account requirements and you're in.",
+        "minimumBalance": "/ Minimum balance",
+        "minimumTrades": "{count} minimum monthly trades",
+        "modelTitle": "How our \"free\" model works",
+        "tiers": {
+            "starter": {
+                "name": "Starter",
+                "description": "Everything you need to begin trading smoothly with EasyAlgos. You get a reliable, performance-optimized VPS that runs your EAs effortlessly, offering a solid foundation and a seamless entry into the EasyAlgos ecosystem."
+            },
+            "pro": {
+                "name": "Pro",
+                "description": "Designed for traders who want more power and more support. You get an upgraded, higher-spec VPS, full remote-desktop assistance, and access to Market Forecasts, giving you both stronger performance and deeper insight into every trading condition."
+            },
+            "elite": {
+                "name": "Elite",
+                "description": "Access the highest level of capability, exclusivity, and convenience. You receive our top-tier VPS, early access to upcoming releases, exclusive resources, and a completely guided, hands-off experience, the ultimate EasyAlgos offering."
+            }
+        }
+    },
+    "research": {
+        "titleLine1": "Behind the algorithms:",
+        "titleLine2": "research, data, and AI",
+        "lead": "Forget about payments or commissions of any kind - EasyAlgos is available for free with no hidden costs.. if you qualify",
+        "more": "More Research articles",
+        "posts": {
+            "dashboard": {
+                "title": "The User Dashboard Just Got a Major Upgrade",
+                "excerpt": "The EasyAlgos dashboard has been rebuilt from the ground up - a new Overview page, expanded account and EA analytics, a profit & loss calendar, and a cleaner, faster interface."
+            },
+            "window": {
+                "title": "AI Bubble or Not, This Window Won't Last Forever",
+                "excerpt": "Explore whether the AI boom is a bubble, why current tools are temporarily underpriced, and how recent breakthroughs in reliability and coding are changing what's possible today."
+            },
+            "bubble": {
+                "title": "Is There an AI Bubble, and Will It Pop? (Here's the Math)",
+                "excerpt": "Explore AI bubble risks, market concentration concerns, and high valuations. Learn if the AI bubble will burst by 2027 and how to leverage subsidized AI tools now."
+            }
+        }
+    },
+    "banner": {
+        "eyebrow": "Stop looking elsewhere",
+        "titleLine1": "Discover why",
+        "titleLine2": "traders choose us",
+        "leadLine1": "The answer to succeeding with Expert Advisors",
+        "leadLine2": "without the hassle, is right in front of you:"
+    },
+    "footer": {
+        "groups": {
+            "gettingStarted": "Getting started",
+            "support": "Support",
+            "links": "Links",
+            "brokers": "Brokers",
+            "featuredArticles": "Featured articles",
+            "developers": "Developers",
+            "expertAdvisors": "Expert Advisors"
+        },
+        "links": {
+            "applyNow": "Apply now",
+            "howToJoin": "How to join",
+            "howToOnboard": "How to onboard",
+            "howToGetEasyvps": "How to get your EasyVPS",
+            "howToStartTrading": "How to start trading",
+            "helpCenter": "Help center",
+            "terms": "Terms",
+            "privacy": "Privacy policy",
+            "faq": "Frequently asked questions",
+            "login": "Log-in",
+            "easyvps": "EasyVPS",
+            "about": "About",
+            "pricing": "Pricing",
+            "affiliates": "Affiliates",
+            "research": "Research",
+            "reviews": "Reviews",
+            "results": "Results",
+            "deck": "Deck",
+            "algoscore": "AlgoScore",
+            "precisionAccounts": "Precision accounts"
+        },
+        "articles": {
+            "window": "AI bubble or not, this window won't last forever",
+            "bubble": "Is there an AI bubble, and will it pop? (Here's the math)",
+            "needsYou": "Why AI needs you more than you think",
+            "reallyUsing": "Are we really using AI for trading?",
+            "forecasts": "How our AI market forecasts help you trade smarter",
+            "notAlone": "Why we don't let AI trade on its own",
+            "realAi": "How our Expert Advisors use real AI",
+            "invisibleEdge": "The invisible edge behind our EAs visible results"
+        },
+        "legal": {
+            "natureTitle": "Nature of Business Disclaimer",
+            "earningsTitle": "Earnings & Risk Disclaimer"
+        },
+        "copyright": "Copyright (c) {year}. All rights reserved.",
+        "srNav": "Footer navigation"
+    }
+}

@@ -7,3 +7,6 @@ build/
 .env.local
 .nuxt/
 .output/
+.playwright-mcp/
+*.jpeg
+shots/

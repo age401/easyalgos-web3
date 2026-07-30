@@ -1,0 +1,263 @@
+{
+    "common": {
+        "skipToContent": "Zum Inhalt springen",
+        "applyNow": "Jetzt bewerben",
+        "learnMore": "Mehr erfahren",
+        "logIn": "Anmelden",
+        "for": "Fuer",
+        "traders": "Trader",
+        "developers": "Entwickler",
+        "openMenu": "Menue oeffnen",
+        "closeMenu": "Menue schliessen",
+        "playVideo": "Video abspielen",
+        "previous": "Zurueck",
+        "next": "Weiter",
+        "goToStep": "Zu Schritt {n}"
+    },
+    "nav": {
+        "expertAdvisors": "Expert Advisors",
+        "easyvps": "EasyVPS",
+        "icprecision": "ICPrecision",
+        "research": "Research"
+    },
+    "hero": {
+        "titleLine1": "Top-bewertete",
+        "titleLine2": "Expert Advisors nutzen,",
+        "titleLine3": "ohne dafuer",
+        "titleLine4": "zu bezahlen",
+        "leadLine1": "Der Markt fuer Expert Advisors war kaputt.",
+        "leadLine2": "So haette er immer sein sollen.",
+        "partners": "Partner Nr. 1 fuer algorithmischen Handel",
+        "cardsLabel": "Eine Auswahl der bei EasyAlgos verfuegbaren Expert Advisors"
+    },
+    "card": {
+        "algoScore": "AlgoScore",
+        "excellent": "Hervorragend",
+        "accountGrowth": "Kontowachstum",
+        "monthlyGain": "Monatlicher Gewinn",
+        "dailyGain": "Taeglicher Gewinn",
+        "maximumDrawdown": "Maximaler Drawdown",
+        "monthsInProfit": "Monate im Plus",
+        "yearsTracked": "Erfasste Jahre",
+        "listPrice": "Listenpreis",
+        "developer": "Entwickler",
+        "eaOfTheMonth": "EA des Monats",
+        "trackRecord": "Historie"
+    },
+    "trustpilot": {
+        "excellent": "Hervorragend",
+        "basedOn": "{rating} von 5 auf Basis von",
+        "reviews": "{count} Bewertungen",
+        "srLabel": "Bewertet mit Hervorragend, {rating} von 5, auf Basis von {count} Trustpilot-Bewertungen"
+    },
+    "problem": {
+        "eyebrow": "Das Problem",
+        "titleLine1": "Alles, was Sie zum Handeln",
+        "titleLine2": "mit Expert Advisors brauchten...",
+        "titleAccent": "lag an verschiedenen Orten"
+    },
+    "solution": {
+        "eyebrow": "Die Loesung",
+        "titleLine1": "Jetzt ist endlich...",
+        "titleAccent": "alles an einem Ort"
+    },
+    "roles": {
+        "trader": "Trader",
+        "developer": "Entwickler",
+        "broker": "Broker",
+        "vps": "VPS-Anbieter",
+        "community": "Community",
+        "analytics": "Analysen"
+    },
+    "accolades": {
+        "tradersLabel": "Trader vertrauen uns",
+        "volumeValue": "Milliarden",
+        "volumeLabel": "an monatlichem Handelsvolumen"
+    },
+    "whatYouGet": {
+        "eyebrow": "Das bekommen Sie",
+        "titleLine1": "Expert Advisors und alles,",
+        "titleAccent": "um damit erfolgreich zu sein",
+        "items": {
+            "expertAdvisors": {
+                "title": "Expert Advisors",
+                "description": "Eine kuratierte Auswahl der besten Expert Advisors am Markt."
+            },
+            "analytics": {
+                "title": "Einfache Analysen",
+                "description": "Konto- und EA-Performance in einem uebersichtlichen Dashboard verfolgen."
+            },
+            "history": {
+                "title": "Handelshistorie",
+                "description": "Jeder Trade erfasst und durchsuchbar, mit Gewinn- und Verlustkalender."
+            },
+            "backtesting": {
+                "title": "Backtesting-Daten",
+                "description": "Geprueste Backtests, damit Sie wissen, wie sich eine Strategie verhalten hat, bevor Sie sie einsetzen."
+            },
+            "easyvps": {
+                "title": "EasyVPS",
+                "description": "Ein performance-optimierter VPS mit bereits installierten Expert Advisors."
+            },
+            "ai": {
+                "title": "KI-Technologie",
+                "description": "Research und Modelle, die die Strategien hinter jedem Expert Advisor schaerfen."
+            },
+            "forecasts": {
+                "title": "KI-Marktprognosen",
+                "description": "Vorausschauende Markteinschaetzungen als Kontext fuer jede Handelssituation."
+            },
+            "support": {
+                "title": "Remote-Support",
+                "description": "Fernwartung durch das Team, wann immer das Setup Unterstuetzung braucht."
+            },
+            "community": {
+                "title": "Community",
+                "description": "Eine Community aus Tradern und Entwicklern auf derselben Plattform."
+            }
+        }
+    },
+    "howItWorks": {
+        "eyebrow": "So funktioniert es",
+        "titleLine1": "In vier einfachen Schritten starten.",
+        "titleAccent": "Kein Kaufen, Herunterladen oder Installieren",
+        "steps": {
+            "connect": {
+                "title": "Konto verbinden",
+                "description": "Nach der Freigabe oeffnen Sie Ihr Dashboard und verbinden Ihr MetaTrader-Konto mit wenigen Klicks sicher."
+            },
+            "vps": {
+                "title": "EasyVPS erhalten",
+                "description": "Betrieben von ForexVPS.net, mit allen Expert Advisors bereits installiert und konfiguriert, startklar."
+            },
+            "deploy": {
+                "title": "Expert Advisors per Drag & Drop",
+                "description": "Waehlen Sie aus einem Katalog von ueber 20 Premium-Expert-Advisors und ziehen Sie sie auf Ihre Charts."
+            },
+            "results": {
+                "title": "Lassen Sie sich ueberraschen",
+                "description": "Lehnen Sie sich zurueck: unsere Expert Advisors uebernehmen die Arbeit, waehrend Sie Ihre Ergebnisse im Dashboard verfolgen."
+            }
+        }
+    },
+    "testimonials": {
+        "srLabel": "Was Partner ueber EasyAlgos sagen",
+        "items": {
+            "icmarkets": {
+                "quote": "EasyAlgos ist eine grossartige Gelegenheit, wenn Sie einige der besten Expert Advisors handeln moechten, ohne dafuer zu bezahlen.",
+                "name": "ICMarkets",
+                "role": "Globaler Forex-Broker - Seit 2007"
+            },
+            "forexvps": {
+                "quote": "EasyAlgos ist ein hervorragender Partner, und wir sind stolz darauf, die Trader mit der VPS-Infrastruktur zu unterstuetzen, die sie brauchen, um ihre Strategien rund um die Uhr laufen zu lassen.",
+                "name": "Kim Shearer - CMO",
+                "role": "ForexVPS.net"
+            },
+            "developer": {
+                "quote": "Als EA-Entwickler bin ich von EasyAlgos sehr beeindruckt, seit ich meine Expert Advisors dort anbiete. Einreichung und Pruefung laufen schnell und professionell, mit klaren Vorgaben und schnellem Support; und dank des EasyVPS-Setups laufen meine EAs von Anfang an reibungslos.",
+                "name": "Wim Schrynemakers",
+                "role": "EA-Entwickler - Malta"
+            }
+        }
+    },
+    "pricing": {
+        "eyebrow": "Der einzige Haken",
+        "titleAccent": "Sie zahlen nicht,",
+        "titleRest": "Sie qualifizieren sich.",
+        "leadLine1": "Keine Lizenzgebuehren. Keine Abos. Keine versteckten Kosten.",
+        "leadLine2": "Erfuellen Sie einfach die Mindestanforderungen an das Konto und Sie sind dabei.",
+        "minimumBalance": "/ Mindestguthaben",
+        "minimumTrades": "{count} Trades pro Monat mindestens",
+        "modelTitle": "So funktioniert unser \"kostenloses\" Modell",
+        "tiers": {
+            "starter": {
+                "name": "Starter",
+                "description": "Alles, was Sie fuer einen reibungslosen Start mit EasyAlgos brauchen. Sie erhalten einen zuverlaessigen, performance-optimierten VPS, der Ihre EAs muehelos betreibt - eine solide Grundlage und ein nahtloser Einstieg in das EasyAlgos-Oekosystem."
+            },
+            "pro": {
+                "name": "Pro",
+                "description": "Fuer Trader, die mehr Leistung und mehr Unterstuetzung wollen. Sie erhalten einen hoeher ausgestatteten VPS, vollen Remote-Desktop-Support und Zugang zu Marktprognosen - mehr Performance und tieferer Einblick in jede Marktlage."
+            },
+            "elite": {
+                "name": "Elite",
+                "description": "Hoechste Leistung, Exklusivitaet und Komfort. Sie erhalten unseren Top-VPS, fruehen Zugang zu kommenden Releases, exklusive Ressourcen und eine vollstaendig begleitete Rundum-Betreuung - das beste EasyAlgos-Angebot."
+            }
+        }
+    },
+    "research": {
+        "titleLine1": "Hinter den Algorithmen:",
+        "titleLine2": "Research, Daten und KI",
+        "lead": "Vergessen Sie Zahlungen oder Provisionen jeder Art - EasyAlgos ist kostenlos und ohne versteckte Kosten verfuegbar.. wenn Sie sich qualifizieren",
+        "more": "Weitere Research-Artikel",
+        "posts": {
+            "dashboard": {
+                "title": "Das Nutzer-Dashboard wurde grundlegend ueberarbeitet",
+                "excerpt": "Das EasyAlgos-Dashboard wurde von Grund auf neu gebaut - eine neue Uebersichtsseite, erweiterte Konto- und EA-Analysen, ein Gewinn- und Verlustkalender und eine klarere, schnellere Oberflaeche."
+            },
+            "window": {
+                "title": "KI-Blase oder nicht - dieses Fenster bleibt nicht ewig offen",
+                "excerpt": "Wir untersuchen, ob der KI-Boom eine Blase ist, warum aktuelle Werkzeuge voruebergehend unterbewertet sind und wie juengste Fortschritte bei Zuverlaessigkeit und Programmierung veraendern, was heute moeglich ist."
+            },
+            "bubble": {
+                "title": "Gibt es eine KI-Blase, und wird sie platzen? (Hier ist die Rechnung)",
+                "excerpt": "Risiken einer KI-Blase, Marktkonzentration und hohe Bewertungen im Blick. Erfahren Sie, ob die Blase bis 2027 platzt und wie Sie subventionierte KI-Werkzeuge jetzt nutzen."
+            }
+        }
+    },
+    "banner": {
+        "eyebrow": "Hoeren Sie auf, woanders zu suchen",
+        "titleLine1": "Entdecken Sie, warum",
+        "titleLine2": "Trader uns waehlen",
+        "leadLine1": "Die Antwort auf erfolgreichen Handel mit Expert Advisors",
+        "leadLine2": "ohne Aufwand liegt direkt vor Ihnen:"
+    },
+    "footer": {
+        "groups": {
+            "gettingStarted": "Erste Schritte",
+            "support": "Support",
+            "links": "Links",
+            "brokers": "Broker",
+            "featuredArticles": "Empfohlene Artikel",
+            "developers": "Entwickler",
+            "expertAdvisors": "Expert Advisors"
+        },
+        "links": {
+            "applyNow": "Jetzt bewerben",
+            "howToJoin": "So werden Sie Mitglied",
+            "howToOnboard": "So starten Sie",
+            "howToGetEasyvps": "So erhalten Sie Ihren EasyVPS",
+            "howToStartTrading": "So beginnen Sie zu handeln",
+            "helpCenter": "Hilfebereich",
+            "terms": "AGB",
+            "privacy": "Datenschutzerklaerung",
+            "faq": "Haeufige Fragen",
+            "login": "Anmelden",
+            "easyvps": "EasyVPS",
+            "about": "Ueber uns",
+            "pricing": "Preise",
+            "affiliates": "Partnerprogramm",
+            "research": "Research",
+            "reviews": "Bewertungen",
+            "results": "Ergebnisse",
+            "deck": "Praesentation",
+            "algoscore": "AlgoScore",
+            "precisionAccounts": "Precision-Konten"
+        },
+        "articles": {
+            "window": "KI-Blase oder nicht - dieses Fenster bleibt nicht ewig offen",
+            "bubble": "Gibt es eine KI-Blase, und wird sie platzen? (Hier ist die Rechnung)",
+            "needsYou": "Warum die KI Sie mehr braucht, als Sie denken",
+            "reallyUsing": "Nutzen wir wirklich KI fuer das Trading?",
+            "forecasts": "Wie unsere KI-Marktprognosen Ihnen zu klugeren Trades verhelfen",
+            "notAlone": "Warum wir die KI nicht allein handeln lassen",
+            "realAi": "Wie unsere Expert Advisors echte KI nutzen",
+            "invisibleEdge": "Der unsichtbare Vorteil hinter den sichtbaren Ergebnissen unserer EAs"
+        },
+        "legal": {
+            "natureTitle": "Hinweis zur Geschaeftstaetigkeit",
+            "earningsTitle": "Hinweis zu Ertraegen und Risiken"
+        },
+        "copyright": "Copyright (c) {year}. Alle Rechte vorbehalten.",
+        "srNav": "Fussbereich-Navigation"
+    }
+}

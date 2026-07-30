@@ -105,12 +105,40 @@ export default <Partial<Config>>{
             'Ink/900': '#101731',
             'Ink/800': '#161F3E',
             'Ink/edge': '#232D52',
+            // v3 additions, read off the Figma file.
+            // Mixed-case Violet ramp mirroring the legacy uppercase VIOLET/* one.
+            // The v3 file names its variables this way, so matching it keeps the
+            // classes in the markup readable straight off the design.
+            'Violet/100': '#E4E0FF',
+            'Violet/200': '#C9C2FF',
+            'Violet/300': '#AFA3FF',
+            'Violet/400': '#8B7EFF',
+            'Violet/500': '#7D73EA',
+            'Violet/600': '#7469D7',
+            'Violet/700': '#5A50C9',
+            'Violet/800': '#4134BC',
+            // The role chips floating over the particle cluster.
+            'Chip/bg': '#0E0E10',
+            'Chip/edge': '#3E4153',
+            // Chip label colours — one per ecosystem role, from the Indicators set.
+            'Role/trader': '#BC78FF',
+            'Role/developer': '#42DBE0',
+            'Role/broker': '#00F070',
+            'Role/vps': '#C9C2FF',
+            'Role/community': '#B1C4F1',
+            'Role/analytics': '#F1D8B1',
         },
         extend: {
             fontFamily: {
                 poppins: ['"Poppins"', 'ui-serif', 'system-ui'],
                 franklin: ['"Roboto"', 'sans-serif', 'system-ui'],
-                rubik: ['"Rubik"', 'sans-serif', 'system-ui'],
+                // Rubik is the dashboard-UI face; the EA cards' 10px stat rows use
+                // it. Roboto is listed ahead of the generic fallback so that if the
+                // Rubik woff2 files are absent the rows land on a face that is
+                // already loaded rather than on the system sans — at 10px the two
+                // are near-indistinguishable, and it means Rubik never has to be
+                // preloaded into the critical path.
+                rubik: ['"Rubik"', '"Roboto"', 'sans-serif', 'system-ui'],
                 inter: ['"Inter"', 'sans-serif', 'system-ui'],
             },
             fontWeight: {
@@ -125,6 +153,33 @@ export default <Partial<Config>>{
                 'black-gradient': 'linear-gradient(to bottom, #4B4B4B 0%, #1E1E1E 100%)',
                 'black-gradient-hover': 'linear-gradient(to bottom, #696969 0%, #4B4B4B 100%)',
                 'black-gradient-active': 'linear-gradient(to bottom, #969696 0%, #696969 100%)',
+                // ---- v3 brand gradients (measured from the Figma file) ----
+                // Headline accent: the blue-to-violet sweep on "without paying for
+                // them". Light-surface variant.
+                'ea-text': 'linear-gradient(90deg, #205EFB 0%, #5959FF 50%, #B36DFF 100%)',
+                // The same idea lifted for dark surfaces, so it still reads at 48px
+                // on #171717.
+                'ea-text-dark': 'linear-gradient(90deg, #4379FF 0%, #7272FF 50%, #B571FF 100%)',
+                // Primary CTA fill. Deliberately wider than the button (see .ea-btn
+                // in main.css): the extra violet at both ends is what sweeps across
+                // on hover, so the band must extend past the visible pill.
+                'ea-cta': 'linear-gradient(90deg, #8663FF 0%, #205EFB 34%, #5959FF 62%, #B36DFF 85%, #8663FF 100%)',
+                // Closing banner: a blue-violet base with two radial blooms over it
+                // (a deep navy that darkens the bottom-left, a cyan that lifts the
+                // top-right) — the layering is what keeps 636px of gradient from
+                // looking flat.
+                'ea-banner': [
+                    'radial-gradient(120% 90% at 88% 8%, rgba(64,214,255,0.5) 0%, rgba(29,33,109,0) 71%)',
+                    'radial-gradient(130% 110% at 6% 100%, rgba(21,43,119,0.85) 0%, rgba(9,21,60,0.9) 100%)',
+                    'linear-gradient(104deg, #205EFB 0%, #5959FF 46%, #B36DFF 100%)'
+                ].join(', '),
+                // Pricing: an outer tinted shell holding three near-white cards.
+                'ea-pricing-shell': 'linear-gradient(135deg, #F6F7FF 0%, #E7E9F9 39%, #F2F3FF 100%)',
+                'ea-pricing-card': 'linear-gradient(160deg, #F7F7FB 0%, #FFFFFF 100%)',
+                // "EA of the month" ribbon on the featured hero card.
+                'ea-ribbon': 'linear-gradient(90deg, #489EFF 0%, #4CA8FF 100%)',
+                // The role chips' inner bubble.
+                'ea-bubble': 'radial-gradient(circle at 30% 25%, #787C9A 0%, #373F78 55%, #444D8D 90%)',
             },
             boxShadow: {
                 'primary': '0px 16px 20px 0px rgba(63, 97, 235, 0.16)',
@@ -135,6 +190,19 @@ export default <Partial<Config>>{
                 'affiliate-card': '0px 30px 40px 0px rgba(3, 63, 255, 0.05)',
                 'pricing-card': '0 24px 60px 0 rgba(192, 191, 243, 0.6)',
                 'card-m': '0 16px 16px 0 rgba(84, 107, 197, 0.04), 0 8px 6px 0 rgba(84, 107, 197, 0.04)',
+                // ---- v3 ----
+                // Primary/dark CTA: a tight contact shadow plus a wide blue bloom.
+                'ea-cta': '0 12px 30px -12px rgba(32, 94, 251, 0.2), 0 1px 2px 0 rgba(11, 17, 37, 0.16)',
+                'ea-cta-hover': '0 18px 40px -14px rgba(32, 94, 251, 0.34), 0 2px 4px 0 rgba(11, 17, 37, 0.18)',
+                // Floating EA card. Four stacked ambient shadows, no offset — the
+                // cards read as suspended sheets rather than as lifted UI.
+                'ea-card':
+                    '0 0 250px 0 rgba(128, 123, 143, 0.12), 0 0 96px 0 rgba(37, 32, 51, 0.04), 0 0 48px 0 rgba(37, 32, 51, 0.02), -6px 0 12px 0 rgba(84, 107, 197, 0.04)',
+                'ea-card-hover':
+                    '0 0 250px 0 rgba(128, 123, 143, 0.16), 0 24px 48px -24px rgba(37, 32, 51, 0.18), 0 0 48px 0 rgba(37, 32, 51, 0.03), -6px 0 12px 0 rgba(84, 107, 197, 0.05)',
+                // Halo around a role chip's bubble.
+                'ea-bubble': '0 0 0 4px rgba(98, 103, 143, 0.1)',
+                'ea-step': '0 24px 48px -28px rgba(37, 32, 51, 0.16)',
             },
             borderRadius: {
                 '1.5xl': '.875rem',
@@ -173,9 +241,23 @@ export default <Partial<Config>>{
                     from: { opacity: '0', transform: 'translateY(2px)' },
                     to: { opacity: '1', transform: 'translateY(0)' },
                 },
+                // Brand marquee. Translating exactly -50% of a doubled track is what
+                // makes the loop seamless; transform-only so it stays on the
+                // compositor and never triggers layout.
+                eaMarquee: {
+                    from: { transform: 'translate3d(0, 0, 0)' },
+                    to: { transform: 'translate3d(-50%, 0, 0)' },
+                },
+                // Slow drift on the role chips so the cluster never looks frozen.
+                eaFloat: {
+                    '0%, 100%': { transform: 'translate3d(0, 0, 0)' },
+                    '50%': { transform: 'translate3d(0, -7px, 0)' },
+                },
             },
             animation: {
                 fadeIn: 'fadeIn 0.15s ease-out',
+                eaMarquee: 'eaMarquee 46s linear infinite',
+                eaFloat: 'eaFloat 6s ease-in-out infinite',
             },
             blur: {
                 '120': '120px',
