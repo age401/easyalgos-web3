@@ -1,7 +1,10 @@
 <script setup lang="ts">
-// Two headline figures on a tinted band, between the dark particle section and
-// the white "What you get". It reads as a breath between two heavy sections, so
-// it stays deliberately short.
+// Two headline figures between the particle section and "What you get". It reads
+// as a breath between two heavy sections, so it stays deliberately short.
+//
+// It paints no background of its own, and neither does the section after it: the
+// particle section's page tint is still washing back to white across both of
+// them, and a band with a colour would have cut that fade with an edge.
 //
 // The trader count is formatted through i18n's number formatter, so it groups as
 // 7,435 / 7.435 per locale rather than being hard-coded either way.
@@ -9,7 +12,7 @@ const { n } = useI18n()
 </script>
 
 <template>
-    <div class="bg-Tinted/50">
+    <div>
         <div class="ea-container grid grid-cols-1 gap-8 py-12 text-center tablet:grid-cols-2 tablet:gap-6 tablet-wide:py-14">
             <div v-reveal>
                 <p class="ea-num font-poppins text-[2rem] font-semibold leading-none tracking-[-1px] text-Tinted/950 tablet-wide:text-[3rem] tablet-wide:tracking-[-2px]">

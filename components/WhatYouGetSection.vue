@@ -28,7 +28,9 @@ const activeVisual = computed(() => {
 </script>
 
 <template>
-    <section id="what-you-get" class="ea-section relative overflow-x-clip bg-white">
+    <!-- No background of its own: the particle section's page tint is still
+         resolving to white across this section, and a painted box would edge it. -->
+    <section id="what-you-get" class="ea-section relative overflow-x-clip">
         <div class="ea-container-wide grid grid-cols-1 items-center gap-12 tablet-wide:grid-cols-[minmax(0,620px)_minmax(0,1fr)] tablet-wide:gap-10 desktop:gap-16">
             <!-- Left column -->
             <div>

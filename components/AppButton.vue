@@ -1,11 +1,14 @@
 <script setup lang="ts">
-// The one pill button, four skins (see .ea-btn* in main.css).
+// The one pill button, four skins (see .ea-btn* in main.css). The variants map
+// to the Figma "Button" component (node 458:1310): primary = Default,
+// stroke = White BG + Stroke, white = White BG, ink = Dark BG. Each carries the
+// component's default / hover / pressed states via :hover and :active.
 //
 // The `primary` variant carries an oversized gradient band in a child layer: at
-// rest you see its middle, and on hover the band slides so the violet travels
-// through. That layer exists because animating a child's transform stays on the
-// compositor, whereas animating background-position would repaint the button on
-// every frame of the sweep.
+// rest you see its right end, and on hover the band slides so the violet left
+// end travels through. That layer exists because animating a child's transform
+// stays on the compositor, whereas animating background-position would repaint
+// the button on every frame of the sweep.
 //
 // Renders <a> or <button> depending on whether an href is given, so a CTA that
 // navigates is a real link (middle-clickable, crawlable) and one that acts is a
@@ -49,16 +52,17 @@ const isExternal = computed(() => !!props.href && /^(https?:)?\/\//.test(props.h
         <svg
             v-if="arrow"
             class="ea-btn__arrow shrink-0"
-            width="15"
-            height="15"
+            width="16"
+            height="16"
             viewBox="0 0 16 16"
             fill="none"
             aria-hidden="true"
         >
+            <!-- Geometry from the Figma component's exported "Icon" asset. -->
             <path
-                d="M3 8h10m0 0L9 4m4 4-4 4"
+                d="M3 8H12M8.5 4.5L12.5 8L8.5 11.5"
                 stroke="currentColor"
-                stroke-width="1.7"
+                stroke-width="1.5"
                 stroke-linecap="round"
                 stroke-linejoin="round"
             />

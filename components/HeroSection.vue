@@ -19,10 +19,10 @@ onMounted(() => requestAnimationFrame(() => (loaded.value = true)))
 <template>
     <section
         id="top"
-        :class="['relative overflow-x-clip pt-[64px] tablet-wide:pt-[76px]', { 'is-loaded': loaded }]"
+        :class="['relative overflow-x-clip', { 'is-loaded': loaded }]"
     >
         <div
-            class="ea-container grid grid-cols-1 items-center gap-12 pb-16 pt-12 tablet:pt-16 tablet-wide:grid-cols-[minmax(0,1fr)_auto] tablet-wide:gap-6 tablet-wide:pb-20 tablet-wide:pt-20 desktop:min-h-[calc(100vh-76px)] desktop:pb-24"
+            class="ea-container grid grid-cols-1 items-center gap-12 pb-16 pt-12 tablet:pt-16 tablet-wide:grid-cols-[minmax(0,1fr)_auto] tablet-wide:gap-6 tablet-wide:pb-20 tablet-wide:pt-20 desktop:min-h-[calc(100vh-72px)] desktop:pb-24"
         >
             <!-- Copy -->
             <div class="max-w-[680px]">

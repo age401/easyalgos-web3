@@ -29,6 +29,12 @@ export function useDarkBand(headerHeight = 76) {
         const line = headerHeight * 0.5
         let next = false
         for (const band of bands) {
+            // A band whose colour is scroll-interpolated (see usePageTint) marks
+            // itself "off" while it is mid-fade: geometry alone would keep the
+            // header inverted over a background that has already washed out to
+            // near-white on the way out. The two tests AND together — on the way
+            // IN geometry is the later gate, on the way out the fade is.
+            if (band.dataset.darkBand === 'off') continue
             const rect = band.getBoundingClientRect()
             if (rect.top <= line && rect.bottom > line) {
                 next = true

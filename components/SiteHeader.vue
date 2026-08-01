@@ -1,11 +1,34 @@
 <script setup lang="ts">
-// Sticky header. Inverts itself while a dark band sits behind it (useDarkBand +
-// the .ea-header rules in main.css) — the two wordmarks cross-fade and the links
-// lighten, with no layout change, so nothing reflows on the swap.
+// The header scrolls away with the page — it is not pinned. The particle
+// section's choreography reads as a full-bleed stage, and a bar floating over it
+// the whole way down fought that.
+//
+// `useDarkBand` is still called here, and still from here: it no longer has a
+// floating header to invert (the `.is-dark-band .ea-header` rules survive but are
+// inert now that the bar is never over anything but the hero),
+// but it is what carries the PAGE background across the self-coloured dark bands
+// — the testimonials section and the footer — so an overscroll past one never
+// flashes white. The problem/solution section drives the same custom property
+// itself, on a scroll ramp; see usePageTint.
 //
 // The white wordmark is the same SVG under `brightness(0) invert(1)` rather than
 // a second asset: one fewer request, and the two can never drift apart.
-useDarkBand(76)
+useDarkBand(72)
+
+// Links drop into the burger one at a time as the row narrows, "Expert
+// Advisors" surviving longest — so it hides latest here, and its mobile-panel
+// twin (below) hides earliest, once the row already shows it.
+const NAV_LINK_ROW_CLASS: Partial<Record<string, string>> = {
+    easyvps: 'hidden tablet-wide:inline-flex',
+    icprecision: 'hidden desktop:inline-flex',
+    research: 'hidden desktop-md:inline-flex'
+}
+const NAV_LINK_PANEL_CLASS: Partial<Record<string, string>> = {
+    expertAdvisors: 'tablet-md:hidden',
+    easyvps: 'tablet-wide:hidden',
+    icprecision: 'desktop:hidden',
+    research: 'desktop-md:hidden'
+}
 
 const menuOpen = ref(false)
 
@@ -28,12 +51,12 @@ function onKeydown(event: KeyboardEvent) {
 
 <template>
     <header
-        class="ea-header fixed inset-x-0 top-0 z-50 border-b border-Tinted/50 bg-white/85 backdrop-blur-md"
+        class="ea-header relative z-50 border-b border-Tinted/50 bg-white/85 backdrop-blur-md"
         @keydown="onKeydown"
     >
-        <div class="ea-container flex h-[64px] items-center justify-between gap-6 tablet-wide:h-[76px]">
+        <div class="ea-header__inner flex h-[72px] items-center justify-between gap-6">
             <!-- Wordmark + audience switch -->
-            <div class="flex items-center gap-4">
+            <div class="flex items-center gap-6">
                 <a href="/" class="flex shrink-0 items-center gap-1.5" aria-label="EasyAlgos">
                     <img src="/img/logo-mark.svg" alt="" width="22" height="22" class="h-[22px] w-[22px]" />
                     <span class="relative block h-[18px] w-[93px]">
@@ -56,39 +79,37 @@ function onKeydown(event: KeyboardEvent) {
                     </span>
                 </a>
 
-                <span class="hidden h-3 w-0.5 shrink-0 rounded-full bg-Tinted/100 desktop:block" aria-hidden="true" />
-
                 <!-- Audience switch. This is the traders site, so Traders is the
                      current segment and Developers is the link away. -->
                 <div class="hidden items-center gap-2 desktop:flex">
                     <span class="font-franklin text-[12px] leading-4 text-Tinted/400">{{ $t('common.for') }}</span>
-                    <div class="ea-header__switch flex items-center gap-1 rounded-full border border-Tinted/100 bg-Tinted/25 p-1">
-                        <span
-                            aria-current="page"
-                            class="rounded-full bg-Tinted/900 px-3 py-1 font-poppins text-[12px] font-medium leading-4 tracking-[0.01em] text-Tinted/25"
-                        >
+                    <div class="ea-header__switch">
+                        <span aria-current="page" class="ea-header__switch-item ea-header__switch-item--current">
                             {{ $t('common.traders') }}
                         </span>
-                        <a
-                            href="/developers"
-                            class="ea-header__switch-idle rounded-full px-3 py-1 font-poppins text-[12px] font-medium leading-4 tracking-[0.01em] text-Tinted/600 transition-colors duration-300 hover:text-Tinted/900"
-                        >
+                        <a href="/developers" class="ea-header__switch-item ea-header__switch-idle">
                             {{ $t('common.developers') }}
                         </a>
                     </div>
                 </div>
             </div>
 
-            <!-- Primary nav -->
-            <nav class="hidden items-center gap-8 tablet-wide:flex desktop-md:gap-10" aria-label="Main">
-                <a v-for="link in NAV_LINKS" :key="link.id" :href="link.href" class="ea-header__link">
+            <!-- Primary nav. Links join one at a time as the row widens; see
+                 NAV_LINK_ROW_CLASS above. -->
+            <nav class="hidden items-center gap-4 tablet-md:flex" aria-label="Main">
+                <a
+                    v-for="link in NAV_LINKS"
+                    :key="link.id"
+                    :href="link.href"
+                    :class="['ea-header__link', NAV_LINK_ROW_CLASS[link.id] ?? 'inline-flex']"
+                >
                     {{ $t(`nav.${link.id}`) }}
                 </a>
             </nav>
 
             <!-- Actions -->
             <div class="flex items-center gap-3 tablet:gap-5">
-                <a :href="LOGIN_HREF" class="ea-header__link hidden tablet:block">{{ $t('common.logIn') }}</a>
+                <a :href="LOGIN_HREF" class="ea-header__link hidden tablet:inline-flex">{{ $t('common.logIn') }}</a>
                 <AppButton
                     :label="$t('common.applyNow')"
                     :href="APPLY_HREF"
@@ -100,7 +121,7 @@ function onKeydown(event: KeyboardEvent) {
 
                 <button
                     type="button"
-                    class="ea-header__link -mr-1 flex h-10 w-10 items-center justify-center tablet-wide:hidden"
+                    class="ea-header__link -mr-1 flex h-10 w-10 items-center justify-center desktop-md:hidden"
                     :aria-label="menuOpen ? $t('common.closeMenu') : $t('common.openMenu')"
                     :aria-expanded="menuOpen"
                     aria-controls="ea-mobile-nav"
@@ -123,15 +144,15 @@ function onKeydown(event: KeyboardEvent) {
             <div
                 v-if="menuOpen"
                 id="ea-mobile-nav"
-                class="ea-container overflow-y-auto border-t border-Tinted/50 bg-white/95 pb-8 pt-6 backdrop-blur-md tablet-wide:hidden"
-                style="max-height: calc(100vh - 64px)"
+                class="ea-container overflow-y-auto border-t border-Tinted/50 bg-white/95 pb-8 pt-6 backdrop-blur-md desktop-md:hidden"
+                style="max-height: calc(100vh - 72px)"
             >
                 <nav class="flex flex-col" aria-label="Main">
                     <a
                         v-for="link in NAV_LINKS"
                         :key="link.id"
                         :href="link.href"
-                        class="border-b border-Tinted/50 py-4 font-poppins text-[16px] font-medium text-Tinted/950"
+                        :class="['border-b border-Tinted/50 py-4 font-poppins text-[16px] font-medium text-Tinted/950', NAV_LINK_PANEL_CLASS[link.id]]"
                         @click="close"
                     >
                         {{ $t(`nav.${link.id}`) }}

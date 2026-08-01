@@ -2,30 +2,48 @@
 // "The problem" -> "The solution", on one pinned stage.
 //
 // The choreography, in one place so it is readable as a whole:
-//   1. The section is three viewports tall and its inner stage is `position:
+//   1. The section is nearly five viewports tall and its inner stage is `position:
 //      sticky; height: 100vh`. Scrolling therefore carries the cluster up until
 //      it is centred in the viewport and then HOLDS it there while the page keeps
 //      moving — no JS, no fixed positioning, nothing that can desync.
 //   2. During that hold the first text group has already entered (its own
 //      scroll-reveal fires as the section arrives).
-//   3. Past the hand-off point the first group lifts away and the second takes
-//      the stage — a class swap, so CSS owns the easing.
-//   4. From just after the hand-off the cluster draws inward, finishing before the
-//      stage releases. That collapse is a single shader uniform.
-//   5. `@converged` fires when the cloud has fully drawn in. That is the seam for
-//      the follow-on phase.
+//   3. The cloud draws into its own centre — a single shader uniform — and a
+//      violet core condenses out of it as it goes. With the collapse all but
+//      finished the first text group fades out, cleared by the thing it was
+//      describing.
+//   4. The star map takes over that core: rings bloom out of it and dots orbit
+//      them, then the core swells and darkens and the mark resolves inside it,
+//      the second text group arriving with it. The rings never move for that —
+//      the core does all the work.
+//   5. A last transformation to a white badge, and then the stage RELEASES: the
+//      reader gets their scrolling back and the white line grows to the foot of
+//      the section on ordinary page scroll, while the page washes back to white
+//      underneath it so line and background meet as one colour.
+//
+// The running order and its scroll budget live in `usePinnedProgress` (see ACT
+// there — one table, everything downstream is derived from it). The star map's
+// own keyframes live in `StarMap.vue`, transcribed from Figma. This component
+// only wires the two together.
+//
+// The page background is the other moving part: the section paints nothing, and
+// `usePageTint` carries the DOCUMENT background between white and the dark as the
+// section arrives and leaves. That is why the dark has no hard edge.
 //
 // Below tablet-wide the stage un-pins (see the CSS overrides at the foot of this
 // component's classes and in main.css): the cluster sits above the copy, both
-// text groups read in normal flow, and the collapse is suppressed so the cloud
-// stays whole. Scroll-jacking a phone is worse than the effect is good.
+// text groups read in normal flow, the collapse is suppressed so the cloud stays
+// whole, and the star map does not play at all. Scroll-jacking a phone is worse
+// than the effect is good.
 const sectionRef = ref<HTMLElement | null>(null)
-const { phaseState, converge } = usePinnedProgress(sectionRef)
+const { phaseState, converge, starMapTime } = usePinnedProgress(sectionRef)
 
-// Only the pinned layout has a held stretch to map a collapse onto. On the
-// stacked layout the cluster simply turns.
+// Only the pinned layout has a held stretch to map any of this onto. On the
+// stacked layout the cluster simply turns, the star map does not play, and the
+// page tint stands down in favour of the section painting its own dark.
 const isPinned = useMediaQuery('(min-width: 1024px)')
 const clusterConverge = computed(() => (isPinned.value ? converge.value : 0))
+const { active: tinted } = usePageTint(sectionRef, [23, 23, 23], isPinned) // Neutral/800
 
 // The chips are "the different places". Collapsing their container toward its own
 // centre pulls every one of them inward proportionally — one transform for the
@@ -58,7 +76,8 @@ function onConverged() {
     <section
         ref="sectionRef"
         data-dark-band
-        class="ea-dark relative bg-Neutral/800 tablet-wide:h-[300vh]"
+        class="ea-dark relative tablet-wide:h-[480vh]"
+        :class="tinted ? 'bg-transparent' : 'bg-Neutral/800'"
     >
         <div
             class="ea-pinned__stage flex items-center"
@@ -88,6 +107,12 @@ function onConverged() {
                             </span>
                         </div>
                     </ParticleCluster>
+
+                    <!-- Shares the cluster's box, and therefore its centre: the
+                         rings bloom out of exactly the point the cloud collapsed
+                         into. Pinned layout only — there is no held stretch to
+                         play it against otherwise. -->
+                    <StarMap v-if="isPinned" :t="starMapTime" :converge="clusterConverge" />
                 </div>
 
                 <!-- Copy. Both groups occupy the same grid cell so the swap has no

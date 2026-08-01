@@ -62,6 +62,8 @@ export default <Partial<Config>>{
             'PINK': '#B36DFF',
             'WARNING': '#FF3437',
             'Neutral/White': '#FFFFFF',
+            'Neutral/25': '#FAFAFA',
+            'Neutral/50': '#F5F5F5',
             'Neutral/100': '#E5E5E5',
             'Neutral/200': '#D4D4D4',
             'Neutral/300': '#A3A3A3',
@@ -160,10 +162,11 @@ export default <Partial<Config>>{
                 // The same idea lifted for dark surfaces, so it still reads at 48px
                 // on #171717.
                 'ea-text-dark': 'linear-gradient(90deg, #4379FF 0%, #7272FF 50%, #B571FF 100%)',
-                // Primary CTA fill. Deliberately wider than the button (see .ea-btn
-                // in main.css): the extra violet at both ends is what sweeps across
-                // on hover, so the band must extend past the visible pill.
-                'ea-cta': 'linear-gradient(90deg, #8663FF 0%, #205EFB 34%, #5959FF 62%, #B36DFF 85%, #8663FF 100%)',
+                // Primary CTA fill. The stops are the Figma band's, laid across a
+                // layer three times the pill's width (see .ea-btn__bg in main.css):
+                // at rest its right end is framed (blue -> violet), on hover it
+                // slides so the left end is framed (violet -> blue).
+                'ea-cta': 'linear-gradient(96deg, #8663FF 0%, #205EFB 50%, #5959FF 75%, #B36DFF 100%)',
                 // Closing banner: a blue-violet base with two radial blooms over it
                 // (a deep navy that darkens the bottom-left, a cyan that lifts the
                 // top-right) — the layering is what keeps 636px of gradient from
@@ -194,6 +197,10 @@ export default <Partial<Config>>{
                 // Primary/dark CTA: a tight contact shadow plus a wide blue bloom.
                 'ea-cta': '0 12px 30px -12px rgba(32, 94, 251, 0.2), 0 1px 2px 0 rgba(11, 17, 37, 0.16)',
                 'ea-cta-hover': '0 18px 40px -14px rgba(32, 94, 251, 0.34), 0 2px 4px 0 rgba(11, 17, 37, 0.18)',
+                // The solid pills (ink / white). One neutral drop, unchanged across
+                // default, hover and pressed — the Figma component only moves colour
+                // between those states, never the shadow.
+                'ea-pill': '0 18px 40px -16px rgba(11, 17, 37, 0.5)',
                 // Floating EA card. Four stacked ambient shadows, no offset — the
                 // cards read as suspended sheets rather than as lifted UI.
                 'ea-card':

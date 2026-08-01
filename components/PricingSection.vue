@@ -64,7 +64,6 @@ const { n } = useI18n()
                                 :label="$t('common.applyNow')"
                                 :href="APPLY_HREF"
                                 :variant="tier.featured ? 'primary' : 'ink'"
-                                :size="tier.featured ? 'md' : 'sm'"
                             />
                         </div>
 
