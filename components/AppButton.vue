@@ -17,7 +17,8 @@ interface Props {
     label: string
     href?: string
     variant?: 'primary' | 'ink' | 'stroke' | 'white'
-    size?: 'md' | 'sm'
+    /** md is the page's CTA; sm and xs are the topbar's (42px and 36px pills). */
+    size?: 'md' | 'sm' | 'xs'
     arrow?: boolean
     type?: 'button' | 'submit'
 }
@@ -29,11 +30,11 @@ const props = withDefaults(defineProps<Props>(), {
     type: 'button'
 })
 
-const classes = computed(() => [
-    'ea-btn',
-    `ea-btn--${props.variant}`,
-    props.size === 'sm' ? 'ea-btn--sm' : ''
-])
+// Spelled out rather than interpolated so the class names exist as literals in
+// the source for Tailwind's content scanner to find.
+const SIZE_CLASS = { md: '', sm: 'ea-btn--sm', xs: 'ea-btn--xs' } as const
+
+const classes = computed(() => ['ea-btn', `ea-btn--${props.variant}`, SIZE_CLASS[props.size]])
 
 const isExternal = computed(() => !!props.href && /^(https?:)?\/\//.test(props.href))
 </script>

@@ -209,6 +209,8 @@ export default <Partial<Config>>{
                     '0 0 250px 0 rgba(128, 123, 143, 0.16), 0 24px 48px -24px rgba(37, 32, 51, 0.18), 0 0 48px 0 rgba(37, 32, 51, 0.03), -6px 0 12px 0 rgba(84, 107, 197, 0.05)',
                 // Halo around a role chip's bubble.
                 'ea-bubble': '0 0 0 4px rgba(98, 103, 143, 0.1)',
+                // The burger's dropdown card, floating clear of the topbar.
+                'ea-menu': '0 20px 48px 12px rgba(24, 17, 64, 0.14), 0 6px 9.6px 2px rgba(34, 32, 38, 0.06)',
                 'ea-step': '0 24px 48px -28px rgba(37, 32, 51, 0.16)',
             },
             borderRadius: {

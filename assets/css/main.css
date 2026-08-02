@@ -121,12 +121,17 @@
         max-width: calc(1600px + 120px);
     }
 
-    /* The topbar runs edge-to-edge of the 1920px stage rather than clamping to
-       the 1360px text column — same side padding as .ea-container, just no
-       inner cap. */
+    /* The topbar's inner column. The <header> around it stays full-bleed so the
+       bottom stroke reaches both edges of the viewport however wide it gets;
+       this caps at the 1920px stage and carries the drawn side padding — which
+       is much tighter than .ea-container's, the bar being chrome rather than
+       text. 20/12 vertical on the phone bar against 4 above it: the same 68px
+       either way, since the phone bar holds 36px controls and the wide one
+       holds 42px ones. */
     .ea-header__inner {
-        @apply w-full mx-auto px-5 tablet:px-8 tablet-wide:px-10 desktop:px-[60px];
-        max-width: 1920px;
+        @apply relative mx-auto flex h-[68px] w-full max-w-[1920px] items-center justify-between
+               pb-3 pl-3 pr-2 pt-5
+               min-[841px]:py-1 min-[841px]:pl-6 min-[841px]:pr-4;
     }
 
     /* Section rhythm. 192px top/bottom at desktop is the drawn value; scaling it
@@ -253,11 +258,15 @@
         @apply relative inline-flex select-none items-center justify-center gap-2.5 overflow-hidden whitespace-nowrap
                rounded-full font-poppins text-[15px] font-normal leading-4 tracking-[0.02em]
                h-[52px] px-7 tablet:h-[56px] tablet:px-8 tablet:text-[16px];
-        transition: box-shadow 0.45s theme('transitionTimingFunction.smooth'),
-                    transform 0.45s theme('transitionTimingFunction.smooth'),
-                    background-color 0.3s theme('transitionTimingFunction.smooth'),
-                    border-color 0.3s theme('transitionTimingFunction.smooth'),
-                    color 0.3s theme('transitionTimingFunction.smooth');
+        /* --ea-hover / --ea-hover-slow are the interaction-feedback durations,
+           read from the nearest ancestor that sets them and otherwise these
+           defaults. Only the open burger menu overrides them (see
+           .ea-header__menu), so everything else keeps 0.3/0.45 unchanged. */
+        transition: box-shadow var(--ea-hover-slow, 0.45s) theme('transitionTimingFunction.smooth'),
+                    transform var(--ea-hover-slow, 0.45s) theme('transitionTimingFunction.smooth'),
+                    background-color var(--ea-hover, 0.3s) theme('transitionTimingFunction.smooth'),
+                    border-color var(--ea-hover, 0.3s) theme('transitionTimingFunction.smooth'),
+                    color var(--ea-hover, 0.3s) theme('transitionTimingFunction.smooth');
     }
     .ea-btn > * {
         position: relative;
@@ -273,9 +282,17 @@
         transform: scale(0.985);
     }
 
-    /* Small variant — the topbar's Apply now. */
+    /* The topbar's two pills. Both are drawn at one size across every
+       breakpoint, so neither carries a `tablet:` step — and since both rules sit
+       after `.ea-btn`'s own media block at equal specificity, their unprefixed
+       declarations win at every width. */
     .ea-btn--sm {
-        @apply h-[42px] px-6 text-[14px] tablet:h-[42px] tablet:px-8;
+        @apply h-[42px] px-8 text-[16px] tracking-[0.01em];
+    }
+    /* The solid "Log in" that replaces the quiet chip once the bar is a phone
+       bar (Figma 517:1369). */
+    .ea-btn--xs {
+        @apply h-9 px-5 text-[14px] tracking-[0.01em];
     }
 
     /* Primary ("Default" in Figma): gradient sweep. The shadow is one value for
@@ -686,8 +703,8 @@
     .ea-header__link {
         @apply relative h-[40px] items-center justify-center whitespace-nowrap rounded-full px-5
                font-poppins text-[14px] font-medium tracking-[0.01em] text-Tinted/950;
-        transition: background-color 0.3s theme('transitionTimingFunction.smooth'),
-                    color 0.3s theme('transitionTimingFunction.smooth');
+        transition: background-color var(--ea-hover, 0.3s) theme('transitionTimingFunction.smooth'),
+                    color var(--ea-hover, 0.3s) theme('transitionTimingFunction.smooth');
     }
     .ea-header__link:hover {
         @apply cursor-pointer bg-Tinted/50;
@@ -700,11 +717,15 @@
     /* Audience switch ("Site Mode Switch", node 498:2738/498:2715). */
     .ea-header__switch {
         @apply flex items-center gap-1 rounded-[9px] bg-Tinted/50 p-1;
-        transition: background-color 0.3s theme('transitionTimingFunction.smooth');
+        transition: background-color var(--ea-hover, 0.3s) theme('transitionTimingFunction.smooth');
     }
+    /* 28px tall, not the 38 a 12px line box would give: Figma trims the label to
+       its cap height before adding the 10px padding, so the height has to be set
+       rather than inherited from the leading. */
     .ea-header__switch-item {
-        @apply rounded-[7px] p-2.5 font-poppins text-[12px] font-normal tracking-[0.01em] text-Tinted/600;
-        transition: color 0.3s theme('transitionTimingFunction.smooth');
+        @apply flex h-7 items-center justify-center rounded-[7px] px-2.5
+               font-poppins text-[12px] font-normal tracking-[0.01em] text-Tinted/600;
+        transition: color var(--ea-hover, 0.3s) theme('transitionTimingFunction.smooth');
     }
     .ea-header__switch-item--current {
         @apply bg-Tinted/600 text-Tinted/25;
@@ -712,6 +733,131 @@
     }
     .ea-header__switch-idle:hover {
         @apply cursor-pointer text-Tinted/950;
+    }
+    /* Inside the menu the switch spans the panel and the two halves split it. */
+    .ea-header__switch--wide {
+        @apply w-full;
+    }
+    .ea-header__switch--wide .ea-header__switch-item {
+        @apply flex-1;
+    }
+
+    /* Show/hide across the phone-bar boundary. This lives here rather than as
+       `hidden min-[841px]:flex` on the element because .ea-btn declares its own
+       display, and custom CSS in the utilities layer outranks a generated
+       utility at equal specificity — the utility loses, silently. Anything that
+       does NOT set its own display (.ea-header__link, the burger, plain
+       wrappers) can keep using the utilities directly. */
+    .ea-header__phone-only {
+        @apply flex min-[841px]:hidden;
+    }
+    .ea-header__bar-only {
+        @apply hidden min-[841px]:flex;
+    }
+
+    /* Wordmark lockup ("Topbar Logo", node 498:2673) — 118x22, and the same
+       lockup at 81.8% once the bar becomes a phone bar. The two marks are placed
+       by percentage of that box rather than by a flex gap, so one width class
+       rescales the whole thing and the proportions stay exactly Figma's. */
+    .ea-header__logo {
+        @apply relative block h-[17.96px] w-[96.55px] shrink-0 min-[841px]:h-[22px] min-[841px]:w-[118px];
+    }
+    .ea-header__logo-mark {
+        @apply absolute left-0 top-[3.85%] h-[94.06%] w-[17.47%];
+    }
+    .ea-header__logo-word {
+        @apply absolute left-[22.07%] top-[10.24%] h-[81.67%] w-[77.93%];
+    }
+
+    /* ===================================================== Burger button == */
+    /* Figma "Button - Burger Menu", node 516:1229. Three 16x2 bars in a 36px
+       chip; the top and bottom ones sit 5px off centre so that sliding them by
+       that much stacks all three on the middle line.
+       The open animation (node 515:1263) is two 200ms halves: the bars slide
+       together, the middle one blinks out at the seam, then the outer two rotate
+       into the X. Close is the same timeline reversed, which is the whole reason
+       the two states carry different transition declarations — the delay moves
+       from the rotation to the slide.
+       `translate`/`rotate` are animated as their own CSS properties rather than
+       as one `transform`, since a single shorthand cannot hold two easings and
+       two delays. That also rules out `-translate-x-1/2` for the horizontal
+       centring: the standalone properties resolve BEFORE `transform`, so a
+       transform-based centre offset would be applied in the rotated frame and
+       throw the X off its axis. Hence the fixed -8px margin. */
+    .ea-header__burger {
+        @apply relative size-9 shrink-0 rounded-lg bg-white;
+        transition: background-color 0.2s theme('transitionTimingFunction.smooth');
+    }
+    .ea-header__burger:hover {
+        @apply cursor-pointer bg-Tinted/50;
+    }
+    .ea-header__burger:active {
+        @apply bg-Tinted/100;
+    }
+    .ea-header__burger span {
+        @apply absolute left-1/2 -ml-2 h-0.5 w-4 bg-Tinted/900;
+        /* Closing: un-rotate first, then slide back apart. */
+        transition: rotate 0.2s cubic-bezier(0.5, 0, 0.5, 1) 0s,
+                    translate 0.2s linear 0.2s,
+                    opacity 0s linear 0.2s;
+    }
+    .ea-header__burger span:nth-child(1) { top: 12px; }
+    .ea-header__burger span:nth-child(2) { top: 17px; }
+    .ea-header__burger span:nth-child(3) { top: 22px; }
+    .ea-header__burger[aria-expanded='true'] span {
+        /* Opening: slide together first, then rotate. */
+        transition: translate 0.2s linear 0s,
+                    rotate 0.2s cubic-bezier(0.5, 0, 0.5, 1) 0.2s,
+                    opacity 0s linear 0.2s;
+    }
+    .ea-header__burger[aria-expanded='true'] span:nth-child(1) {
+        translate: 0 5px;
+        rotate: -45deg;
+    }
+    .ea-header__burger[aria-expanded='true'] span:nth-child(2) {
+        opacity: 0;
+    }
+    .ea-header__burger[aria-expanded='true'] span:nth-child(3) {
+        translate: 0 -5px;
+        rotate: 45deg;
+    }
+    .is-dark-band .ea-header__burger { @apply !bg-transparent; }
+    .is-dark-band .ea-header__burger:hover { @apply !bg-white/10; }
+    .is-dark-band .ea-header__burger span { @apply !bg-white; }
+
+    /* ====================================================== Burger menu == */
+    /* One element, two presentations. Below 841 it is a sheet filling what is
+       left of the viewport under the bar (node 523:2717) with its sign-in block
+       pushed to the foot; from 841 up it is a 320px card hung 12px off the bar's
+       right edge (node 523:2660), where the same two blocks simply stack. */
+    .ea-header__menu {
+        @apply absolute left-0 top-full z-50 flex w-full flex-col justify-between
+               overflow-y-auto overscroll-contain bg-white p-6;
+        height: calc(100dvh - 68px);
+        /* Hover feedback runs at half speed in here. The panel is a transient
+           surface you are already on your way out of, and a 300ms settle that
+           reads as composed in the bar reads as lag on something being dismissed.
+           Set once and inherited, so every control inside — the link chips, the
+           switch and its halves, the Apply now pill — halves together without
+           any of them restating its own transition list. */
+        --ea-hover: 0.15s;
+        --ea-hover-slow: 0.225s;
+    }
+    @media (min-width: 841px) {
+        .ea-header__menu {
+            @apply left-auto right-4 top-[calc(100%+12px)] h-auto w-[320px] justify-start
+                   rounded-[20px] p-3 shadow-ea-menu;
+        }
+    }
+    /* Only the sheet takes the page's scroll with it — the card is a dropdown,
+       and freezing the page behind one would be wrong. The header just marks
+       <html> while the menu is open and lets the same breakpoint that chooses
+       the presentation choose this too, so a resize across 840 can never leave
+       the lock out of step with what is on screen. */
+    @media (max-width: 840px) {
+        html.ea-menu-open {
+            overflow: hidden;
+        }
     }
 
     /* ======================================================= Misc effects == */
@@ -850,5 +996,11 @@
     }
     .ea-marquee__track {
         animation: none !important;
+    }
+    /* The blanket rule above collapses durations but not delays, and the
+       burger's whole shape is a delay — without this the bars would still take
+       200ms to answer the click. */
+    .ea-header__burger span {
+        transition-delay: 0s !important;
     }
 }
