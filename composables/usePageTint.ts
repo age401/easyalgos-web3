@@ -19,18 +19,29 @@ import { norm } from '~/utils/keyframes'
 // it is not.
 const PAGE = [255, 255, 255] as const
 
-/** How much of a viewport the fade takes on the way in. 0.6 puts the page fully
- *  dark by the time the section covers the lower 60% of the screen — before any
- *  of its white copy has climbed high enough to be read against a light
- *  background. */
-const ENTER_RAMP = 0.6
+/** How far the section's leading edge must climb before the fade starts at all,
+ *  in viewports. Without it the page begins darkening the instant that edge
+ *  crosses the viewport bottom — which is while the hero is still most of the
+ *  screen, so the tint reads as something happening to the hero rather than as
+ *  the next section arriving. Holding off until the section owns the lower half
+ *  of the screen keeps the hero clean. */
+const ENTER_DELAY = 0.5
 
-/** And on the way out — a full viewport, which is exactly the travel left once
- *  the pinned stage releases. So the wash back to white begins on the same frame
- *  the white line starts to grow and finishes as the section leaves: the line
- *  reaches the foot of the section into a page that has already become its own
- *  colour. */
+/** How much of a viewport the fade then takes. Together with the delay the page
+ *  is fully dark once the section covers the lower 90% of the screen — still
+ *  before any of its white copy has climbed high enough to be read against a
+ *  light background, which is the constraint that matters. */
+const ENTER_RAMP = 0.4
+
+/** On the way out, how much of a viewport the wash back to white takes. */
 const EXIT_RAMP = 1
+
+/** And how far ahead of the section's own departure that wash finishes, in
+ *  viewports — measured on the trailing edge, so the page is white again with
+ *  this much of the section still to scroll. The line finishing into an
+ *  already-white page is what makes a white line read as melding rather than as
+ *  vanishing, so it wants to land early rather than exactly on the boundary. */
+const EXIT_LEAD = 0.5
 
 /**
  * @param root    the section whose arrival and departure drive the fade
@@ -53,8 +64,10 @@ export function usePageTint(
      *  transparent after. */
     const active = ref(false)
     let ticking = false
+    let enterDelay = ENTER_DELAY
     let enterRamp = ENTER_RAMP
     let exitRamp = EXIT_RAMP
+    let exitLead = EXIT_LEAD
     let lastWritten = -1
     let darkFlag: boolean | null = null
 
@@ -103,10 +116,14 @@ export function usePageTint(
         const rect = el.getBoundingClientRect()
         const vh = window.innerHeight
         // The fade tracks the leading edge coming up the screen, then the trailing
-        // edge leaving it, and holds full dark for everything between. The two
-        // ramps differ because the exit has a job the entry does not: see
-        // EXIT_RAMP.
-        const q = Math.min(norm(vh - rect.top, 0, enterRamp * vh), norm(rect.bottom, 0, exitRamp * vh))
+        // edge leaving it, and holds full dark for everything between. Each end
+        // carries an offset as well as a ramp — the entry so the hero is clear of
+        // the screen before the page starts to move, the exit so the wash back to
+        // white completes ahead of the section's own departure.
+        const q = Math.min(
+            norm(vh - rect.top, enterDelay * vh, (enterDelay + enterRamp) * vh),
+            norm(rect.bottom - exitLead * vh, 0, exitRamp * vh)
+        )
         setBand(q >= 0.5)
         writeVar(q)
     }
@@ -124,10 +141,14 @@ export function usePageTint(
     onMounted(() => {
         // Reduced motion still needs the dark — it is what makes the copy legible
         // — it just should not be a gradient the reader scrubs. A ramp of one
-        // pixel is a hard swap without a second code path.
+        // pixel is a hard swap without a second code path. The offsets go too:
+        // they exist to pace a gradient, and keeping the exit one would hand the
+        // page back to white while the copy was still on it.
         if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
             enterRamp = 1 / window.innerHeight
             exitRamp = enterRamp
+            enterDelay = 0
+            exitLead = 0
         }
 
         measure()

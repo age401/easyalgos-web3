@@ -6,55 +6,90 @@
 // as the hero cards.
 //
 // The star row is decorative — the whole rating is announced once, as a sentence,
-// through the visually-hidden label.
+// through the visually-hidden label. Below 769px the bar switches to a
+// compact layout (Figma frames "[1024~769]" and "[1920~1025]" render
+// identically; only "[768~]" differs): smaller type/stars, the score
+// shortened to a bare number, and the separator dot moves to sit before the
+// logo instead of before the score sentence.
 const rating = SITE_STATS.trustpilotRating
 const reviews = SITE_STATS.trustpilotReviews
-const filled = Math.round(rating)
+
+// Trustpilot fills each star by how much of the rating falls in its slot
+// (star N covers the range [N-1, N)) rather than rounding the whole rating
+// to the nearest star, so a 4.6 rating shows 4 full stars and a 60%-filled 5th.
+function starFill(star: number) {
+    const coverage = Math.min(1, Math.max(0, rating - (star - 1)))
+    return Math.round(coverage * 1000) / 10
+}
 </script>
 
 <template>
     <div class="border-y border-Tinted/50 bg-white">
-        <!-- min-h pins the bar to the 68px it is drawn at, which is what the
+        <!-- min-h pins the bar to the height it is drawn at (52px on phones,
+             68px above 768 — the variable carries the switch), which is what the
              hero's `100svh - topbar - trustpilot` subtraction assumes. Content
-             is untouched; it is still centred in whatever height it needs. -->
+             is untouched; it is still centred in whatever height it needs.
+             py is 1px under Figma's 16/20 because Figma's borders are INSIDE
+             strokes — its padding already contains the 1px rule, while CSS adds
+             the border outside the padding box. -->
         <div
-            class="ea-container flex min-h-[calc(var(--ea-trustpilot-h)-2px)] flex-wrap items-center justify-center gap-x-8 gap-y-3 py-5 tablet-wide:gap-x-12"
+            class="ea-container flex min-h-[calc(var(--ea-trustpilot-h)-2px)] flex-wrap items-center justify-center gap-3 px-4 py-[15px] min-[769px]:gap-x-12 min-[769px]:py-[19px]"
         >
             <p class="sr-only">{{ $t('trustpilot.srLabel', { rating, count: reviews }) }}</p>
 
-            <div class="flex items-center gap-3" aria-hidden="true">
-                <span class="font-poppins text-[14px] font-semibold tracking-[-0.02em] text-Tinted/800">
-                    {{ $t('trustpilot.excellent') }}
-                </span>
-                <span class="flex gap-0.5">
-                    <span
-                        v-for="star in 5"
-                        :key="star"
-                        class="flex h-[22px] w-[22px] items-center justify-center"
-                        :class="star <= filled ? 'bg-[#00B67A]' : 'bg-[#DCDCE6]'"
-                    >
-                        <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                            <path d="M7 1.2l1.76 3.72 3.99.55-2.9 2.79.72 4.04L7 10.36 3.43 12.3l.72-4.04-2.9-2.79 3.99-.55L7 1.2Z" fill="#fff" />
-                        </svg>
+            <div class="flex flex-wrap items-center gap-3 min-[769px]:gap-4" aria-hidden="true">
+                <div class="flex items-center gap-3">
+                    <span class="font-poppins text-[12px] font-semibold tracking-[-0.02em] text-Tinted/800 min-[769px]:text-[14px]">
+                        {{ $t('trustpilot.excellent') }}
                     </span>
-                </span>
+                    <span class="flex gap-0.5">
+                        <span
+                            v-for="star in 5"
+                            :key="star"
+                            class="relative h-5 w-5 shrink-0 overflow-hidden bg-[#00B67A] min-[769px]:h-6 min-[769px]:w-6"
+                        >
+                            <span class="absolute inset-y-0 right-0 bg-[#D9D9D9]" :style="{ left: starFill(star) + '%' }" />
+                            <svg class="absolute left-[15.22%] top-[17.83%] h-[64.39%] w-[69.56%]" viewBox="0 0 17 16" fill="none">
+                                <path
+                                    d="M8.34783 11.7704L12.0313 10.7896L13.5026 15.4539L8.34783 11.7704ZM16.6957 5.88522H10.3096L8.34783 0L6.38609 5.88522H0L5.15478 9.5687L3.19304 15.4539L8.34783 11.7704L11.5409 9.55826L16.6957 5.87478V5.88522Z"
+                                    fill="#fff"
+                                />
+                            </svg>
+                        </span>
+                    </span>
+                </div>
+
+                <!-- compact score: <=768px only -->
+                <p class="order-2 font-poppins text-[12px] font-semibold tracking-[-0.02em] text-Tinted/700 min-[769px]:hidden">
+                    {{ rating }}
+                </p>
+
+                <!-- separator dot: before the score on >=769px, after it on <=768px -->
+                <span class="order-3 h-1 w-1 shrink-0 rounded-full bg-Tinted/100 min-[769px]:order-2" />
+
+                <!-- full score sentence + reviews link: >=769px only -->
+                <p class="hidden font-poppins text-[12px] font-semibold tracking-[-0.02em] text-Tinted/700 min-[769px]:order-3 min-[769px]:block">
+                    {{ $t('trustpilot.basedOn', { rating }) }}
+                    <a href="https://www.trustpilot.com/" rel="noopener nofollow" target="_blank" class="underline decoration-Tinted/300 underline-offset-2 transition-colors duration-300 hover:text-Tinted/950">
+                        {{ $t('trustpilot.reviews', { count: reviews }) }}
+                    </a>
+                </p>
             </div>
 
-            <p class="font-poppins text-[12px] font-semibold tracking-[-0.02em] text-Tinted/700" aria-hidden="true">
-                {{ $t('trustpilot.basedOn', { rating }) }}
-                <a href="https://www.trustpilot.com/" rel="noopener nofollow" target="_blank" class="underline decoration-Tinted/300 underline-offset-2 transition-colors duration-300 hover:text-Tinted/950">
-                    {{ $t('trustpilot.reviews', { count: reviews }) }}
-                </a>
-            </p>
-
-            <img
-                src="/img/brands/trustpilot.svg"
-                alt="Trustpilot"
-                width="99"
-                height="24"
-                loading="lazy"
-                class="h-6 w-auto"
-            />
+            <!-- pb-0.5 on mobile nudges the logo up from true centre, matching the
+                 Figma container; dropped on >=769px since the equivalent slack there
+                 (a 28px frame vs a 24px logo) would grow the bar past the 68px
+                 `--ea-trustpilot-h` the hero's height math depends on. -->
+            <div class="flex shrink-0 flex-col items-start justify-start pb-0.5 min-[769px]:pb-0">
+                <img
+                    src="/img/brands/trustpilot.svg"
+                    alt="Trustpilot"
+                    width="99"
+                    height="24"
+                    loading="lazy"
+                    class="h-[18px] w-[74.118px] min-[769px]:h-6 min-[769px]:w-[99px]"
+                />
+            </div>
         </div>
     </div>
 </template>

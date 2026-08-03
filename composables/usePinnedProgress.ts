@@ -24,8 +24,9 @@ import { norm } from '~/utils/keyframes'
 //
 //   converge    the cloud draws into its own centre; the violet core forms out of
 //               it as it goes
-//   problemOut  "The problem" starts to leave with the collapse all but finished,
-//               so the copy is cleared by the thing it was describing
+//   problemOut  "The problem" starts to leave halfway through the collapse, so the
+//               copy is cleared by the thing it was describing while that thing is
+//               still visibly moving
 //   starMap     the star map plays, Figma t 0 -> 0.88 (bloom, orbit, the combined
 //               station, then the white circle)
 //   settle      the resolved frame holds for the last stretch before release
@@ -41,9 +42,10 @@ const ACT = {
     starMap: [0.34, 0.94]
 } as const
 
-/** Progress at which "The problem" starts to lift away — 85% of the way through
- *  the collapse. */
-const PROBLEM_OUT = 0.3
+/** Progress at which "The problem" starts to lift away — the midpoint of the
+ *  collapse, so the copy is already going while the cloud is still visibly
+ *  drawing inward rather than waiting for it to finish. */
+const PROBLEM_OUT = (ACT.converge[0] + ACT.converge[1]) / 2
 
 /** How far along the Figma timeline the pinned stretch carries: everything up to
  *  and including the white circle. The remaining 0.12 is the line, and it is paid

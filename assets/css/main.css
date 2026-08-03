@@ -544,13 +544,20 @@
 
     /* ====================================================== Hero collage == */
     /* Topbar + hero + Trustpilot bar fill at least one screen, with the hero
-       taking whatever is left over. Both bars are a fixed 68px at every
-       breakpoint, so the leftover is a subtraction rather than a flex container
-       — which matters because the three are not siblings (the header sits
-       outside <main>) and wrapping them would move the <h1> out of it. */
+       taking whatever is left over. Each bar's height is fixed per breakpoint,
+       so the leftover is a subtraction rather than a flex container — which
+       matters because the three are not siblings (the header sits outside
+       <main>) and wrapping them would move the <h1> out of it.
+       The Trustpilot bar is shorter on phones (16px padding + a 20px row, vs
+       20px + 28px above 768) — see the "[768~]" Figma reference frame. */
     :root {
         --ea-topbar-h: 68px;
-        --ea-trustpilot-h: 68px;
+        --ea-trustpilot-h: 52px;
+    }
+    @media (min-width: 769px) {
+        :root {
+            --ea-trustpilot-h: 68px;
+        }
     }
     .ea-hero {
         position: relative;
