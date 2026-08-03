@@ -14,7 +14,12 @@ const filled = Math.round(rating)
 
 <template>
     <div class="border-y border-Tinted/50 bg-white">
-        <div class="ea-container flex flex-wrap items-center justify-center gap-x-8 gap-y-3 py-5 tablet-wide:gap-x-12">
+        <!-- min-h pins the bar to the 68px it is drawn at, which is what the
+             hero's `100svh - topbar - trustpilot` subtraction assumes. Content
+             is untouched; it is still centred in whatever height it needs. -->
+        <div
+            class="ea-container flex min-h-[calc(var(--ea-trustpilot-h)-2px)] flex-wrap items-center justify-center gap-x-8 gap-y-3 py-5 tablet-wide:gap-x-12"
+        >
             <p class="sr-only">{{ $t('trustpilot.srLabel', { rating, count: reviews }) }}</p>
 
             <div class="flex items-center gap-3" aria-hidden="true">

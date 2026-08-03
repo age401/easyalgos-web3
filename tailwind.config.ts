@@ -180,7 +180,7 @@ export default <Partial<Config>>{
                 'ea-pricing-shell': 'linear-gradient(135deg, #F6F7FF 0%, #E7E9F9 39%, #F2F3FF 100%)',
                 'ea-pricing-card': 'linear-gradient(160deg, #F7F7FB 0%, #FFFFFF 100%)',
                 // "EA of the month" ribbon on the featured hero card.
-                'ea-ribbon': 'linear-gradient(90deg, #489EFF 0%, #4CA8FF 100%)',
+                'ea-ribbon': 'linear-gradient(95.25deg, #489EFF 0%, #4CA8FF 100%)',
                 // The role chips' inner bubble.
                 'ea-bubble': 'radial-gradient(circle at 30% 25%, #787C9A 0%, #373F78 55%, #444D8D 90%)',
             },

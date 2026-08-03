@@ -29,12 +29,17 @@ export const NAV_LINKS = [
 export const APPLY_HREF = '/apply'
 export const LOGIN_HREF = '/auth/signin'
 
-/** The partner strip under the hero headline — a subset of the marquee, drawn
- *  smaller and desaturated. */
-export const HERO_PARTNERS: BrandLogo[] = [
-    { id: 'icmarkets', label: 'IC Markets', src: '/img/brands/icmarkets.svg' },
-    { id: 'ictrading', label: 'IC Trading', src: '/img/brands/ictrading.svg' },
-    { id: 'forexvps', label: 'ForexVPS.net', src: '/img/brands/forexvps.svg' }
+/** The partner strip under the hero headline.
+ *
+ *  These are their own Figma components (`logo-herobrand-*`), not the marquee's
+ *  marks scaled down: they are drawn two-tone, in a grey device against a darker
+ *  grey wordmark, and both tones recolour on hover. The artwork therefore lives
+ *  as path data in data/heroBrandLogos.ts rather than as files — only the id and
+ *  the trademark name are needed here. */
+export const HERO_PARTNERS: Pick<BrandLogo, 'id' | 'label'>[] = [
+    { id: 'icmarkets', label: 'IC Markets' },
+    { id: 'ictrading', label: 'IC Trading' },
+    { id: 'forexvps', label: 'ForexVPS.net' }
 ]
 
 /** The marquee. Each mark is the trademark of its owner. */

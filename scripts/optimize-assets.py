@@ -30,7 +30,8 @@ OUT = ROOT / 'public' / 'img'
 
 # (source, out-subdir/name, crop, target-size-or-None)
 # `crop` is either an explicit box in the SOURCE image's pixel space, the string
-# 'alpha' to auto-crop to the opaque content, or None.
+# 'alpha' to auto-crop to the opaque content, the string 'pad' to centre the
+# source on a transparent canvas of the target size, or None.
 #
 # The step-card sources are whole 660x588 cards exported at 2x, so the media panel
 # is cropped out of them: the card has 32px padding around a 596x400 panel, i.e.
@@ -58,17 +59,22 @@ JOBS = [
     ('person1.png', 'people/icmarkets-tile', None, None),
     ('person2.png', 'people/kim-shearer', None, None),
     ('person3.png', 'people/wim-schrynemakers', None, None),
-    # --- Hero background cards. Auto-cropped on alpha: the sources include up
-    #     to 250px of soft shadow bleed, and the opaque bounding box is exactly
-    #     the card, which is what the collage positions against. ---------------
-    ('ghost-lg-a.png', 'hero/ghost-lg-a', 'alpha', (374, 438)),
-    ('ghost-lg-b.png', 'hero/ghost-lg-b', 'alpha', (374, 438)),
-    ('ghost-lg-c.png', 'hero/ghost-lg-c', 'alpha', (374, 438)),
-    ('ghost-lg-d.png', 'hero/ghost-lg-d', 'alpha', (374, 438)),
-    ('ghost-sm-a.png', 'hero/ghost-sm-a', 'alpha', (272, 320)),
-    ('ghost-sm-b.png', 'hero/ghost-sm-b', 'alpha', (272, 320)),
-    ('ghost-sm-c.png', 'hero/ghost-sm-c', 'alpha', (272, 320)),
-    ('ghost-sm-d.png', 'hero/ghost-sm-d', 'alpha', (272, 320)),
+    # --- Hero veiled cards. Two assets, reused for every veiled slot in the
+    #     collage — the Figma layouts repeat a single "Card Blurred A" and a
+    #     single "Card Blurred B", so there is nothing per-slot to export.
+    #
+    #     The sources come out of Figma with the drop shadows switched OFF (they
+    #     are re-created in CSS, see .ea-blur-card in main.css) and only the
+    #     LAYER_BLUR baked in, because that blur softens the card's own edge and
+    #     no CSS filter can reproduce it without also blurring the shadow. What
+    #     is left is the card box plus a few px of blur bleed, which must be
+    #     KEPT — cropping to the card box would put a hard edge back on. So the
+    #     sources are padded, not cropped, to an even 2x box; data/heroCards.ts
+    #     records the bleed so the collage still positions by the card box.
+    #       A: 376x440 card + 2x3.5px bleed -> 390x454   (1x 195x227)
+    #       B: 272x320 card + 2x4.5px bleed -> 290x338   (1x 145x169)
+    ('blurred-a.png', 'hero/blurred-a', 'pad', (390, 454)),
+    ('blurred-b.png', 'hero/blurred-b', 'pad', (290, 338)),
     # --- EA avatars (2x of the 64px slot) ------------------------------------
     ('ea-quantum-king.png', 'ea/quantum-king', None, (128, 128)),
     ('ea-syna.png', 'ea/syna', None, (128, 128)),
@@ -76,6 +82,7 @@ JOBS = [
     ('ea-goldbot-one.png', 'ea/goldbot-one', None, (128, 128)),
     ('ea-range-breakout.png', 'ea/range-breakout', None, (128, 128)),
     ('ea-little-crazy.png', 'ea/little-crazy', None, (128, 128)),
+    ('ea-quantum-athena.png', 'ea/quantum-athena', None, (128, 128)),
 ]
 
 # Panels with no usable Figma export yet. Rendered as a flat tinted card so the
@@ -130,6 +137,18 @@ def alpha_bbox(image: Image.Image) -> tuple[int, int, int, int] | None:
     return mask.getbbox()
 
 
+def pad(image: Image.Image, size: tuple[int, int]) -> Image.Image:
+    """Centre `image` on a transparent canvas of exactly `size`.
+
+    Used where the source must not be resampled: the veiled hero cards carry a
+    baked Gaussian edge, and rescaling 389px to 390px would soften an asset
+    whose whole point is a precisely-drawn blur. Padding is lossless.
+    """
+    canvas = Image.new('RGBA', size, (0, 0, 0, 0))
+    canvas.paste(image, ((size[0] - image.width) // 2, (size[1] - image.height) // 2))
+    return canvas
+
+
 def placeholder(size: tuple[int, int]) -> Image.Image:
     """A flat tinted panel standing in for a missing export."""
     return Image.new('RGBA', size, (240, 241, 247, 255))
@@ -163,6 +182,9 @@ def main() -> int:
                 box = alpha_bbox(work)
                 if box:
                     work = work.crop(box)
+            elif crop == 'pad':
+                work = pad(work, size)
+                size = None
             elif crop:
                 # Clamp to the image so a slightly different export size degrades
                 # to "as much as we have" instead of raising. A degenerate box

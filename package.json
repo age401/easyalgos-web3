@@ -4,7 +4,7 @@
     "type": "module",
     "description": "EasyAlgos home page (\"The Ledger\") — institutional redesign of easyalgos.ai",
     "scripts": {
-        "dev": "nuxt dev",
+        "dev": "nuxt dev --host",
         "build": "nuxt build",
         "generate": "nuxt generate",
         "preview": "nuxt preview",
