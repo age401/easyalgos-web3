@@ -48,28 +48,41 @@ const LINE_WIDTH = 2
 
 // ---------------------------------------------------------------- keyframes --
 // Values and easings come from get_motion_context on 527:899; the station TIMES
-// are re-cut, because the reference's two middle stations were collapsed into
-// one. What the piece plays now is:
+// are re-cut, because the reference's stations have been collapsed. What the
+// piece plays now is:
 //
-//   t 0.00 - 0.23   the rings bloom out of the violet core, staggered
-//   t 0.23 - 0.46   hold: Figma "Star Map - Reference 01", dots orbiting
-//   t 0.46 - 0.66   the core swells 30px -> 164px and turns from violet to the
-//                   page's own dark; the logo resolves inside it as it does
-//   t 0.66 - 0.76   hold: Figma "Star Map - Reference 02" (538:1204)
-//   t 0.76 - 0.88   the rings draw in, the core becomes a 60px white badge, the
+//   t 0.00 - 0.23   the rings bloom out of the violet core, staggered — AND, over
+//                   the same stretch, the core swells 30px -> 164px, turns from
+//                   violet to the page's own dark, and the logo resolves inside
+//                   it. One dense move rather than two consecutive ones.
+//   t 0.18 - 0.26   the dots light up on the frame that move just built
+//   t 0.26 - 0.44   hold: Figma "Star Map - Reference 02" (538:1204), dots
+//                   orbiting
+//   t 0.44 - 0.56   the rings draw in, the core becomes a 60px white badge, the
 //                   mark halves — the reference's last transition, unchanged
-//   t 0.88 - 1.00   the line grows (and by now the stage has released)
+//   t 0.56 - 1.00   the line grows (and by now the stage has released)
 //
-// The rings hold at full size right through the middle of that, which is the
-// whole point of the combined station: nothing moves but the core and the mark.
+// Reference 01 — the small violet core sitting inside full-size rings — is no
+// longer a station. It used to be the frame the piece HELD on while waiting to
+// start the core transition, and holding there was the single biggest cost in
+// the section's runtime. The core's move now runs concurrently with the bloom
+// and finishes with it, so the reader arrives at Reference 02 in one beat.
+//
+// Every keyframe below keeps the WIDTH and easing it was authored with — the
+// core transition is still 0.20 of the timeline, the logo fade still 0.10, the
+// last transition still 0.12. Only their positions moved. That is what keeps
+// these tables diffable against the Figma payload, and it means the shortening
+// came out of dead air rather than out of the moves themselves.
+//
 // Ordered as they are drawn: outermost ring first.
 
 /** Station times. Named because four tracks share them and they are the thing
- *  most likely to be retimed. */
-const T_HOLD_1 = 0.46 // Reference 01 breaks
-const T_STAGE_2 = 0.66 // Reference 02 reached
-const T_HOLD_2 = 0.76 // Reference 02 breaks
-const T_STAGE_3 = 0.88 // the white badge; the line starts here
+ *  most likely to be retimed. `usePinnedProgress` has to agree with T_STAGE_3 —
+ *  its STATION_T is where the pinned stretch hands over to the line. */
+const T_HOLD_1 = 0.03 // the core starts to swell, while the rings are still blooming
+const T_STAGE_2 = 0.23 // Reference 02 reached: dark core, logo up, rings at full size
+const T_HOLD_2 = 0.44 // Reference 02 breaks
+const T_STAGE_3 = 0.56 // the white badge; the line starts here
 
 interface Ring {
     id: string
@@ -144,8 +157,9 @@ const CENTRE_SCALE: Track = {
     eases: ['linear', [0, 0, 0.5, 1], 'linear', [0.302, 0, 0.362, 1], 'linear']
 }
 // Violet core -> the page's own dark (it swells into a hole the mark emerges
-// from) -> white, as the badge the line drops out of. The first move is what the
-// combined station is FOR: the core does the work the ring shrink used to.
+// from) -> white, as the badge the line drops out of. The first move now runs
+// UNDER the bloom: the rings break outward while the core inflates and darkens
+// beneath them, which is the moment the whole section is built around.
 const CENTRE_FILL: ColorTrack = {
     times: [0, T_HOLD_1, T_STAGE_2, T_HOLD_2, T_STAGE_3],
     values: ['#AFA3FF', '#AFA3FF', '#171717', '#171717', '#FFFFFF'],
@@ -167,10 +181,11 @@ const CORE_IN_OPACITY: Track = {
     eases: ['linear', [0.4, 0, 0.5, 1], 'linear']
 }
 
-// Later than the reference put it: the mark now resolves as the core finishes
-// darkening rather than alongside a ring move that no longer happens.
+// Still keyed to the core: the mark resolves over the last 0.10 of the core's
+// darkening, so it reads as emerging from the hole rather than being placed on
+// top of a shape that already finished moving.
 const LOGO_OPACITY: Track = {
-    times: [0, 0.56, T_STAGE_2, 1],
+    times: [0, T_STAGE_2 - 0.1, T_STAGE_2, 1],
     values: [0, 0, 1, 1],
     eases: ['linear', [0.5, 0, 0.5, 1], 'linear']
 }
@@ -209,12 +224,14 @@ const DOT_RINGS: DotRing[] = [
 ]
 
 // Not in the reference — Figma has nowhere to put dot motion, and both reference
-// frames simply draw them at rest. They arrive once the rings have bloomed and
-// hold right through the combined station (which is why 538:1204 still shows
-// them); they leave only when the rings finally do move, since a dot orbiting a
-// radius that is sliding underneath it reads as an error.
+// frames simply draw them at rest. They come up as the bloom-and-swell lands, so
+// the resolved frame is complete at the moment the dots are there to be seen —
+// which is the beat Diego asked the core transition to be ready for. They then
+// hold right through the station (which is why 538:1204 still shows them) and
+// leave only when the rings finally do move, since a dot orbiting a radius that
+// is sliding underneath it reads as an error.
 const DOT_OPACITY: Track = {
-    times: [0, 0.14, 0.22, T_HOLD_2, 0.84, 1],
+    times: [0, 0.18, 0.26, T_HOLD_2, T_STAGE_3 - 0.04, 1],
     values: [0, 0, 1, 1, 0, 0],
     eases: ['linear', [0.33, 0, 0.67, 1], 'linear', [0.33, 0, 0.67, 1], 'linear']
 }
@@ -286,11 +303,19 @@ const lineStyle = computed(() => {
     }
 })
 
-// The orbit clock only runs while the dots are on screen, so a reader parked
-// anywhere else in the page is not paying for a rAF loop.
+// The orbit clock runs only when the dots are BOTH called for by the timeline and
+// actually on screen. Two conditions, because either alone leaves a hole:
+// the timeline takes the dots to zero as the rings draw in, which covers a reader
+// who scrolls past on the pinned layout — but the stacked layout stops the piece
+// mid-hold, with the dots at full opacity, and then the reader scrolls away and
+// leaves a rAF turning twelve circles nobody can see for as long as the page is
+// open. On a phone that is a battery cost with no upside.
+const stage = ref<HTMLElement | null>(null)
 let rafId = 0
 let last = 0
 let reduced = false
+let onScreen = true
+let io: IntersectionObserver | null = null
 
 function tick(now: number) {
     const delta = last ? Math.min(now - last, 64) : 16
@@ -305,21 +330,49 @@ function stop() {
     last = 0
 }
 
-watch(
-    dotOpacity,
-    (value) => {
-        if (reduced) return
-        if (value > 0 && !rafId) rafId = requestAnimationFrame(tick)
-        else if (value <= 0) stop()
-    },
-    { immediate: true }
-)
+function sync() {
+    if (reduced) return stop()
+    if (dotOpacity.value > 0 && onScreen) {
+        if (!rafId) rafId = requestAnimationFrame(tick)
+    } else stop()
+}
+
+watch(dotOpacity, sync, { immediate: true })
+
+/** Attach the visibility gate to the stage element.
+ *
+ *  Driven off a watch rather than done once in onMounted, because everything in
+ *  this component lives inside `<ClientOnly>` — its slot is not rendered until
+ *  after mount, so at onMounted the template ref is still null and observing it
+ *  there silently does nothing. The symptom is subtle enough to be worth naming:
+ *  no error, no visual difference, just an orbit that never stops turning. */
+function observeStage(el: HTMLElement | null) {
+    io?.disconnect()
+    io = null
+    if (!el || reduced) return
+    io = new IntersectionObserver(
+        (entries) => {
+            for (const entry of entries) onScreen = entry.isIntersecting
+            sync()
+        },
+        { rootMargin: '200px 0px' }
+    )
+    io.observe(el)
+}
+
+watch(stage, observeStage)
 
 onMounted(() => {
     reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    if (reduced) stop()
+    if (reduced) return stop()
+    observeStage(stage.value)
 })
-onBeforeUnmount(stop)
+
+onBeforeUnmount(() => {
+    io?.disconnect()
+    io = null
+    stop()
+})
 </script>
 
 <template>
@@ -328,7 +381,7 @@ onBeforeUnmount(stop)
          decoration that only means anything once the reader is scrolling, so
          there is nothing to render on the server. -->
     <ClientOnly>
-        <div class="pointer-events-none absolute inset-0" aria-hidden="true">
+        <div ref="stage" class="pointer-events-none absolute inset-0" aria-hidden="true">
             <div class="ea-starmap__line" :style="lineStyle" />
 
             <svg :viewBox="`0 0 ${BOX} ${BOX}`" class="absolute inset-0 h-full w-full">

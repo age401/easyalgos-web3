@@ -24,7 +24,11 @@ function starFill(star: number) {
 </script>
 
 <template>
-    <div class="border-y border-Tinted/50 bg-white">
+    <!-- Background, rules and content all track the page darkening as the section
+         below arrives, but not in the same way — see `.ea-trustpilot` in main.css.
+         The background and the two rules are declared there rather than as
+         utilities here because they are expressions, not fixed colours. -->
+    <div class="ea-trustpilot">
         <!-- min-h pins the bar to the height it is drawn at (52px on phones,
              68px above 768 — the variable carries the switch), which is what the
              hero's `100svh - topbar - trustpilot` subtraction assumes. Content
@@ -33,7 +37,7 @@ function starFill(star: number) {
              strokes — its padding already contains the 1px rule, while CSS adds
              the border outside the padding box. -->
         <div
-            class="ea-container flex min-h-[calc(var(--ea-trustpilot-h)-2px)] flex-wrap items-center justify-center gap-3 px-4 py-[15px] min-[769px]:gap-x-12 min-[769px]:py-[19px]"
+            class="ea-trustpilot__inner ea-container flex min-h-[calc(var(--ea-trustpilot-h)-2px)] flex-wrap items-center justify-center gap-3 px-4 py-[15px] min-[769px]:gap-x-12 min-[769px]:py-[19px]"
         >
             <p class="sr-only">{{ $t('trustpilot.srLabel', { rating, count: reviews }) }}</p>
 

@@ -529,17 +529,54 @@
         animation-play-state: paused;
     }
 
-    /* ========================================================= Role chips == */
-    /* Float over the particle cluster. Each carries its own drift delay so they
-       never pulse in unison. */
+    /* ========================================================= Role cards == */
+    /* Float over the particle cluster, labelling the constellation. Figma
+       524:2889 for the card, 524:2890 for the bubble, 526:842 for the glyphs.
+       Each carries its own drift delay so they never pulse in unison.
+
+       Padding is 2px under Figma's stated 10/8 on purpose. Figma's border is an
+       INSIDE stroke, so its padding numbers already contain the 2px rule, while
+       CSS lays the border outside the padding box — measured off the reference
+       render, the outer edge sits exactly 10px from the bubble and the card is
+       exactly 36px tall, which is what `border-2 px-2 py-1.5` reproduces and
+       what `px-2.5 py-2` overshot by 4px in both axes. Same trap as the
+       Trustpilot bar; check `strokeAlign` before copying padding off any
+       bordered Figma frame. */
     .ea-chip {
-        @apply inline-flex items-center gap-3 rounded-[10px] border-2 border-Chip/edge px-2.5 py-2
-               font-poppins text-[12px] font-medium leading-none;
-        background-color: rgba(14, 14, 16, 0.85);
-        backdrop-filter: blur(2px);
+        @apply inline-flex items-center gap-3 rounded-[10px] border-2 border-Chip/edge px-2 py-1.5
+               font-poppins text-[12px] font-medium leading-[14px] tracking-[0.5px];
+        background-color: rgba(14, 14, 16, 0.85); /* Chip/bg at 85% */
+        /* The drift lives on this element, so this is the layer that moves. Kept
+           promoted rather than left to Chrome's own judgement because the card is a
+           2px rule over a live WebGL canvas: composited, it is rasterised once and
+           the compositor moves the bitmap, instead of the rule being re-rasterised
+           onto a new sub-pixel boundary every frame and crawling. */
+        will-change: transform;
     }
+    /* Anchors a card to its point in the cluster. Nothing else — every card is now
+       drawn at full size, so there is no depth here to carry.
+
+       It exists at all because an animated transform replaces an inline one
+       outright: if the drift ran on the card itself with the centring also on the
+       card, the card would jump half its own size off its mark the moment the
+       animation started. One element holds still and centres, the other drifts.
+
+       There was a `backdrop-filter: blur(2px)` on the card too. It is gone: it is
+       not in the Figma spec, and a backdrop blur means re-sampling and re-blurring
+       whatever is behind the element every frame — here a live WebGL particle
+       canvas — which was both the most expensive thing on the screen and a source
+       of the same edge crawl. The card body is 85% opaque, so it bought little. */
+    .ea-card-anchor {
+        @apply absolute origin-center;
+        transform: translate(-50%, -50%);
+    }
+    /* A pearl: the light body is the background COLOUR and `ea-bubble` is the
+       wash over it, which is clear at the highlight — so the order matters and
+       the two cannot be collapsed into one declaration. See the token comment in
+       tailwind.config.ts. */
     .ea-chip__bubble {
-        @apply h-5 w-5 shrink-0 rounded-full bg-ea-bubble shadow-ea-bubble;
+        @apply grid h-5 w-5 shrink-0 place-items-center rounded-full bg-Bubble/pearl
+               bg-ea-bubble text-Tinted/800 shadow-ea-bubble;
     }
 
     /* ====================================================== Hero collage == */
@@ -558,6 +595,47 @@
         :root {
             --ea-trustpilot-h: 68px;
         }
+    }
+    /* The bar leaves as the page darkens. It is white, full-bleed, and butts
+       straight up against the section that carries the page to near-black, so it
+       cannot simply stay.
+
+       Fading the WHOLE bar was the obvious move and it is wrong: a half-
+       transparent white slab over a mid-grey page is lighter than that page, so
+       the thing you see is not the bar leaving, it is a pale horizontal band
+       sliding up the screen. There is no opacity at which it matches.
+
+       So the box and its contents are handled separately. The BACKGROUND reads
+       exactly the expression html/body read, which means the bar is the page
+       colour by construction — at every point of the fade, not just the two
+       ends, so there is never an edge to see. Only the CONTENT fades, and it can
+       fade honestly because it is ink on that background rather than the
+       background itself. Same for the rules top and bottom: a fixed light grey
+       would turn into two bright lines on a dark page, so their alpha rides the
+       tint down and they are simply gone by the time the page is dark.
+
+       Diego asked whether doing the strokes too would cost anything: no, and the
+       whole arrangement is CHEAPER than the opacity version it replaces. All
+       three are colour-only, driven by variables that are already written once
+       per frame on <html> by usePageTint, and none of them touches layout. The
+       version this replaces put an opacity layer over the full-bleed bar, which
+       had to be composited against a page whose colour was changing underneath
+       it; now the only composited thing is the content row.
+
+       Height is untouched throughout, so the hero's
+       `100svh - topbar - trustpilot` subtraction still holds.
+
+       No reduced-motion carve-out, deliberately. In that mode the tint is a hard
+       swap rather than a ramp, and the bar swapping in the same frame as the
+       page it is matching is the coherent outcome — it is the one case where the
+       bar must NOT be treated as an independent animation. */
+    .ea-trustpilot {
+        background-color: var(--ea-page-bg, theme('colors.Neutral/White'));
+        border-top: 1px solid rgb(240 241 247 / calc(1 - var(--ea-page-tint, 0))); /* Tinted/50 */
+        border-bottom: 1px solid rgb(240 241 247 / calc(1 - var(--ea-page-tint, 0)));
+    }
+    .ea-trustpilot__inner {
+        opacity: calc(1 - var(--ea-page-tint, 0));
     }
     .ea-hero {
         position: relative;
@@ -852,18 +930,11 @@
         transform: none;
         pointer-events: none;
     }
-    /* Below tablet-wide the stage is not pinned, so there is no held stretch for
-       the groups to hand over across — both simply read, in order. Without this
-       the scroll-derived phase would still be hiding one of them (and, through
-       the handover, both). */
-    @media (max-width: 1023.98px) {
-        .ea-phase[data-state='pending'],
-        .ea-phase[data-state='past'] {
-            opacity: 1;
-            transform: none;
-            pointer-events: auto;
-        }
-    }
+    /* Nothing layout-specific here any more: both layouts play the same handover,
+       one scrubbed and one on a clock (see useTimedSequence). The stacked layout
+       used to force both groups visible because it had no clock to hand over on;
+       doing that now would print them on top of each other, since they share a
+       grid cell. */
 
     /* The line that drops out of the resolved mark. It starts at the centre of
        the cluster box and runs half a viewport — which, with the box centred in
@@ -1195,8 +1266,8 @@
     .line-mask > span {
         transform: none !important;
     }
-    /* The pinned section becomes a plain stack: both text groups visible, no
-       sticky viewport-height stage to scroll through. */
+    /* The section becomes a plain stack: both text groups readable, no sticky
+       viewport-height stage to scroll through, and no handover. */
     .ea-pinned__stage {
         position: static;
         height: auto;
@@ -1206,6 +1277,20 @@
         opacity: 1;
         transform: none;
         pointer-events: auto;
+    }
+    /* Making both groups visible is only half the job, and the half that was
+       missing: they share ONE grid cell so the handover can crossfade in place
+       without moving anything, which means revealing both prints them on top of
+       each other. No handover here, so they each need a row.
+       `!important` because these are overriding the `col-start-1`/`row-start-1`
+       utilities, which Tailwind emits at the `@tailwind utilities` directive near
+       the top of this file. */
+    .ea-phase {
+        grid-column: auto !important;
+        grid-row: auto !important;
+    }
+    .ea-phase + .ea-phase {
+        margin-top: 4rem;
     }
     .ea-marquee__track {
         animation: none !important;

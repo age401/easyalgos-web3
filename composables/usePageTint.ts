@@ -17,6 +17,16 @@ import { norm } from '~/utils/keyframes'
 // sets the same property, so the two mechanisms compose instead of fighting —
 // the inline value wins while this section is on screen and is removed the moment
 // it is not.
+//
+// A SECOND property goes out with it: `--ea-page-tint`, the raw 0..1 position of
+// the same fade. Anything that has to leave as the page darkens can then key off
+// it in pure CSS instead of running its own scroll listener — which is the point,
+// because two listeners on the same journey are two things that can disagree.
+// The Trustpilot bar uses it (see `.ea-trustpilot` in main.css): it is white, it
+// butts straight up against this section, and a white slab is the one thing a
+// darkening page cannot carry. Riding this property it cannot desync, and it
+// costs nothing measurable — same rAF, same already-quantised value, same single
+// style write, and opacity neither reflows nor repaints anything but the bar.
 const PAGE = [255, 255, 255] as const
 
 /** How far the section's leading edge must climb before the fade starts at all,
@@ -81,12 +91,16 @@ export function usePageTint(
         const style = document.documentElement.style
         if (q <= 0) {
             // Hand the page back, so a following dark band's `.is-dark-band` rule
-            // is free to take it.
+            // is free to take it. The tint goes with it rather than being pinned
+            // at 0, so everything reading it falls back to its own default and
+            // the property does not linger on a page that no longer has a fade.
             style.removeProperty('--ea-page-bg')
+            style.removeProperty('--ea-page-tint')
             return
         }
         const mix = PAGE.map((c, i) => Math.round(c + (tint[i] - c) * q))
         style.setProperty('--ea-page-bg', `rgb(${mix[0]}, ${mix[1]}, ${mix[2]})`)
+        style.setProperty('--ea-page-tint', String(q))
     }
 
     /** Tell the header whether this still counts as a dark band. Past the halfway
@@ -160,6 +174,7 @@ export function usePageTint(
         window.removeEventListener('scroll', onScrollOrResize)
         window.removeEventListener('resize', onScrollOrResize)
         document.documentElement.style.removeProperty('--ea-page-bg')
+        document.documentElement.style.removeProperty('--ea-page-tint')
     })
 
     return { active }

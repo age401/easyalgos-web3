@@ -27,19 +27,25 @@ import { norm } from '~/utils/keyframes'
 //   problemOut  "The problem" starts to leave halfway through the collapse, so the
 //               copy is cleared by the thing it was describing while that thing is
 //               still visibly moving
-//   starMap     the star map plays, Figma t 0 -> 0.88 (bloom, orbit, the combined
-//               station, then the white circle)
+//   starMap     the star map plays, Figma t 0 -> STATION_T (the bloom and the core
+//               transition together, the orbiting station, then the white circle)
 //   settle      the resolved frame holds for the last stretch before release
 //
 // The line is NOT in here. It starts exactly as the stage releases and runs on
 // ordinary page scroll — see `afterRelease` below.
 //
-// The section is 480vh tall, so 380vh of travel: a fraction here is 3.8 viewport
+// The section is 380vh tall, so 280vh of travel: a fraction here is 2.8 viewport
 // heights of scrolling. Widen an act by widening its slice; everything
 // downstream is derived.
+//
+// It used to be 480vh. The star map no longer holds on a station waiting to start
+// its core transition (see StarMap.vue — that move now runs under the bloom), so
+// a whole viewport of the old budget was paying for a frame that did not change.
+// The acts below are what is left once that is gone, and they come out at roughly
+// 0.8 viewports for the collapse and 1.5 for the star map.
 const ACT = {
-    converge: [0.08, 0.34],
-    starMap: [0.34, 0.94]
+    converge: [0.08, 0.36],
+    starMap: [0.36, 0.9]
 } as const
 
 /** Progress at which "The problem" starts to lift away — the midpoint of the
@@ -48,9 +54,15 @@ const ACT = {
 const PROBLEM_OUT = (ACT.converge[0] + ACT.converge[1]) / 2
 
 /** How far along the Figma timeline the pinned stretch carries: everything up to
- *  and including the white circle. The remaining 0.12 is the line, and it is paid
- *  for out of the section's own exit rather than the held stretch. */
-const STATION_T = 0.88
+ *  and including the white circle. Must match `T_STAGE_3` in StarMap.vue — that
+ *  is the same instant named from the other side. The remainder is the line, and
+ *  it is paid for out of the section's own exit rather than the held stretch.
+ *
+ *  It dropped from 0.88 with the retiming, and that is not a slowdown: the moves
+ *  kept their authored widths, so a timeline with less dead air in it simply ends
+ *  sooner. Against the `starMap` act above this spends ~70vh on the combined
+ *  bloom-and-swell, ~48vh holding the orbit, and ~32vh on the white badge. */
+const STATION_T = 0.56
 
 /** How much of the post-release travel the line takes to reach full length. It
  *  finishes with a little of the section still to go, so it arrives at the foot
@@ -58,9 +70,15 @@ const STATION_T = 0.88
  *  a white line on a white page read as melding rather than as vanishing. */
 const LINE_RUN = 0.72
 
-/** The solution copy arrives just ahead of the logo (which fades in over Figma t
- *  0.56 -> 0.66), so the reader is already reading when the mark resolves. */
-const SOLUTION_IN = 0.54
+/** The solution copy arrives DURING the core transition rather than after it —
+ *  just ahead of the logo, which fades in over Figma t 0.13 -> 0.23. The reader
+ *  is already reading by the time the mark resolves, and the sentence and the
+ *  shape land together instead of taking a turn each.
+ *
+ *  Exported because `useTimedSequence` hands over at the same point. It is a
+ *  position on the star map's timeline, not on the scroll, so it means the same
+ *  thing whichever clock is driving. */
+export const SOLUTION_IN = 0.1
 
 /** And leaves shortly after the stage releases — as a fraction of the
  *  post-release travel. It has to: the page is washing back to white underneath
@@ -68,7 +86,15 @@ const SOLUTION_IN = 0.54
  *  the last thing the section does is the line alone. */
 const SOLUTION_OUT = 0.12
 
-export function usePinnedProgress(root: Ref<HTMLElement | null>) {
+/**
+ * @param root    the section whose held stretch is being reported on
+ * @param enabled false on the stacked layout, where there is no sticky stage to
+ *                report on and `useTimedSequence` drives instead. Without it this
+ *                would keep a scroll listener alive on a phone measuring a
+ *                section nobody is scrubbing — cheap per call, but paid on every
+ *                frame of every scroll for an answer that is discarded.
+ */
+export function usePinnedProgress(root: Ref<HTMLElement | null>, enabled: Ref<boolean>) {
     const progress = ref(0)
     /** 0 -> 1 across the travel AFTER the stage unsticks, where the section is
      *  scrolling away normally. Zero for the whole held stretch, because
@@ -102,8 +128,15 @@ export function usePinnedProgress(root: Ref<HTMLElement | null>) {
         requestAnimationFrame(measure)
     }
 
-    onMounted(() => {
-        reduced.value = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    let listening = false
+    function detach() {
+        if (!listening) return
+        listening = false
+        window.removeEventListener('scroll', onScrollOrResize)
+        window.removeEventListener('resize', onScrollOrResize)
+    }
+
+    function attach() {
         if (reduced.value) {
             // Show the piece resolved: solution copy, star map at its last station,
             // line drawn.
@@ -111,15 +144,24 @@ export function usePinnedProgress(root: Ref<HTMLElement | null>) {
             afterRelease.value = 1
             return
         }
+        if (!enabled.value) return detach()
+        if (listening) return
+        listening = true
         measure()
         window.addEventListener('scroll', onScrollOrResize, { passive: true })
         window.addEventListener('resize', onScrollOrResize)
+    }
+
+    // The media query behind `enabled` resolves in ITS onMounted, which may land
+    // after ours, and a rotation can cross the threshold without a scroll.
+    watch(enabled, attach)
+
+    onMounted(() => {
+        reduced.value = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+        attach()
     })
 
-    onBeforeUnmount(() => {
-        window.removeEventListener('scroll', onScrollOrResize)
-        window.removeEventListener('resize', onScrollOrResize)
-    })
+    onBeforeUnmount(detach)
 
     /** 0 -> 1 as the particle cloud draws inward. The problem copy is still on
      *  stage for almost all of it and leaves at the end, so the collapse reads as
@@ -148,15 +190,5 @@ export function usePinnedProgress(root: Ref<HTMLElement | null>) {
         return -1
     })
 
-    /** State token for a group at `index`, consumed by `.ea-phase[data-state]`. */
-    function phaseState(index: number): 'pending' | 'active' | 'past' {
-        if (index === phase.value) return 'active'
-        // Through the gap both groups are off-stage: the one already read has
-        // gone, the one still to come waits below. Any index below the phase has
-        // been read — which is what makes phase 2 clear them both.
-        if (phase.value === -1) return index === 0 ? 'past' : 'pending'
-        return index < phase.value ? 'past' : 'pending'
-    }
-
-    return { progress, phase, phaseState, converge, starMapTime, afterRelease, reduced }
+    return { progress, phase, converge, starMapTime, afterRelease, reduced }
 }

@@ -6,6 +6,12 @@
 // currentColor and an asset swap). The two fills read custom properties, so the
 // hover in main.css is a variable flip — one asset, no extra request, and a real
 // colour transition instead of a swap.
+//
+// The `.attr` modifiers on viewBox/width/height are load-bearing. Vue's
+// hydration path patches dynamic props without telling patchProp it is in the
+// SVG namespace, so it falls back to `key in el` — true for all three on
+// SVGSVGElement, where they are getter-only — and the assignment throws. `.attr`
+// forces setAttribute. Plain `:viewBox` warns three times per logo on hydration.
 import { HERO_BRAND_LOGOS } from '~/data/heroBrandLogos'
 
 interface Props {
@@ -24,9 +30,9 @@ const logo = computed(() => HERO_BRAND_LOGOS[props.id])
         v-if="logo"
         class="ea-brand-logo"
         :style="logo.accentHover ? { '--brand-accent-hover': logo.accentHover } : undefined"
-        :viewBox="`0 0 ${logo.width} ${logo.height}`"
-        :width="logo.width"
-        :height="logo.height"
+        :viewBox.attr="`0 0 ${logo.width} ${logo.height}`"
+        :width.attr="logo.width"
+        :height.attr="logo.height"
         fill="none"
         role="img"
         :aria-label="label"

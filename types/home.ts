@@ -147,6 +147,23 @@ export interface HeroBrandLogo {
     accentHover?: string
 }
 
+/** One of the labels floating over the particle cluster, naming an ecosystem
+ *  role. Geometry is in the 760x760 box the cluster and the star map share. */
+export interface RoleCard {
+    id: string
+    /** Centre of the card, as a percentage of the box. */
+    left: number
+    top: number
+    /** Tailwind text colour class for the label. */
+    color: string
+    /** Where in the drift this card starts, as a negative CSS animation delay.
+     *  Spread across the whole period so the six read as a field rather than as one
+     *  shape moving. */
+    delay: string
+    /** Glyph, as 20x20 stroke paths — see ROLE_CARDS for why these are inline. */
+    icon: string[]
+}
+
 export interface FooterLinkGroup {
     id: string
     /** i18n key suffixes under footer.links, in drawn order. */

@@ -1,5 +1,6 @@
 import type { Config } from 'tailwindcss'
 import colors from 'tailwindcss/colors'
+import { PINNED_MEDIA, STACKED_MEDIA } from './utils/breakpoints'
 
 // EasyAlgos design system (ported verbatim from PROJECT_STACK_GUIDE_FOR_AI.md §17)
 // plus the v2 "Ledger" additions at the bottom of the colors map. Ship as-is for
@@ -23,6 +24,12 @@ export default <Partial<Config>>{
             desktop: '1280px',
             'desktop-md': '1600px',
             wide: '1920px',
+            // `pinned:` / `stacked:` belong here conceptually but CANNOT live here:
+            // a single object-valued entry in `screens` turns off the `min-[Npx]:`
+            // and `max-*` arbitrary variants for the whole project, and this
+            // codebase leans on those (SiteHeader's 841/1241, TrustpilotBar's 769,
+            // and `max-tablet-wide` itself). They are registered as plain variants
+            // at the foot of this file instead.
         },
         colors: {
             ...colors,
@@ -119,9 +126,12 @@ export default <Partial<Config>>{
             'Violet/600': '#7469D7',
             'Violet/700': '#5A50C9',
             'Violet/800': '#4134BC',
-            // The role chips floating over the particle cluster.
+            // The role cards floating over the particle cluster.
             'Chip/bg': '#0E0E10',
             'Chip/edge': '#3E4153',
+            // The body of a card's bubble, under the `ea-bubble` wash. Shared with
+            // the star map's orbiting dots, which are the same object drawn in SVG.
+            'Bubble/pearl': '#C5CDD5',
             // Chip label colours — one per ecosystem role, from the Indicators set.
             'Role/trader': '#BC78FF',
             'Role/developer': '#42DBE0',
@@ -181,8 +191,23 @@ export default <Partial<Config>>{
                 'ea-pricing-card': 'linear-gradient(160deg, #F7F7FB 0%, #FFFFFF 100%)',
                 // "EA of the month" ribbon on the featured hero card.
                 'ea-ribbon': 'linear-gradient(95.25deg, #489EFF 0%, #4CA8FF 100%)',
-                // The role chips' inner bubble.
-                'ea-bubble': 'radial-gradient(circle at 30% 25%, #787C9A 0%, #373F78 55%, #444D8D 90%)',
+                // The role cards' inner bubble (Figma 524:2890) — and the same
+                // object as the star map's orbiting dots, which is the point: the
+                // cards are labels ON those dots, so the two must read identically.
+                //
+                // It is a PEARL, not a dark disc: a light #C5CDD5 body (set as the
+                // background-COLOUR in `.ea-chip__bubble`) seen through this wash,
+                // which is clear at the highlight and only reaches 0.8 alpha at the
+                // rim. The previous version had the same three colours as fully
+                // opaque stops, which threw the base away and rendered the bubble
+                // roughly twice as dark as drawn.
+                //
+                // Geometry is Figma's verbatim: centre 50% / 29.69%, radius 70.31%
+                // of the box. Expressed as an `ellipse` with two percentage radii
+                // because CSS forbids a percentage radius on `circle` — the bubble
+                // is always square, so the two are the same thing here.
+                'ea-bubble':
+                    'radial-gradient(ellipse 70.31% 70.31% at 50% 29.69%, rgba(120, 124, 154, 0) 0%, rgba(55, 63, 120, 0.2) 55%, rgba(68, 77, 141, 0.8) 90%)',
             },
             boxShadow: {
                 'primary': '0px 16px 20px 0px rgba(63, 97, 235, 0.16)',
@@ -257,16 +282,42 @@ export default <Partial<Config>>{
                     from: { transform: 'translate3d(0, 0, 0)' },
                     to: { transform: 'translate3d(-50%, 0, 0)' },
                 },
-                // Slow drift on the role chips so the cluster never looks frozen.
-                eaFloat: {
-                    '0%, 100%': { transform: 'translate3d(0, 0, 0)' },
-                    '50%': { transform: 'translate3d(0, -7px, 0)' },
+                // Slow drift on the role cards, so each one reads as orbiting the
+                // cluster rather than bobbing in place. Eight stations around an
+                // 8.75px circle: with `linear` timing that is close enough to a
+                // circle at this amplitude, and unlike a four-station diamond it has
+                // no corners to give the path away. Each card enters at its own
+                // phase (a negative delay in ROLE_CARDS, spread across the whole
+                // period), so the set drifts as a field instead of moving in unison.
+                //
+                // Transform-only, and deliberately on the card itself rather than on
+                // the wrapper that positions it: an animated `transform` outranks an
+                // inline one, so a single element cannot carry both the drift and
+                // the `translate(-50%,-50%)` that centres the card on its point.
+                eaOrbit: {
+                    '0%, 100%': { transform: 'translate3d(8.75px, 0, 0)' },
+                    '12.5%': { transform: 'translate3d(6.19px, 6.19px, 0)' },
+                    '25%': { transform: 'translate3d(0, 8.75px, 0)' },
+                    '37.5%': { transform: 'translate3d(-6.19px, 6.19px, 0)' },
+                    '50%': { transform: 'translate3d(-8.75px, 0, 0)' },
+                    '62.5%': { transform: 'translate3d(-6.19px, -6.19px, 0)' },
+                    '75%': { transform: 'translate3d(0, -8.75px, 0)' },
+                    '87.5%': { transform: 'translate3d(6.19px, -6.19px, 0)' },
                 },
             },
             animation: {
                 fadeIn: 'fadeIn 0.15s ease-out',
                 eaMarquee: 'eaMarquee 46s linear infinite',
-                eaFloat: 'eaFloat 6s ease-in-out infinite',
+                // Linear, because an orbit has no ends to ease into.
+                //
+                // The period is set from the radius, not picked: widening the circle
+                // from 7px to 8.75px lengthens the path by 25%, so holding the old
+                // 18s would have made the cards travel 25% FASTER, which is the
+                // opposite of a slow drift. 22.5s would have exactly cancelled that;
+                // 27s goes past it, so the cards now cover more ground at a lower
+                // speed than before — 2.0 px/s against the old 2.4. Change the
+                // radius and this has to move with it.
+                eaOrbit: 'eaOrbit 27s linear infinite',
             },
             blur: {
                 '120': '120px',
@@ -300,6 +351,16 @@ export default <Partial<Config>>{
                     display: 'contents',
                 },
             })
+        },
+        // The problem/solution section's two states. Not breakpoints — they turn on
+        // available AREA, not width, so they cannot be expressed on the `screens`
+        // scale (and putting them there would disable `min-[Npx]:` everywhere; see
+        // the note in `screens`). Defined as a matched pair rather than relying on
+        // a generated inverse, and sharing one source of truth with the component
+        // that reads the same query through matchMedia — utils/breakpoints.ts.
+        function ({ addVariant }: any) {
+            addVariant('pinned', `@media ${PINNED_MEDIA}`)
+            addVariant('stacked', `@media ${STACKED_MEDIA}`)
         },
     ],
 }
