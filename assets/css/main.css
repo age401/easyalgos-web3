@@ -144,8 +144,10 @@
     .ea-section {
         @apply py-[72px] tablet:py-[96px] tablet-wide:py-[128px] desktop:py-[192px];
     }
+    /* Bottom only — the brand marquee (its sole consumer) sits flush under
+       whatever comes before it. */
     .ea-section--tight {
-        @apply py-[56px] tablet:py-[72px] tablet-wide:py-[96px] desktop:py-[120px];
+        @apply pb-[56px] tablet:pb-[72px] tablet-wide:pb-[96px] desktop:pb-[120px];
     }
 
     /* ========================================================= Typography == */
@@ -561,14 +563,14 @@
         -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 8%, #000 92%, transparent 100%);
     }
     .ea-marquee__track {
-        @apply flex w-max shrink-0 items-center gap-4 tablet:gap-8;
-        animation: eaMarquee 46s linear infinite;
+        /* animate-eaMarquee, not a hand-written `animation:` declaration — Tailwind
+           only emits a theme keyframe's @keyframes block when an animate-* utility
+           actually requests it; a raw `animation: eaMarquee ...` here compiled fine
+           but pointed at a keyframe name Tailwind had never generated, so the track
+           sat still. */
+        @apply flex w-max shrink-0 animate-eaMarquee items-center gap-4 tablet:gap-8;
         will-change: transform;
     }
-    .ea-marquee:hover .ea-marquee__track {
-        animation-play-state: paused;
-    }
-
     /* ========================================================= Role cards == */
     /* Float over the particle cluster, labelling the constellation. Figma
        524:2889 for the card, 524:2890 for the bubble, 526:842 for the glyphs.

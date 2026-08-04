@@ -42,13 +42,16 @@ export const HERO_PARTNERS: Pick<BrandLogo, 'id' | 'label'>[] = [
     { id: 'forexvps', label: 'ForexVPS.net' }
 ]
 
-/** The marquee. Each mark is the trademark of its owner. */
+/** The marquee. Each mark is the trademark of its owner. Assets are all the
+ *  Figma "Dark=True" logo variant — dark ink, sized for the light marquee card;
+ *  "Dark=False" is a white-ink variant for a dark surface, unused here. */
 export const BRANDS: BrandLogo[] = [
-    { id: 'metatrader', label: 'MetaTrader', src: '/img/brands/metatrader.webp' },
+    { id: 'metatrader', label: 'MetaTrader', src: '/img/brands/metatrader.svg' },
     { id: 'icmarkets', label: 'IC Markets', src: '/img/brands/icmarkets.svg' },
     { id: 'ictrading', label: 'IC Trading', src: '/img/brands/ictrading.svg' },
     { id: 'forexvps', label: 'ForexVPS.net', src: '/img/brands/forexvps.svg' },
     { id: 'myfxbook', label: 'Myfxbook', src: '/img/brands/myfxbook.svg' },
+    { id: 'fxblue', label: 'FX Blue', src: '/img/brands/fxblue.svg' },
     { id: 'equinix', label: 'Equinix', src: '/img/brands/equinix.svg' },
     { id: 'claude', label: 'Claude', src: '/img/brands/claude.svg' },
     { id: 'openai', label: 'OpenAI', src: '/img/brands/openai.svg' },
