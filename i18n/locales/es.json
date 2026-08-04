@@ -54,7 +54,10 @@
         "eyebrow": "El problema",
         "titleLine1": "Todo lo que necesitabas",
         "titleLine2": "para operar con Expert Advisors...",
-        "titleAccent": "estaba en sitios distintos"
+        "titleAccent": "estaba en sitios distintos",
+        "play": "Reproducir la animacion",
+        "pause": "Pausar la animacion",
+        "replay": "Volver a reproducir la animacion"
     },
     "solution": {
         "eyebrow": "La solucion",

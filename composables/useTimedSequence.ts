@@ -19,12 +19,15 @@ import { SOLUTION_IN } from '~/composables/usePinnedProgress'
 // It also sidesteps the reason a scroll-tied version is genuinely awkward on a
 // phone rather than merely rude: mobile URL bars resize the viewport mid-scroll,
 // and every measurement in the pinned path is denominated in viewport heights.
-// Nothing here measures the viewport at all.
-
-/** How much of the cluster has to be showing before the piece starts. High
- *  enough that it is not playing off-screen, low enough that the reader is not
- *  already past it. */
-const TRIGGER_RATIO = 0.55
+// Nothing here measures the viewport at all — except the trigger, and there only
+// to decide whether the copy fits on screen, which a URL bar cannot change the
+// answer to.
+//
+// It is a TRANSPORT, not just a one-shot: `toggle` pauses and resumes, and picking
+// it up again from a finished sequence replays it from the top. That is what the
+// playback control under the copy drives, and it is the reason the elapsed time is
+// accumulated rather than measured from a start timestamp — a start time cannot
+// survive being paused.
 
 /** Beat lengths, ms. Roughly the proportions the pinned version spends on each
  *  act, compressed into something that holds attention without demanding it.
@@ -35,12 +38,16 @@ const TRIGGER_RATIO = 0.55
  *  that is the reader's own scrolling and can be as long as they like; here it is
  *  a fixed budget, and 900ms + 750ms is the floor for a two-line sentence
  *  (they will also have had it on screen for however long it took them to scroll
- *  the cluster into view, which is what actually fires the trigger). Lengthen
+ *  the copy fully into view, which is what actually fires the trigger). Lengthen
  *  this before anything else if the handover feels rushed. */
 const LEAD_MS = 900
 const CONVERGE_MS = 1500
 const GAP_MS = 150
 const STARMAP_MS = 2600
+
+/** When the star map's own timeline starts, and the length of the whole piece. */
+const MAP_FROM = LEAD_MS + CONVERGE_MS + GAP_MS
+const TOTAL_MS = MAP_FROM + STARMAP_MS
 
 /** Where the star map stops.
  *
@@ -56,50 +63,86 @@ const STARMAP_MS = 2600
 const END_T = 0.34
 
 /**
- * @param root    the element whose arrival starts the clock — the cluster, not
- *                the section, so the trigger tracks the thing being animated
+ * @param root    the element whose FULL arrival starts the clock. The copy, not
+ *                the cluster: nothing moves until the reader can read the sentence
+ *                the movement is illustrating, so the piece cannot play to someone
+ *                who is looking at half a paragraph.
  * @param enabled false on the pinned layout, where scroll drives instead
  */
 export function useTimedSequence(root: Ref<HTMLElement | null>, enabled: Ref<boolean>) {
     const converge = ref(0)
     const starMapTime = ref(0)
+    /** Accumulated position in the piece, ms. The single source of truth: both
+     *  outputs and the progress ring are derived from it, so a pause cannot leave
+     *  them disagreeing. */
+    const elapsed = ref(0)
+    const playing = ref(false)
 
     let io: IntersectionObserver | null = null
     let rafId = 0
-    let startedAt = 0
-    let played = false
+    let lastTimestamp = 0
+    /** Whether the arrival trigger has already fired. Separate from `elapsed`
+     *  because a reader who pauses on the first frame has still had their one
+     *  automatic play, and should not get another on the next scroll. */
+    let triggered = false
 
-    function frame(now: number) {
-        if (!startedAt) startedAt = now
-        const elapsed = now - startedAt
-
+    function apply(ms: number) {
         // Ease the collapse. On the pinned layout this value is linear in scroll,
         // which reads fine because the reader is setting the pace themselves; on a
         // clock a linear ramp starts and stops abruptly, so it gets a smoothstep.
         // `starMapTime` stays linear — the keyframe tables it feeds carry their own
         // easing per segment, and easing it here would double up.
-        const c = norm(elapsed, LEAD_MS, LEAD_MS + CONVERGE_MS)
+        const c = norm(ms, LEAD_MS, LEAD_MS + CONVERGE_MS)
         converge.value = c * c * (3 - 2 * c)
+        starMapTime.value = END_T * norm(ms, MAP_FROM, TOTAL_MS)
+    }
 
-        const mapFrom = LEAD_MS + CONVERGE_MS + GAP_MS
-        starMapTime.value = END_T * norm(elapsed, mapFrom, mapFrom + STARMAP_MS)
+    function frame(now: number) {
+        // Advance on the real frame delta and clamp it: a backgrounded tab hands
+        // back a multi-second gap on return, which would skip the whole piece.
+        const delta = lastTimestamp ? Math.min(now - lastTimestamp, 64) : 0
+        lastTimestamp = now
+        elapsed.value = Math.min(TOTAL_MS, elapsed.value + delta)
+        apply(elapsed.value)
 
-        if (elapsed < mapFrom + STARMAP_MS) rafId = requestAnimationFrame(frame)
-        else rafId = 0 // one shot: nothing left to advance, so stop asking for frames
+        if (elapsed.value < TOTAL_MS) {
+            rafId = requestAnimationFrame(frame)
+        } else {
+            // Rests here: nothing left to advance, and the control falls back to
+            // offering a replay.
+            rafId = 0
+            playing.value = false
+        }
     }
 
     function play() {
-        if (played || rafId) return
-        played = true
-        startedAt = 0
+        if (!enabled.value || rafId) return
+        // Finished, so this is a replay rather than a resume.
+        if (elapsed.value >= TOTAL_MS) elapsed.value = 0
+        playing.value = true
+        lastTimestamp = 0
         rafId = requestAnimationFrame(frame)
+    }
+
+    function pause() {
+        if (rafId) cancelAnimationFrame(rafId)
+        rafId = 0
+        lastTimestamp = 0
+        playing.value = false
+    }
+
+    /** What the playback control calls. */
+    function toggle() {
+        if (playing.value) pause()
+        else play()
     }
 
     function resolve() {
         // Straight to the end state, no clock.
-        converge.value = 1
-        starMapTime.value = END_T
-        played = true
+        pause()
+        elapsed.value = TOTAL_MS
+        apply(TOTAL_MS)
+        triggered = true
     }
 
     /** Stop watching. Separate from `teardown` on purpose: the observer's whole
@@ -113,38 +156,58 @@ export function useTimedSequence(root: Ref<HTMLElement | null>, enabled: Ref<boo
 
     function teardown() {
         unwatch()
-        if (rafId) cancelAnimationFrame(rafId)
-        rafId = 0
+        pause()
+    }
+
+    /** Whether the trigger element is as visible as it is going to get.
+     *
+     *  "Completely visible" is the rule, but it cannot be `intersectionRatio >= 1`
+     *  alone: a copy group taller than the viewport can never reach that, and on a
+     *  short phone in landscape it is a real possibility, so the piece would
+     *  simply never play. Measuring the visible HEIGHT against whichever is
+     *  smaller — the element or the screen — asks the question the rule means. */
+    function fullyVisible(entry: IntersectionObserverEntry) {
+        const own = entry.boundingClientRect.height
+        const room = window.innerHeight * 0.9
+        // A pixel of slack: intersection rects are fractional and a "complete"
+        // element routinely lands a hair short of its own height.
+        return entry.intersectionRect.height + 1 >= Math.min(own, room)
     }
 
     function arm() {
         teardown()
         if (!enabled.value || !root.value) return
-        if (played) return resolve()
+        if (triggered) return
 
         if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return resolve()
 
         io = new IntersectionObserver(
             (entries) => {
                 for (const entry of entries) {
-                    if (entry.intersectionRatio < TRIGGER_RATIO) continue
-                    unwatch() // one shot
+                    if (!fullyVisible(entry)) continue
+                    unwatch() // one shot; replays are the control's business
+                    triggered = true
                     play()
                     return
                 }
             },
-            { threshold: TRIGGER_RATIO }
+            // Several steps rather than just 1: the tall-element case above never
+            // produces a ratio of 1, so it needs callbacks on the way up.
+            { threshold: [0.5, 0.75, 0.9, 1] }
         )
         io.observe(root.value)
     }
 
     // `enabled` resolves in the media query's own onMounted, which may land after
     // ours, and the breakpoint can be crossed by a rotation without a scroll. If
-    // the piece has already played, crossing back just restores the end state
-    // rather than replaying it at the reader.
+    // the piece has already played, crossing back leaves it where it was rather
+    // than replaying it at the reader.
     watch(enabled, arm)
     onMounted(arm)
     onBeforeUnmount(teardown)
+
+    /** 0..1 through the piece, for the playback control's ring. */
+    const progress = computed(() => elapsed.value / TOTAL_MS)
 
     /** Which copy group owns the stage, on the same terms `usePinnedProgress`
      *  reports it: 0 the problem, -1 the gap where the visual is alone, 1 the
@@ -165,5 +228,5 @@ export function useTimedSequence(root: Ref<HTMLElement | null>, enabled: Ref<boo
         return -1
     })
 
-    return { converge, starMapTime, phase }
+    return { converge, starMapTime, phase, playing, progress, toggle }
 }

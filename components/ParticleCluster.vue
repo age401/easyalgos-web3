@@ -27,8 +27,13 @@ interface Props {
     converge?: number
     /** Rendered as a single mid-motion frame instead of animating. */
     still?: boolean
+    /** Holds the rotation where it is, and picks it up from there. Unlike `still`
+     *  this is expected to change: it is how the stacked layout keeps the cloud
+     *  idle until its sequence starts, and how the playback control's pause stops
+     *  the whole stage rather than just the timeline driving `converge`. */
+    paused?: boolean
 }
-const props = withDefaults(defineProps<Props>(), { converge: 0, still: false })
+const props = withDefaults(defineProps<Props>(), { converge: 0, still: false, paused: false })
 const emit = defineEmits<{ (e: 'converged'): void }>()
 
 const stageRef = ref<HTMLElement | null>(null)
@@ -306,11 +311,11 @@ function loop(timestamp: number) {
     lastTimestamp = timestamp
     motionMs += delta
     drawFrame()
-    if (inView && !reducedMotion && !disposed) rafId = requestAnimationFrame(loop)
+    if (inView && !reducedMotion && !disposed && !props.paused) rafId = requestAnimationFrame(loop)
 }
 
 function start() {
-    if (rafId || reducedMotion || disposed || props.still) return
+    if (rafId || reducedMotion || disposed || props.still || props.paused) return
     lastTimestamp = 0
     rafId = requestAnimationFrame(loop)
 }
@@ -336,6 +341,16 @@ watch(
     }
 )
 
+// Unpausing has to restart the loop, since nothing else will: the IntersectionObserver
+// only fires on a visibility change and the stage was already visible.
+watch(
+    () => props.paused,
+    (value) => {
+        if (value) stop()
+        else if (inView) start()
+    }
+)
+
 onMounted(async () => {
     reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
@@ -352,6 +367,12 @@ onMounted(async () => {
         drawFrame()
         return
     }
+
+    // Paint the resting frame now rather than waiting for the loop. It may never
+    // come: a stage that mounts paused would otherwise show a blank canvas until
+    // something un-paused it, which on the stacked layout is the whole point of
+    // the idle state.
+    drawFrame()
 
     io = new IntersectionObserver(
         (entries) => {

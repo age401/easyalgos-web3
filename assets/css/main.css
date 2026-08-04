@@ -568,7 +568,25 @@
        of the same edge crawl. The card body is 85% opaque, so it bought little. */
     .ea-card-anchor {
         @apply absolute origin-center;
+        /* The card's point, as a percentage of the cluster box, pushed away from
+           the centre by `--ea-card-spread`. The multiplier is here rather than
+           folded into the numbers in ROLE_CARDS because it is per-LAYOUT: the
+           stacked cluster draws its cards at 1x inside a box that is now wider
+           than the drawn one, so they occupy proportionally more of it and read
+           as clustered. Doing it in CSS keeps the positions identical on the
+           server and the client — the media query that would decide it in JS
+           resolves a frame late, and these are inline styles. */
+        left: calc((50 + (var(--ea-card-x) - 50) * var(--ea-card-spread, 1)) * 1%);
+        top: calc((50 + (var(--ea-card-y) - 50) * var(--ea-card-spread, 1)) * 1%);
         transform: translate(-50%, -50%);
+    }
+    /* The whole cluster holds still until the sequence starts — see the `paused`
+       prop on ParticleCluster for the grains, which are a shader rather than a
+       stylesheet. Paused rather than `animation: none` so the cards keep the
+       offset their negative delay puts them at instead of snapping to the 3
+       o'clock point of their circle. */
+    .ea-cards--idle .ea-chip {
+        animation-play-state: paused;
     }
     /* A pearl: the light body is the background COLOUR and `ea-bubble` is the
        wash over it, which is clear at the highlight — so the order matters and
@@ -935,6 +953,19 @@
        used to force both groups visible because it had no clock to hand over on;
        doing that now would print them on top of each other, since they share a
        grid cell. */
+
+    /* The replay control under the copy — Figma "Playback control" (623:3161).
+       Tinted/500 at 20%, lifting to 50% on hover; the glyph and the ring live in
+       the component's SVG. Written as rgba because the opacity modifier cannot be
+       stacked onto a colour name that already carries a slash. */
+    .ea-playback {
+        @apply grid h-8 w-8 place-items-center rounded-full;
+        background-color: rgba(122, 127, 163, 0.2); /* Tinted/500 at 20% */
+        transition: background-color 0.2s theme('transitionTimingFunction.smooth');
+    }
+    .ea-playback:hover {
+        background-color: rgba(122, 127, 163, 0.5); /* Tinted/500 at 50% */
+    }
 
     /* The line that drops out of the resolved mark. It starts at the centre of
        the cluster box and runs half a viewport — which, with the box centred in
