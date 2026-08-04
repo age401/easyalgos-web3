@@ -209,6 +209,17 @@ export function useTimedSequence(root: Ref<HTMLElement | null>, enabled: Ref<boo
     /** 0..1 through the piece, for the playback control's ring. */
     const progress = computed(() => elapsed.value / TOTAL_MS)
 
+    /** Whether the piece has begun — which is NOT `playing`, and the difference is
+     *  the whole reason this exists.
+     *
+     *  Before the trigger the stage is not "stopped", it is waiting: the grains turn
+     *  and the cards drift, they just have not been asked to collapse yet. Reading
+     *  `!playing` as "hold the stage still" freezes it from mount and hands the
+     *  reader a dead canvas above live copy. Only a pause the reader asked for, or
+     *  the resolved end state, should stop the ambient motion — both of which have
+     *  put time on the clock. */
+    const started = computed(() => elapsed.value > 0)
+
     /** Which copy group owns the stage, on the same terms `usePinnedProgress`
      *  reports it: 0 the problem, -1 the gap where the visual is alone, 1 the
      *  solution.
@@ -228,5 +239,5 @@ export function useTimedSequence(root: Ref<HTMLElement | null>, enabled: Ref<boo
         return -1
     })
 
-    return { converge, starMapTime, phase, playing, progress, toggle }
+    return { converge, starMapTime, phase, playing, started, progress, toggle }
 }

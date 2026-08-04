@@ -39,9 +39,10 @@
 //            map, AND the copy handover — plays ONCE on arrival off a clock
 //            instead of off the scroll (`useTimedSequence`), stopping on its best
 //            frame. Nothing is pinned and no scrolling is taken from the reader.
-//            The stage is IDLE until it starts — grains and cards both — so the
-//            reader is not given something already in motion to catch up with, and
-//            a playback control under the copy hands the piece back afterwards.
+//            Only the SEQUENCE waits for the copy to arrive: the grains turn and
+//            the cards drift throughout, so what the reader approaches is a live
+//            cloud that then collapses, not a still image that comes to life. A
+//            playback control under the copy hands the piece back afterwards.
 //
 // Almost all of it is common to the two. The star map cannot tell which one is
 // driving `t`, and the copy groups cannot tell what moved `phase`; only the clock
@@ -64,6 +65,7 @@ const {
     starMapTime: timedTime,
     phase: timedPhase,
     playing,
+    started,
     progress,
     toggle
 } = useTimedSequence(copyRef, isStacked)
@@ -100,10 +102,17 @@ const cardsStyle = computed(() => ({
  *  drift, which are a shader uniform and a CSS animation respectively and so are
  *  stopped in two different places from this one flag.
  *
- *  Only the stacked layout has an idle state to be in. The pinned cluster is alive
- *  from the moment it is on screen because there the reader's own scrolling is the
- *  clock, and a stage that waited for something would be waiting for them. */
-const stageIdle = computed(() => isStacked.value && !playing.value)
+ *  What is waiting for the copy to arrive is the SEQUENCE — the collapse and the
+ *  star map — not the stage. The grains turn and the cards drift from the moment
+ *  they are on screen, on both layouts: that ambient motion is what makes the
+ *  scatter read as an ecosystem rather than a diagram, and holding it until the
+ *  trigger fires means the reader spends the whole approach looking at a still
+ *  image. `started`, not `!playing`, is the difference — see the note there.
+ *
+ *  So the only thing this stops is a pause the reader ASKED for, mid-piece, which
+ *  should stop everything or the button is lying about what it does. Never on the
+ *  pinned layout, which has no transport to pause. */
+const stageIdle = computed(() => isStacked.value && started.value && !playing.value)
 
 /** Three states worth naming for a screen reader, since the glyph only draws two:
  *  a control that has run to the end restarts rather than resumes. */

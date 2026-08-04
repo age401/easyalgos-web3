@@ -28,9 +28,10 @@ interface Props {
     /** Rendered as a single mid-motion frame instead of animating. */
     still?: boolean
     /** Holds the rotation where it is, and picks it up from there. Unlike `still`
-     *  this is expected to change: it is how the stacked layout keeps the cloud
-     *  idle until its sequence starts, and how the playback control's pause stops
-     *  the whole stage rather than just the timeline driving `converge`. */
+     *  this is expected to change: it is how the playback control's pause stops the
+     *  whole stage rather than just the timeline driving `converge`. Not used for
+     *  the wait BEFORE that timeline starts — the cloud is alive from the moment it
+     *  is on screen. */
     paused?: boolean
 }
 const props = withDefaults(defineProps<Props>(), { converge: 0, still: false, paused: false })

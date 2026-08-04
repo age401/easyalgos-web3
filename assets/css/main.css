@@ -580,11 +580,13 @@
         top: calc((50 + (var(--ea-card-y) - 50) * var(--ea-card-spread, 1)) * 1%);
         transform: translate(-50%, -50%);
     }
-    /* The whole cluster holds still until the sequence starts — see the `paused`
-       prop on ParticleCluster for the grains, which are a shader rather than a
-       stylesheet. Paused rather than `animation: none` so the cards keep the
-       offset their negative delay puts them at instead of snapping to the 3
-       o'clock point of their circle. */
+    /* The whole cluster holds still while the reader has the piece PAUSED — see the
+       `paused` prop on ParticleCluster for the grains, which are a shader rather
+       than a stylesheet. Not while it is merely waiting to start: the drift runs
+       from the moment the cards are on screen.
+       Paused rather than `animation: none` so the cards keep the offset their
+       negative delay puts them at instead of snapping to the 3 o'clock point of
+       their circle. */
     .ea-cards--idle .ea-chip {
         animation-play-state: paused;
     }
