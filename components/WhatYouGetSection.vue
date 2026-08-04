@@ -1,23 +1,29 @@
 <script setup lang="ts">
-// "What you get" — a nine-row accordion on the left, the matching visual on the
-// right.
+// "What you get" — a nine-row accordion, with the selected row's slide beside it
+// on desktop and inside it on handhelds.
 //
 // Rows are real <button>s inside a heading, so the list is keyboard-operable and
 // announces its open state for free via aria-expanded. The open row's description
 // animates on grid-template-rows 0fr -> 1fr (see .ea-solution-row in main.css),
 // which is the only way to transition to an auto height without measuring in JS.
 //
-// The right-hand panel cross-fades between per-row visuals. Only two rows have
-// their artwork so far; the rest fall back to the dashboard export so the panel is
-// never empty while the per-item animations are outstanding. Dropping each one in
-// later is a single line in data/content.ts — no change here.
+// Two slide slots, both always in the markup, one hidden per breakpoint in CSS.
+// That is deliberate: which slot is live is a LAYOUT question, so it cannot come
+// from useMediaQuery without the server and client rendering different trees.
+// Only the active row carries the handheld slide, so the cost is one extra
+// <picture> for the same URL the desktop panel already requested — the browser
+// serves it from one fetch.
+//
+// Only two rows have their artwork so far; the rest fall back to the dashboard
+// export so the slot is never empty while the per-item animations are
+// outstanding. Dropping each one in later is a single line in data/content.ts.
 import { SOLUTIONS, SOLUTIONS_FALLBACK_VISUAL } from '~/data/content'
 
 const activeId = ref(SOLUTIONS[0]!.id)
 
 function toggle(id: string) {
-    // Always leave one row open: the right-hand panel is driven by the selection,
-    // so collapsing everything would blank half the section.
+    // Always leave one row open: the slide is driven by the selection, so
+    // collapsing everything would blank half the section.
     if (activeId.value !== id) activeId.value = id
 }
 
@@ -41,36 +47,88 @@ const activeVisual = computed(() => {
                     </template>
                 </SectionHeading>
 
-                <div v-reveal="140" class="mt-10 tablet-wide:mt-12">
-                    <h3
-                        v-for="(item, index) in SOLUTIONS"
-                        :key="item.id"
-                        class="m-0"
-                    >
-                        <button
-                            type="button"
-                            class="ea-solution-row"
-                            :aria-expanded="activeId === item.id"
-                            :aria-controls="`solution-body-${item.id}`"
-                            @click="toggle(item.id)"
-                        >
-                            <span class="ea-solution-row__index pt-0.5">
-                                {{ String(index + 1).padStart(2, '0') }}
-                            </span>
+                <div v-reveal="140" class="ea-solution-list mt-10 tablet-wide:mt-12">
+                    <!-- Height reserve, desktop only. An invisible copy of the nine
+                         title rows plus every description stacked into a single grid
+                         cell, so it measures exactly (all titles + the TALLEST
+                         description) — which is the tallest the real list can ever
+                         get, since exactly one description is open at a time. The
+                         real list is laid over it, so switching rows never moves the
+                         CTA or anything below the section. Locale-proof by
+                         construction: German's two-line back-testing copy reserves
+                         two lines without a pixel value being written down. -->
+                    <div class="ea-solution-list__reserve" aria-hidden="true">
+                        <span v-for="item in SOLUTIONS" :key="item.id" class="ea-solution-row">
+                            <span class="ea-solution-row__index pt-0.5">00</span>
                             <span class="block">
-                                <span class="block font-poppins text-[14px] font-medium leading-5 text-Neutral/800">
+                                <span class="ea-solution-row__title">
                                     {{ $t(`whatYouGet.items.${item.id}.title`) }}
                                 </span>
-                                <span :id="`solution-body-${item.id}`" class="ea-solution-row__body">
-                                    <span class="block">
-                                        <span class="ea-body--sm block pt-1 !text-Neutral/500">
-                                            {{ $t(`whatYouGet.items.${item.id}.description`) }}
-                                        </span>
-                                    </span>
+                            </span>
+                        </span>
+                        <span class="ea-solution-list__reserve-row">
+                            <span />
+                            <span class="ea-solution-list__reserve-body">
+                                <span
+                                    v-for="item in SOLUTIONS"
+                                    :key="item.id"
+                                    class="ea-body--sm block pt-1"
+                                >
+                                    {{ $t(`whatYouGet.items.${item.id}.description`) }}
                                 </span>
                             </span>
-                        </button>
-                    </h3>
+                        </span>
+                    </div>
+
+                    <div class="ea-solution-list__rows">
+                        <div v-for="(item, index) in SOLUTIONS" :key="item.id">
+                            <!-- Handheld slot: the slide sits above its own row,
+                                 pushing the rest of the list down. Figma 626:5102 /
+                                 626:9308. -->
+                            <Transition name="slide-reveal">
+                                <div v-if="activeId === item.id" class="ea-slide-reveal tablet-wide:hidden">
+                                    <!-- Clipping track, then the natural-height
+                                         content: the padding has to collapse with
+                                         the slide, so it goes on the inner box. -->
+                                    <div>
+                                        <div class="pb-4 pt-3">
+                                            <SolutionSlide
+                                                :media="activeVisual"
+                                                :swap-key="activeId"
+                                                sizes="100vw"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                            </Transition>
+
+                            <h3 class="m-0">
+                                <button
+                                    type="button"
+                                    class="ea-solution-row"
+                                    :aria-expanded="activeId === item.id"
+                                    :aria-controls="`solution-body-${item.id}`"
+                                    @click="toggle(item.id)"
+                                >
+                                    <span class="ea-solution-row__index pt-0.5">
+                                        {{ String(index + 1).padStart(2, '0') }}
+                                    </span>
+                                    <span class="block">
+                                        <span class="ea-solution-row__title">
+                                            {{ $t(`whatYouGet.items.${item.id}.title`) }}
+                                        </span>
+                                        <span :id="`solution-body-${item.id}`" class="ea-solution-row__body">
+                                            <span class="block">
+                                                <span class="ea-body--sm block pt-1 !text-Neutral/500">
+                                                    {{ $t(`whatYouGet.items.${item.id}.description`) }}
+                                                </span>
+                                            </span>
+                                        </span>
+                                    </span>
+                                </button>
+                            </h3>
+                        </div>
+                    </div>
                 </div>
 
                 <div v-reveal="220" class="mt-12">
@@ -78,22 +136,16 @@ const activeVisual = computed(() => {
                 </div>
             </div>
 
-            <!-- Right panel. Bleeds past the column as drawn; the section clips it. -->
+            <!-- Desktop slot. Bleeds past the column as drawn; the section clips it. -->
             <div
                 v-reveal="180"
-                class="relative w-full tablet-wide:w-[calc(100%+8vw)] desktop:w-[calc(100%+12vw)]"
+                class="relative hidden w-full tablet-wide:block tablet-wide:w-[calc(100%+8vw)] desktop:w-[calc(100%+12vw)]"
             >
-                <div class="ea-media relative aspect-[1100/660] w-full rounded-2xl border-2 border-Tinted/100 bg-Tinted/25 shadow-ea-step">
-                    <Transition name="swap" mode="out-in">
-                        <AppPicture
-                            :key="activeId"
-                            :media="activeVisual"
-                            loading="lazy"
-                            sizes="(min-width: 1280px) 1100px, (min-width: 1024px) 60vw, 100vw"
-                            img-class="h-full w-full rounded-2xl object-cover object-left-top"
-                        />
-                    </Transition>
-                </div>
+                <SolutionSlide
+                    :media="activeVisual"
+                    :swap-key="activeId"
+                    sizes="(min-width: 1280px) 1100px, 60vw"
+                />
             </div>
         </div>
     </section>

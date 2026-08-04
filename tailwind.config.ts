@@ -237,6 +237,19 @@ export default <Partial<Config>>{
                 // The burger's dropdown card, floating clear of the topbar.
                 'ea-menu': '0 20px 48px 12px rgba(24, 17, 64, 0.14), 0 6px 9.6px 2px rgba(34, 32, 38, 0.06)',
                 'ea-step': '0 24px 48px -28px rgba(37, 32, 51, 0.16)',
+                // "What you get" slide container. The same suspended-sheet stack as
+                // `ea-card` with a second, wider blue wash on the left edge — the
+                // panel bleeds off the right of the viewport, so the only side that
+                // reads as lit is the one facing the copy. Figma 626:5098.
+                'ea-slide':
+                    '0 0 250px 0 rgba(128, 123, 143, 0.12), 0 0 96px 0 rgba(37, 32, 51, 0.04), 0 0 48px 0 rgba(37, 32, 51, 0.02), -12px 0 16px 0 rgba(84, 107, 197, 0.04), -6px 0 12px 0 rgba(84, 107, 197, 0.04)',
+                // The same five layers on handhelds, at roughly a quarter of the
+                // blur — and with the two blue washes moved from the left edge onto
+                // the bottom. Inline in the list the slide is centred in the column
+                // rather than bleeding off the right, so it reads as lit from above
+                // instead of from the side. Figma 626:7817.
+                'ea-slide-sm':
+                    '0 0 60px 0 rgba(128, 123, 143, 0.12), 0 0 48px 0 rgba(37, 32, 51, 0.04), 0 0 24px 0 rgba(37, 32, 51, 0.02), 0 6px 8px 0 rgba(84, 107, 197, 0.04), 0 3px 6px 0 rgba(84, 107, 197, 0.04)',
             },
             borderRadius: {
                 '1.5xl': '.875rem',

@@ -39,9 +39,19 @@ OUT = ROOT / 'public' / 'img'
 STEP_CROP = (64, 64, 1256, 864)
 
 JOBS = [
-    # --- "What you get" panel (2x of the 1100x660 slot) -----------------------
-    ('dashboard.png', 'solutions/dashboard', (0, 0, 2200, 1320), (2200, 1320)),
-    ('dashboard.png', 'solutions/expert-advisors', (0, 0, 2200, 1320), (2200, 1320)),
+    # --- "What you get" slides (2x of the 1100x660 slot) ----------------------
+    # The Figma slide frames export CONTENT ONLY. The rounded corners, the tint
+    # and the five stacked ambient shadows belong to the container and are drawn
+    # in CSS (.ea-slide) — so the source is a flat, edge-to-edge 2200x1320 panel
+    # and needs neither crop nor resize.
+    #
+    # The first version of these exports baked the container's shadows into the
+    # bitmap, which left the panel floating inside its own box with a second,
+    # offset shadow under it. If a future slide export arrives looking soft at
+    # the edges, that is the same mistake: turn the frame's effects off before
+    # exporting.
+    ('solution-expert-advisors.png', 'solutions/expert-advisors', None, None),
+    ('solution-expert-advisors.png', 'solutions/dashboard', None, None),
     # --- "How it works" step panels (2x of the 596x400 slot) -----------------
     ('card1.png', 'steps/connect', STEP_CROP, (1192, 800)),
     ('card2.png', 'steps/vps', STEP_CROP, (1192, 800)),

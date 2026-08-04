@@ -475,10 +475,46 @@
     /* Rows share one grid so the numbers stay in a column. The description
        animates on grid-template-rows 0fr -> 1fr, which is the only way to get a
        real auto-height transition without measuring in JS. */
+    /* The list pins its own height from tablet-wide up. Both layers occupy the
+       same grid cell: the reserve measures the list's tallest possible state
+       (see WhatYouGetSection.vue) and the real rows are laid over it, top-
+       aligned. Handhelds get neither — there the slide lives inside the active
+       row and the list is expected to change height. */
+    .ea-solution-list__reserve {
+        display: none;
+    }
+    .ea-solution-list__reserve-row {
+        @apply grid grid-cols-[2rem_1fr] gap-x-5;
+    }
+    /* Stacked in one cell, so the cell is as tall as the longest description —
+       measured at the width the real descriptions get, which is why this sits in
+       the second column of a row-shaped grid rather than spanning the list. */
+    .ea-solution-list__reserve-body {
+        display: grid;
+    }
+    .ea-solution-list__reserve-body > * {
+        grid-area: 1 / 1;
+    }
+    @media (min-width: 1024px) {
+        .ea-solution-list {
+            @apply grid items-start;
+        }
+        .ea-solution-list__reserve,
+        .ea-solution-list__rows {
+            grid-area: 1 / 1;
+        }
+        .ea-solution-list__reserve {
+            @apply block invisible pointer-events-none;
+        }
+    }
+
     .ea-solution-row {
         @apply grid w-full grid-cols-[2rem_1fr] items-start gap-x-5 border-b py-3 text-left;
         border-color: theme('colors.Tinted/100');
         transition: border-color 0.5s theme('transitionTimingFunction.smooth');
+    }
+    .ea-solution-row__title {
+        @apply block font-poppins text-[14px] font-medium leading-5 text-Neutral/800;
     }
     .ea-solution-row[aria-expanded='true'] {
         border-color: theme('colors.Tinted/600');
@@ -1215,6 +1251,53 @@
         transform: scale(1.035);
     }
 
+    /* ============================================= "What you get" slide == */
+    /* The frame around a slide's content, and the only place its framing is
+       described. Figma's slide sources export as flat 1100x660 panels of pure
+       content; the 24px corners, the tint that shows through before the artwork
+       decodes, and the five-layer ambient shadow all belong here. Keeping them
+       out of the bitmap is what lets a row swap a still for a video later
+       without the box changing.
+       Container is Figma 626:5098, content Figma 618:4532 (radius 24, #F7F7FB,
+       and no stroke — Figma carries a strokeWeight with no paint, which is not
+       a border). */
+    /* Two layers, because one element cannot both clip and cast. The shadow lives
+       on a pseudo-element of the OUTER box: an element's own ::after is a child
+       for clipping purposes, so a shadow drawn there would be cut off by the
+       `overflow: hidden` that rounds the artwork. Hence the frame does the
+       clipping and the box around it does the casting.
+       The split earns its keep in .ea-slide-reveal, where the shadow has to fade
+       in on its own — see the transition block at the foot of this file. */
+    /* Corners and shadow are lighter on handhelds — 12px and a much tighter blur
+       (Figma 626:7817) against 24px and the wide bleed-off-the-viewport stack
+       (Figma 626:5098). The breakpoint is the same 1024px that moves the slide out
+       of the list and into its own column, so the two always change together. */
+    .ea-slide {
+        @apply relative aspect-[1100/660] w-full rounded-xl tablet-wide:rounded-3xl;
+    }
+    .ea-slide::after {
+        content: '';
+        @apply pointer-events-none absolute inset-0 rounded-xl shadow-ea-slide-sm
+               tablet-wide:rounded-3xl tablet-wide:shadow-ea-slide;
+        /* Opacity, not box-shadow: interpolating five stacked shadows (one of them
+           a 250px blur) re-rasterises the whole stack every frame, while fading a
+           shadow the compositor has already cached is close to free. */
+        transition: opacity 0.35s theme('transitionTimingFunction.smooth');
+    }
+    .ea-slide__frame {
+        @apply relative h-full w-full overflow-hidden rounded-xl bg-Tinted/25 tablet-wide:rounded-3xl;
+    }
+
+    /* The handheld slide's slot. Opens and closes on grid-template-rows 0fr <-> 1fr
+       so the list makes room for the slide over the same half-second the row's
+       description expands, rather than the slide landing in one frame and shoving
+       everything below it. Same mechanism as .ea-solution-row__body; the
+       transition classes are on the <Transition> names below. */
+    .ea-slide-reveal {
+        display: grid;
+        grid-template-rows: 1fr;
+    }
+
     /* The step scroller's progress bars. */
     .ea-progress {
         @apply h-1 rounded-sm bg-Tinted/50;
@@ -1265,6 +1348,37 @@
     .swap-leave-active {
         position: absolute;
         inset: 0;
+    }
+
+    /* Height reveal for the handheld slide (see .ea-slide-reveal). The clip that
+       makes 0fr -> 1fr read as a height change lives ONLY on the active
+       transition, never at rest: .ea-slide carries a 250px ambient shadow, and a
+       permanent overflow:hidden on the track would cut it off. Both layers are
+       animating whenever the selection moves — the outgoing slot collapses as the
+       incoming one opens — so the list barely changes height across a swap. */
+    .slide-reveal-enter-active,
+    .slide-reveal-leave-active {
+        transition: grid-template-rows 0.55s theme('transitionTimingFunction.smooth'),
+                    opacity 0.45s theme('transitionTimingFunction.smooth');
+    }
+    .slide-reveal-enter-active > *,
+    .slide-reveal-leave-active > * {
+        overflow: hidden;
+    }
+    .slide-reveal-enter-from,
+    .slide-reveal-leave-to {
+        grid-template-rows: 0fr;
+        opacity: 0;
+    }
+    /* The shadow cannot cross-fade with the height: while the track is clipping,
+       it is not on screen at all, so there is nothing to fade. It therefore waits
+       and takes over — held at zero for as long as the clip is up, then released
+       the instant Vue drops the -active class, which is exactly when the height
+       lands. Removing the class is itself the trigger; the 0.35s ease-in lives on
+       .ea-slide::after, so no delay has to be kept in step with the 0.55s above. */
+    .slide-reveal-enter-active .ea-slide::after,
+    .slide-reveal-leave-active .ea-slide::after {
+        opacity: 0;
     }
 
     .page-enter-active,
