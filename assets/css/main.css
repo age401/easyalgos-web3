@@ -62,15 +62,19 @@
        from `useDarkBand`. The problem/solution section instead writes an
        interpolated value inline on <html> from `usePageTint`, which wins for as
        long as it is on screen and is removed the moment it is not — so its dark
-       arrives as a fade rather than an edge.
+       arrives as a fade rather than an edge. That section is `data-dark-page="off"`
+       precisely so the two do not both try: the fade is the only thing that should
+       ever darken the page there, and on the stacked layout — where the fade stands
+       down and the section paints its own flat dark — nothing should.
 
-       The variable is declared on html ONLY, even though useDarkBand puts the
-       class on both elements. A `body.is-dark-band` rule here would set the
-       property ON body, and a value set on an element always beats the one it
-       would have inherited — so body would sit at a flat dark while html was
-       mid-fade, and the page would show the tint only in the margins outside the
-       body box. */
-    html.is-dark-band {
+       `is-dark-page`, not `is-dark-band`: a band is behind the header whenever its
+       box is, which is not the same as it owning the page. See useDarkBand.
+
+       Declared on html ONLY. A `body` rule here would set the property ON body,
+       and a value set on an element always beats the one it would have inherited —
+       so body would sit at a flat dark while html was mid-fade, and the page would
+       show the tint only in the margins outside the body box. */
+    html.is-dark-page {
         --ea-page-bg: theme('colors.Neutral/800');
     }
 

@@ -28,7 +28,10 @@
 //
 // The page background is the other moving part: the section paints nothing, and
 // `usePageTint` carries the DOCUMENT background between white and the dark as the
-// section arrives and leaves. That is why the dark has no hard edge.
+// section arrives and leaves. That is why the dark has no hard edge. It is the ONLY
+// thing that darkens the page here — hence `data-dark-page="off"`, which keeps
+// `useDarkBand` out of it; the header still inverts, but the flat dark that class
+// would otherwise set would carry across the two unpainted sections below.
 //
 // The section has TWO behaviours, and which one it plays turns on whether there
 // is room for a pinned stage — see utils/breakpoints.ts for where that line is
@@ -136,6 +139,7 @@ function onConverged() {
     <section
         ref="sectionRef"
         data-dark-band
+        data-dark-page="off"
         class="ea-dark relative pinned:h-[380vh] stacked:overflow-x-clip"
         :class="tinted ? 'bg-transparent' : 'bg-Neutral/800'"
     >
