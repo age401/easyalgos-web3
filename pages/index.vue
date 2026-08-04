@@ -41,7 +41,6 @@ useSeoMeta({
 
             <LazyTrustpilotBar :hydrate-on-visible="{ rootMargin: '300px' }" />
             <LazyProblemSolutionSection :hydrate-on-visible="{ rootMargin: '300px' }" />
-            <LazyAccoladesBand :hydrate-on-visible="{ rootMargin: '300px' }" />
             <LazyWhatYouGetSection :hydrate-on-visible="{ rootMargin: '300px' }" />
             <LazyBrandMarquee :hydrate-on-visible="{ rootMargin: '300px' }" />
             <LazyHowItWorksSection :hydrate-on-visible="{ rootMargin: '300px' }" />
