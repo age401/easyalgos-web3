@@ -1246,6 +1246,74 @@
         transform: translateX(3px);
     }
 
+    /* ================================================= Language selector == */
+    /* Figma: trigger 681:6224, panel 681:6778, option 681:6444.
+       Padding is 6, not the file's 8: the 2px stroke is drawn INSIDE in Figma,
+       and `border-box` counts a CSS border, so 2+6+30+6+2 is the drawn 46x36. */
+    .ea-lang__trigger {
+        @apply flex h-9 w-[46px] items-center justify-center rounded-xl border-2 border-Tinted/800 bg-Neutral/800 p-1.5;
+        transition: background-color var(--ea-hover, 0.3s) theme('transitionTimingFunction.smooth'),
+                    border-color var(--ea-hover, 0.3s) theme('transitionTimingFunction.smooth');
+    }
+    .ea-lang__trigger:hover {
+        @apply cursor-pointer border-Tinted/600 bg-Tinted/900;
+    }
+    /* Pressed and open share a skin — while the panel is up the chip should read
+       as engaged, which is what the drawn Pressed state is for. */
+    .ea-lang__trigger:active,
+    .ea-lang__trigger[aria-expanded='true'] {
+        @apply border-Tinted/400 bg-Tinted/900;
+    }
+
+    /* Opens upward: the chip sits at the top of a very long footer, so downward
+       would drop the panel across the link columns.
+       The horizontal anchor has to follow the CHIP, which is right-aligned only
+       from tablet-wide up (below that the contact rows stack and the chip is at
+       the left edge). Anchoring the 200px panel to `right-0` at every width
+       sends it ~150px off the left of a 390px viewport. */
+    .ea-lang__panel {
+        @apply absolute bottom-full left-0 z-30 mb-2 w-[200px] rounded-[20px] bg-Tinted/900 p-3 shadow-ea-menu
+               tablet-wide:left-auto tablet-wide:right-0;
+    }
+    .ea-lang__option {
+        @apply flex w-full items-center gap-3 rounded-lg px-3 py-2.5
+               font-poppins text-[16px] font-medium leading-4 tracking-[0.02em] text-Neutral/100;
+        transition: background-color var(--ea-hover, 0.3s) theme('transitionTimingFunction.smooth'),
+                    color var(--ea-hover, 0.3s) theme('transitionTimingFunction.smooth');
+    }
+    /* Figma's Hover fill for an option is #2F2A4A — which is exactly the panel's
+       own ground, so as drawn the hover is invisible. Tinted/800 (the file's
+       "Current" fill) is used instead: it is the next step up the same ramp and
+       is the only value in the set that actually reads against the panel.
+       Flagged for Diego. */
+    .ea-lang__option:hover,
+    .ea-lang__option:focus-visible {
+        @apply cursor-pointer bg-Tinted/800 text-white;
+    }
+    .ea-lang__option:active {
+        @apply bg-Tinted/600 text-white;
+    }
+    .ea-lang__option[aria-current='true'] {
+        @apply bg-Tinted/800 text-white;
+    }
+
+    .ea-lang-enter-active,
+    .ea-lang-leave-active {
+        transition: opacity 0.18s theme('transitionTimingFunction.smooth'),
+                    transform 0.18s theme('transitionTimingFunction.smooth');
+    }
+    .ea-lang-enter-from,
+    .ea-lang-leave-to {
+        opacity: 0;
+        transform: translateY(4px);
+    }
+    @media (prefers-reduced-motion: reduce) {
+        .ea-lang-enter-active,
+        .ea-lang-leave-active {
+            transition: none;
+        }
+    }
+
     /* Research/step card media: a slow zoom on hover, clipped by the frame. */
     .ea-media {
         @apply relative overflow-hidden;

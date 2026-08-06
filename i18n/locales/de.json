@@ -282,6 +282,7 @@
             "earningsTitle": "Hinweis zu Erträgen und Risiken"
         },
         "copyright": "Copyright (c) {year}. Alle Rechte vorbehalten.",
-        "srNav": "Fußbereich-Navigation"
+        "srNav": "Fußbereich-Navigation",
+        "language": "Sprache ändern, aktuelle Sprache {language}"
     }
 }

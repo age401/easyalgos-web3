@@ -29,8 +29,11 @@ export default defineNuxtConfig({
         locales: [
             { code: 'en', language: 'en-US', file: 'en.json', name: 'English' },
             { code: 'de', language: 'de-DE', file: 'de.json', name: 'Deutsch' },
-            { code: 'es', language: 'es-ES', file: 'es.json', name: 'Espanol' },
-            { code: 'pt', language: 'pt-PT', file: 'pt.json', name: 'Portugues' }
+            // `name` is the autonym, and the language selector renders it
+            // verbatim — so it is spelled properly here rather than flattened to
+            // ASCII. A language's own name for itself is never translated.
+            { code: 'es', language: 'es-ES', file: 'es.json', name: 'Español' },
+            { code: 'pt', language: 'pt-PT', file: 'pt.json', name: 'Português' }
         ],
         bundle: { optimizeTranslationDirective: false }
     },

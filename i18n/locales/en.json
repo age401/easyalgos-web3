@@ -282,6 +282,7 @@
             "earningsTitle": "Earnings & Risk Disclaimer"
         },
         "copyright": "Copyright (c) {year}. All rights reserved.",
-        "srNav": "Footer navigation"
+        "srNav": "Footer navigation",
+        "language": "Change language, current language {language}"
     }
 }

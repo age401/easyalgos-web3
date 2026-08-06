@@ -282,6 +282,7 @@
             "earningsTitle": "Aviso de ganhos e risco"
         },
         "copyright": "Copyright (c) {year}. Todos os direitos reservados.",
-        "srNav": "Navegação do rodapé"
+        "srNav": "Navegação do rodapé",
+        "language": "Alterar idioma, idioma atual {language}"
     }
 }

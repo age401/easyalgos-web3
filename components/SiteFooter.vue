@@ -131,15 +131,15 @@ const CONTACT_ITEMS = [
                     {{ item.label }}
                 </a>
 
-                <!-- Reserved for the locale switcher. Figma 676:2197 puts a
-                     language button here, right-aligned in the fourth column of
-                     this row (46x36, r12, Neutral/700 ground). Diego is supplying
-                     the component references, so the control itself is not built
-                     yet — but the grid above is already four columns wide and this
-                     cell holds its place, so dropping the switcher in here later
-                     needs no layout change. Intentionally empty: a placeholder
-                     flag or an inert button would read as a broken control. -->
-                <div class="hidden tablet-wide:flex tablet-wide:justify-end" />
+                <!-- The locale switcher, right-aligned in the fourth column of
+                     this row (Figma 676:2197, in-place sample 687:7335). It is
+                     shown at every width, unlike the cell that used to hold its
+                     place — on a phone the contact rows stack and the chip simply
+                     becomes the last of them, which is better than hiding the
+                     only way to change language on the smallest screens. -->
+                <div class="flex tablet-wide:justify-end">
+                    <LanguageSelector />
+                </div>
             </div>
 
             <!-- Link columns. The head has 32px of its own bottom padding on top
