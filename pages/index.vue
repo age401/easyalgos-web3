@@ -46,6 +46,11 @@ useSeoMeta({
             <LazyHowItWorksSection :hydrate-on-visible="{ rootMargin: '300px' }" />
             <LazyTestimonialsSection :hydrate-on-visible="{ rootMargin: '300px' }" />
             <LazyPricingSection :hydrate-on-visible="{ rootMargin: '300px' }" />
+            <!-- The two headline figures. Reintroduced 2026-08-06, and note it
+                 sits BETWEEN pricing and research now, not up against the
+                 particle section as it did in v2 — so it is nowhere near the
+                 page tint's fade and is free to paint its own background. -->
+            <LazyAccoladesBand :hydrate-on-visible="{ rootMargin: '300px' }" />
             <LazyResearchSection :hydrate-on-visible="{ rootMargin: '300px' }" />
             <LazyClosingBanner :hydrate-on-visible="{ rootMargin: '300px' }" />
         </main>

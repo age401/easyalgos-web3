@@ -12,7 +12,8 @@
         "playVideo": "Play video",
         "previous": "Previous",
         "next": "Next",
-        "goToStep": "Go to step {n}"
+        "goToStep": "Go to step {n}",
+        "close": "Close"
     },
     "nav": {
         "expertAdvisors": "Expert Advisors",
@@ -125,38 +126,48 @@
         "titleLine1": "Get started in four simple steps.",
         "titleAccent": "No buying, downloading or installing",
         "steps": {
+            "apply": {
+                "title": "Apply",
+                "description": "Answer a few quick questions so we can make sure EasyAlgos is the right fit for you."
+            },
             "connect": {
                 "title": "Connect your account",
-                "description": "Once approved, access your user dashboard and link your MetaTrader account securely in a few clicks."
+                "description": "Connect your existing broker account or open a new one with one of our supported brokers."
             },
             "vps": {
                 "title": "Get your EasyVPS",
                 "description": "Powered by ForexVPS.net, with all the Expert Advisors already installed and configured, ready to go."
             },
             "deploy": {
-                "title": "Drag & drop the Expert Advisors",
-                "description": "Choose from a catalogue of 20+ premium Expert Advisors, and drop it on your trading charts."
-            },
-            "results": {
-                "title": "Get ready to be amazed",
+                "title": "Drag and drop your Expert Advisors",
                 "description": "Sit back and let our Expert Advisors do the heavy lifting, while you track your results through the user dashboard."
             }
         }
     },
     "testimonials": {
+        "eyebrow": "Don't just take our word for it",
+        "title": "See why industry leaders trust us.",
         "srLabel": "What partners say about EasyAlgos",
+        "watch": "Watch testimonial",
         "items": {
             "icmarkets": {
-                "quote": "EasyAlgos is a great opportunity if you want to trade some of the top Expert Advisors without paying for them.",
-                "name": "ICMarkets",
-                "role": "Global Forex Broker - Since 2007"
+                "headline": "EasyAlgos stands out",
+                "quote": "After over a decade working inside top brokers and watching what really happens behind the scenes, I can say confidently that EasyAlgos stands out.",
+                "name": "Angus Walker",
+                "role": "Head of Trading - IC Markets"
             },
             "forexvps": {
                 "quote": "EasyAlgos has been a great partner to work with, and we're proud to support their traders with VPS infrastructure they need to run their strategies around the clock.",
-                "name": "Kim Shearer - CMO",
-                "role": "ForexVPS.net"
+                "name": "Kim Shearer",
+                "role": "ForexVPS.net - CMO"
+            },
+            "algotradingspace": {
+                "quote": "EasyAlgos is a great opportunity if you want to trade some of the top Expert Advisors without paying for them.",
+                "name": "Petko Alexsandrov",
+                "role": "Algo Trading Space - Founder & CEO"
             },
             "developer": {
+                "headline": "Really impressed with EasyAlgos",
                 "quote": "As an EA developer, I've been really impressed with EasyAlgos since I started offering my Expert Advisors on their platform. The submission and verification process is fast and professional, with clear guidelines and responsive support; and the EasyVPS setup lets my EAs run smoothly out of the box.",
                 "name": "Wim Schrynemakers",
                 "role": "EA Developer - Malta"
@@ -171,7 +182,7 @@
         "leadLine2": "Just meet the minimum account requirements and you're in.",
         "minimumBalance": "/ Minimum balance",
         "minimumTrades": "{count} minimum monthly trades",
-        "modelTitle": "How our \"free\" model works",
+        "modelTitle": "How our “free” model works",
         "tiers": {
             "starter": {
                 "name": "Starter",
@@ -185,6 +196,17 @@
                 "name": "Elite",
                 "description": "Access the highest level of capability, exclusivity, and convenience. You receive our top-tier VPS, early access to upcoming releases, exclusive resources, and a completely guided, hands-off experience, the ultimate EasyAlgos offering."
             }
+        },
+        "model": {
+            "intro1": "We work exclusively with IC Markets and IC Trading, two of the most trusted and regulated brokers in the industry.",
+            "intro2": "When you connect your account and trade using the Expert Advisors on our platform, the broker earns a small fee (called a spread or commission) on every trade. As their partners, a portion of that fee is shared with us and with the EA developers.",
+            "intro3": "This creates a win–win–win model:",
+            "bullets": {
+                "traders": "You win because you get access to high-quality, verified Expert Advisors and market-leading infrastructure, without paying for it",
+                "developers": "Developers win because they earn long-term income based on real usage, not one-time sales",
+                "brokers": "Brokers win because they gain loyal, engaged clients who actually trade"
+            },
+            "outro": "There are no payments of any kind, and no hidden costs. If you succeed, everyone in the ecosystem benefits, and that's exactly how EasyAlgos was designed to be."
         }
     },
     "research": {
@@ -221,8 +243,7 @@
             "links": "Links",
             "brokers": "Brokers",
             "featuredArticles": "Featured articles",
-            "developers": "Developers",
-            "expertAdvisors": "Expert Advisors"
+            "developers": "Expert Advisors & Developers"
         },
         "links": {
             "applyNow": "Apply now",

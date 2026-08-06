@@ -118,9 +118,13 @@ export const FOOTER_ARTICLES: { id: string; href: string }[][] = [
     ]
 ]
 
-/** Developers and the Expert Advisors they publish. (The Figma file labels this
- *  block "Brokers"; the names under it are the EA developers, so it is grouped
- *  and headed as such here.) */
+/** Developers and the Expert Advisors they publish, under the footer's violet
+ *  "Expert Advisors & Developers" heading. Figma 676:2259 / 676:2299.
+ *
+ *  The fifth entry used to sit apart as a headless `FOOTER_EXPERT_ADVISORS`
+ *  list, which was a misreading: the reference heads those eight names with
+ *  Wim Schrynemakers exactly like the other four developers. He is the same
+ *  developer quoted in the testimonials block. */
 export const FOOTER_DEVELOPERS: DeveloperGroup[] = [
     {
         name: 'ValeryTrading',
@@ -128,19 +132,11 @@ export const FOOTER_DEVELOPERS: DeveloperGroup[] = [
     },
     { name: 'Pavel Udovichenko', eas: ['FastWay', 'MultiWay', 'Little Crazy'] },
     { name: 'Jimmy Eriksson', eas: ['Gold Atlas', 'Range Breakout EA', 'The Bitcoin Core'] },
-    { name: 'Brandon Autry', eas: ['AiQ', 'BYRDI', 'Nano Machine', 'Mean Machine', 'Syna'] }
-]
-
-/** The remaining Expert Advisors, listed without a developer grouping. */
-export const FOOTER_EXPERT_ADVISORS = [
-    'DayTrade Pro',
-    'Goldbot One',
-    'GoldTrade Pro',
-    'Luna AI',
-    'The Gold Reaper',
-    'The Orb Master',
-    'The Bitcoin Reaper',
-    'The Gold Phantom'
+    { name: 'Brandon Autry', eas: ['AiQ', 'BYRDI', 'Nano Machine', 'Mean Machine', 'Syna'] },
+    {
+        name: 'Wim Schrynemakers',
+        eas: ['DayTrade Pro', 'Goldbot One', 'GoldTrade Pro', 'Luna AI', 'The Gold Reaper', 'The Orb Master', 'The Bitcoin Reaper', 'The Gold Phantom']
+    }
 ]
 
 // ---------------------------------------------------------------- legal ----

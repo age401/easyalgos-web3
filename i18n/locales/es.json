@@ -2,23 +2,24 @@
     "common": {
         "skipToContent": "Saltar al contenido",
         "applyNow": "Solicitar acceso",
-        "learnMore": "Saber mas",
-        "logIn": "Iniciar sesion",
+        "learnMore": "Saber más",
+        "logIn": "Iniciar sesión",
         "for": "Para",
         "traders": "Traders",
         "developers": "Desarrolladores",
-        "openMenu": "Abrir menu",
-        "closeMenu": "Cerrar menu",
-        "playVideo": "Reproducir video",
+        "openMenu": "Abrir menú",
+        "closeMenu": "Cerrar menú",
+        "playVideo": "Reproducir vídeo",
         "previous": "Anterior",
         "next": "Siguiente",
-        "goToStep": "Ir al paso {n}"
+        "goToStep": "Ir al paso {n}",
+        "close": "Cerrar"
     },
     "nav": {
         "expertAdvisors": "Expert Advisors",
         "easyvps": "EasyVPS",
         "icprecision": "ICPrecision",
-        "research": "Investigacion"
+        "research": "Investigación"
     },
     "hero": {
         "titleLine1": "Accede a los mejores",
@@ -26,9 +27,9 @@
         "titleLine3": "sin pagar",
         "titleLine4": "por ellos",
         "leadLine1": "El sector de los Expert Advisors estaba roto.",
-        "leadLine2": "Asi es como siempre deberia haber sido.",
-        "partners": "Partner n.1 en trading algoritmico",
-        "cardsLabel": "Una seleccion de Expert Advisors disponibles en EasyAlgos"
+        "leadLine2": "Así es como siempre debería haber sido.",
+        "partners": "Partner n.1 en trading algorítmico",
+        "cardsLabel": "Una selección de Expert Advisors disponibles en EasyAlgos"
     },
     "card": {
         "algoScore": "AlgoScore",
@@ -36,9 +37,9 @@
         "accountGrowth": "Crecimiento de la cuenta",
         "monthlyGain": "Ganancia mensual",
         "dailyGain": "Ganancia diaria",
-        "maximumDrawdown": "Drawdown maximo",
+        "maximumDrawdown": "Drawdown máximo",
         "monthsInProfit": "Meses en positivo",
-        "yearsTracked": "Anos registrados",
+        "yearsTracked": "Años registrados",
         "listPrice": "Precio de lista",
         "developer": "Desarrollador",
         "eaOfTheMonth": "EA del mes",
@@ -46,22 +47,22 @@
     },
     "trustpilot": {
         "excellent": "Excelente",
-        "basedOn": "{rating} sobre 5 segun",
-        "reviews": "{count} resenas",
-        "srLabel": "Valorado como Excelente, {rating} sobre 5, segun {count} resenas de Trustpilot"
+        "basedOn": "{rating} sobre 5 según",
+        "reviews": "{count} reseñas",
+        "srLabel": "Valorado como Excelente, {rating} sobre 5, según {count} reseñas de Trustpilot"
     },
     "problem": {
         "eyebrow": "El problema",
         "titleLine1": "Todo lo que necesitabas",
         "titleLine2": "para operar con Expert Advisors...",
         "titleAccent": "estaba en sitios distintos",
-        "play": "Reproducir la animacion",
-        "pause": "Pausar la animacion",
-        "replay": "Volver a reproducir la animacion"
+        "play": "Reproducir la animación",
+        "pause": "Pausar la animación",
+        "replay": "Volver a reproducir la animación"
     },
     "solution": {
-        "eyebrow": "La solucion",
-        "titleLine1": "Ahora por fin esta...",
+        "eyebrow": "La solución",
+        "titleLine1": "Ahora por fin está...",
         "titleAccent": "todo en un mismo sitio"
     },
     "roles": {
@@ -70,49 +71,49 @@
         "broker": "Broker",
         "vps": "Proveedor VPS",
         "community": "Comunidad",
-        "analytics": "Analitica"
+        "analytics": "Analítica"
     },
     "accolades": {
-        "tradersLabel": "traders confian en nosotros",
+        "tradersLabel": "traders confían en nosotros",
         "volumeValue": "Miles de millones",
         "volumeLabel": "en volumen negociado mensual"
     },
     "whatYouGet": {
-        "eyebrow": "Que incluye",
+        "eyebrow": "Qué incluye",
         "titleLine1": "Expert Advisors y todo lo necesario",
-        "titleAccent": "para tener exito con ellos",
+        "titleAccent": "para tener éxito con ellos",
         "items": {
             "expertAdvisors": {
                 "title": "Expert Advisors",
-                "description": "Una seleccion curada de los mejores Expert Advisors del mercado."
+                "description": "Una selección curada de los mejores Expert Advisors del mercado."
             },
             "analytics": {
-                "title": "Analitica sencilla",
-                "description": "Sigue el rendimiento de la cuenta y de cada EA desde un unico panel claro."
+                "title": "Analítica sencilla",
+                "description": "Sigue el rendimiento de la cuenta y de cada EA desde un único panel claro."
             },
             "history": {
                 "title": "Historial de operaciones",
-                "description": "Cada operacion registrada y consultable, con calendario de perdidas y ganancias."
+                "description": "Cada operación registrada y consultable, con calendario de pérdidas y ganancias."
             },
             "backtesting": {
                 "title": "Datos de back-testing",
-                "description": "Back-tests verificados para saber como se comporto una estrategia antes de usarla."
+                "description": "Back-tests verificados para saber cómo se comportó una estrategia antes de usarla."
             },
             "easyvps": {
                 "title": "EasyVPS",
                 "description": "Un VPS optimizado con tus Expert Advisors ya instalados."
             },
             "ai": {
-                "title": "Tecnologia de IA",
-                "description": "Investigacion y modelos que afinan las estrategias de cada Expert Advisor."
+                "title": "Tecnología de IA",
+                "description": "Investigación y modelos que afinan las estrategias de cada Expert Advisor."
             },
             "forecasts": {
                 "title": "Previsiones de mercado con IA",
-                "description": "Lecturas anticipadas del mercado para dar contexto a cada condicion de trading."
+                "description": "Lecturas anticipadas del mercado para dar contexto a cada condición de trading."
             },
             "support": {
                 "title": "Soporte remoto",
-                "description": "Asistencia por escritorio remoto del equipo siempre que la configuracion lo requiera."
+                "description": "Asistencia por escritorio remoto del equipo siempre que la configuración lo requiera."
             },
             "community": {
                 "title": "Comunidad",
@@ -121,97 +122,118 @@
         }
     },
     "howItWorks": {
-        "eyebrow": "Como funciona",
+        "eyebrow": "Cómo funciona",
         "titleLine1": "Empieza en cuatro sencillos pasos.",
         "titleAccent": "Sin comprar, descargar ni instalar",
         "steps": {
+            "apply": {
+                "title": "Solicita acceso",
+                "description": "Responde a unas pocas preguntas rápidas para que podamos comprobar que EasyAlgos encaja contigo."
+            },
             "connect": {
                 "title": "Conecta tu cuenta",
-                "description": "Una vez aprobado, accede a tu panel de usuario y vincula tu cuenta de MetaTrader de forma segura en unos pocos clics."
+                "description": "Conecta tu cuenta de broker existente o abre una nueva con uno de nuestros brokers compatibles."
             },
             "vps": {
-                "title": "Obten tu EasyVPS",
-                "description": "Con la tecnologia de ForexVPS.net, con todos los Expert Advisors ya instalados y configurados, listos para funcionar."
+                "title": "Obtén tu EasyVPS",
+                "description": "Con la tecnología de ForexVPS.net, con todos los Expert Advisors ya instalados y configurados, listos para funcionar."
             },
             "deploy": {
-                "title": "Arrastra y suelta los Expert Advisors",
-                "description": "Elige entre un catalogo de mas de 20 Expert Advisors premium y sueltalo sobre tus graficos."
-            },
-            "results": {
-                "title": "Preparate para sorprenderte",
-                "description": "Relajate y deja que nuestros Expert Advisors hagan el trabajo mientras sigues tus resultados en el panel de usuario."
+                "title": "Arrastra y suelta tus Expert Advisors",
+                "description": "Relájate y deja que nuestros Expert Advisors hagan el trabajo duro mientras sigues tus resultados en el panel de usuario."
             }
         }
     },
     "testimonials": {
+        "eyebrow": "No te fíes solo de nuestra palabra",
+        "title": "Descubre por qué los líderes del sector confían en nosotros.",
         "srLabel": "Lo que dicen los socios sobre EasyAlgos",
+        "watch": "Ver testimonio",
         "items": {
             "icmarkets": {
-                "quote": "EasyAlgos es una gran oportunidad si quieres operar con algunos de los mejores Expert Advisors sin pagar por ellos.",
-                "name": "ICMarkets",
-                "role": "Broker global de Forex - Desde 2007"
+                "headline": "EasyAlgos destaca",
+                "quote": "Después de más de una década trabajando dentro de los mejores brokers y viendo lo que ocurre de verdad entre bastidores, puedo decir con total seguridad que EasyAlgos destaca.",
+                "name": "Angus Walker",
+                "role": "Director de Trading - IC Markets"
             },
             "forexvps": {
                 "quote": "EasyAlgos ha sido un gran socio y estamos orgullosos de dar soporte a sus traders con la infraestructura VPS que necesitan para ejecutar sus estrategias las 24 horas.",
-                "name": "Kim Shearer - CMO",
-                "role": "ForexVPS.net"
+                "name": "Kim Shearer",
+                "role": "ForexVPS.net - CMO"
+            },
+            "algotradingspace": {
+                "quote": "EasyAlgos es una gran oportunidad si quieres operar con algunos de los mejores Expert Advisors sin pagar por ellos.",
+                "name": "Petko Alexsandrov",
+                "role": "Algo Trading Space - Fundador y CEO"
             },
             "developer": {
-                "quote": "Como desarrollador de EAs, EasyAlgos me ha impresionado desde que empece a ofrecer mis Expert Advisors en su plataforma. El proceso de envio y verificacion es rapido y profesional, con directrices claras y soporte agil; y la configuracion de EasyVPS hace que mis EAs funcionen sin problemas desde el primer momento.",
+                "headline": "Realmente impresionado con EasyAlgos",
+                "quote": "Como desarrollador de EAs, EasyAlgos me ha impresionado desde que empecé a ofrecer mis Expert Advisors en su plataforma. El proceso de envío y verificación es rápido y profesional, con directrices claras y soporte ágil; y la configuración de EasyVPS hace que mis EAs funcionen sin problemas desde el primer momento.",
                 "name": "Wim Schrynemakers",
                 "role": "Desarrollador de EAs - Malta"
             }
         }
     },
     "pricing": {
-        "eyebrow": "La unica condicion",
+        "eyebrow": "La única condición",
         "titleAccent": "No pagas",
         "titleRest": "calificas.",
         "leadLine1": "Sin pagos de licencia. Sin suscripciones. Sin costes ocultos.",
-        "leadLine2": "Solo cumple los requisitos minimos de cuenta y estas dentro.",
-        "minimumBalance": "/ Saldo minimo",
-        "minimumTrades": "{count} operaciones mensuales minimas",
-        "modelTitle": "Como funciona nuestro modelo \"gratuito\"",
+        "leadLine2": "Solo cumple los requisitos mínimos de cuenta y estás dentro.",
+        "minimumBalance": "/ Saldo mínimo",
+        "minimumTrades": "{count} operaciones mensuales mínimas",
+        "modelTitle": "Cómo funciona nuestro modelo «gratuito»",
         "tiers": {
             "starter": {
                 "name": "Starter",
-                "description": "Todo lo necesario para empezar a operar con EasyAlgos sin fricciones. Recibes un VPS fiable y optimizado que ejecuta tus EAs sin esfuerzo, una base solida y una entrada natural al ecosistema EasyAlgos."
+                "description": "Todo lo necesario para empezar a operar con EasyAlgos sin fricciones. Recibes un VPS fiable y optimizado que ejecuta tus EAs sin esfuerzo, una base sólida y una entrada natural al ecosistema EasyAlgos."
             },
             "pro": {
                 "name": "Pro",
-                "description": "Pensado para traders que quieren mas potencia y mas soporte. Recibes un VPS de mayor capacidad, asistencia completa por escritorio remoto y acceso a las Previsiones de Mercado, con mas rendimiento y mas criterio en cada condicion de mercado."
+                "description": "Pensado para traders que quieren más potencia y más soporte. Recibes un VPS de mayor capacidad, asistencia completa por escritorio remoto y acceso a las Previsiones de Mercado, con más rendimiento y más criterio en cada condición de mercado."
             },
             "elite": {
                 "name": "Elite",
-                "description": "Accede al nivel maximo de capacidad, exclusividad y comodidad. Recibes nuestro VPS de gama alta, acceso anticipado a nuevos lanzamientos, recursos exclusivos y una experiencia totalmente guiada: la mejor version de EasyAlgos."
+                "description": "Accede al nivel máximo de capacidad, exclusividad y comodidad. Recibes nuestro VPS de gama alta, acceso anticipado a nuevos lanzamientos, recursos exclusivos y una experiencia totalmente guiada: la mejor versión de EasyAlgos."
             }
+        },
+        "model": {
+            "intro1": "Trabajamos en exclusiva con IC Markets e IC Trading, dos de los brokers más fiables y regulados del sector.",
+            "intro2": "Cuando conectas tu cuenta y operas con los Expert Advisors de nuestra plataforma, el broker gana una pequeña tarifa (llamada spread o comisión) en cada operación. Como socios suyos, una parte de esa tarifa se comparte con nosotros y con los desarrolladores de EAs.",
+            "intro3": "Así se crea un modelo win-win-win:",
+            "bullets": {
+                "traders": "Tú ganas porque accedes a Expert Advisors verificados y de alta calidad y a una infraestructura líder del mercado, sin pagar por ello",
+                "developers": "Los desarrolladores ganan porque obtienen ingresos a largo plazo basados en el uso real, no en ventas puntuales",
+                "brokers": "Los brokers ganan porque consiguen clientes fieles y activos que realmente operan"
+            },
+            "outro": "No hay pagos de ningún tipo ni costes ocultos. Si a ti te va bien, se beneficia todo el ecosistema, y así es exactamente como se diseñó EasyAlgos."
         }
     },
     "research": {
-        "titleLine1": "Detras de los algoritmos:",
-        "titleLine2": "investigacion, datos e IA",
-        "lead": "Olvidate de pagos o comisiones de cualquier tipo: EasyAlgos esta disponible gratis y sin costes ocultos.. si calificas",
-        "more": "Mas articulos de investigacion",
+        "titleLine1": "Detrás de los algoritmos:",
+        "titleLine2": "investigación, datos e IA",
+        "lead": "Olvídate de pagos o comisiones de cualquier tipo: EasyAlgos está disponible gratis y sin costes ocultos.. si calificas",
+        "more": "Más artículos de investigación",
         "posts": {
             "dashboard": {
                 "title": "El panel de usuario acaba de recibir una gran mejora",
-                "excerpt": "El panel de EasyAlgos se ha reconstruido desde cero: nueva pagina de Resumen, analitica ampliada de cuenta y EAs, calendario de perdidas y ganancias, y una interfaz mas limpia y rapida."
+                "excerpt": "El panel de EasyAlgos se ha reconstruido desde cero: nueva página de Resumen, analítica ampliada de cuenta y EAs, calendario de pérdidas y ganancias, y una interfaz más limpia y rápida."
             },
             "window": {
-                "title": "Burbuja de IA o no, esta ventana no durara para siempre",
-                "excerpt": "Analizamos si el auge de la IA es una burbuja, por que las herramientas actuales estan temporalmente infravaloradas y como los ultimos avances en fiabilidad y programacion estan cambiando lo que hoy es posible."
+                "title": "Burbuja de IA o no, esta ventana no durará para siempre",
+                "excerpt": "Analizamos si el auge de la IA es una burbuja, por qué las herramientas actuales están temporalmente infravaloradas y cómo los últimos avances en fiabilidad y programación están cambiando lo que hoy es posible."
             },
             "bubble": {
-                "title": "Hay una burbuja de IA? Y estallara? (Aqui estan los numeros)",
-                "excerpt": "Explora los riesgos de la burbuja de IA, la concentracion del mercado y las valoraciones elevadas. Descubre si la burbuja estallara antes de 2027 y como aprovechar ahora las herramientas de IA subvencionadas."
+                "title": "¿Hay una burbuja de IA? ¿Y estallará? (Aquí están los números)",
+                "excerpt": "Explora los riesgos de la burbuja de IA, la concentración del mercado y las valoraciones elevadas. Descubre si la burbuja estallará antes de 2027 y cómo aprovechar ahora las herramientas de IA subvencionadas."
             }
         }
     },
     "banner": {
         "eyebrow": "Deja de buscar en otro sitio",
-        "titleLine1": "Descubre por que",
+        "titleLine1": "Descubre por qué",
         "titleLine2": "traders nos eligen",
-        "leadLine1": "La respuesta para tener exito con los Expert Advisors",
+        "leadLine1": "La respuesta para tener éxito con los Expert Advisors",
         "leadLine2": "sin complicaciones la tienes delante:"
     },
     "footer": {
@@ -220,47 +242,46 @@
             "support": "Soporte",
             "links": "Enlaces",
             "brokers": "Brokers",
-            "featuredArticles": "Articulos destacados",
-            "developers": "Desarrolladores",
-            "expertAdvisors": "Expert Advisors"
+            "featuredArticles": "Artículos destacados",
+            "developers": "Expert Advisors y desarrolladores"
         },
         "links": {
             "applyNow": "Solicitar acceso",
-            "howToJoin": "Como unirse",
-            "howToOnboard": "Como darse de alta",
-            "howToGetEasyvps": "Como obtener tu EasyVPS",
-            "howToStartTrading": "Como empezar a operar",
+            "howToJoin": "Cómo unirse",
+            "howToOnboard": "Cómo darse de alta",
+            "howToGetEasyvps": "Cómo obtener tu EasyVPS",
+            "howToStartTrading": "Cómo empezar a operar",
             "helpCenter": "Centro de ayuda",
-            "terms": "Terminos",
-            "privacy": "Politica de privacidad",
+            "terms": "Términos",
+            "privacy": "Política de privacidad",
             "faq": "Preguntas frecuentes",
-            "login": "Iniciar sesion",
+            "login": "Iniciar sesión",
             "easyvps": "EasyVPS",
             "about": "Sobre nosotros",
             "pricing": "Precios",
             "affiliates": "Afiliados",
-            "research": "Investigacion",
-            "reviews": "Resenas",
+            "research": "Investigación",
+            "reviews": "Reseñas",
             "results": "Resultados",
             "deck": "Dossier",
             "algoscore": "AlgoScore",
             "precisionAccounts": "Cuentas Precision"
         },
         "articles": {
-            "window": "Burbuja de IA o no, esta ventana no durara para siempre",
-            "bubble": "Hay una burbuja de IA? Y estallara? (Aqui estan los numeros)",
-            "needsYou": "Por que la IA te necesita mas de lo que crees",
-            "reallyUsing": "Usamos realmente IA para operar?",
-            "forecasts": "Como nuestras previsiones de mercado con IA te ayudan a operar mejor",
-            "notAlone": "Por que no dejamos que la IA opere sola",
-            "realAi": "Como nuestros Expert Advisors usan IA real",
-            "invisibleEdge": "La ventaja invisible detras de los resultados visibles de nuestros EAs"
+            "window": "Burbuja de IA o no, esta ventana no durará para siempre",
+            "bubble": "¿Hay una burbuja de IA? ¿Y estallará? (Aquí están los números)",
+            "needsYou": "Por qué la IA te necesita más de lo que crees",
+            "reallyUsing": "¿Usamos realmente IA para operar?",
+            "forecasts": "Cómo nuestras previsiones de mercado con IA te ayudan a operar mejor",
+            "notAlone": "Por qué no dejamos que la IA opere sola",
+            "realAi": "Cómo nuestros Expert Advisors usan IA real",
+            "invisibleEdge": "La ventaja invisible detrás de los resultados visibles de nuestros EAs"
         },
         "legal": {
             "natureTitle": "Aviso sobre la naturaleza del negocio",
             "earningsTitle": "Aviso de ganancias y riesgo"
         },
         "copyright": "Copyright (c) {year}. Todos los derechos reservados.",
-        "srNav": "Navegacion del pie de pagina"
+        "srNav": "Navegación del pie de página"
     }
 }

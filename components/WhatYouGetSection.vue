@@ -72,7 +72,7 @@ const activeVisual = computed(() => {
                                 <span
                                     v-for="item in SOLUTIONS"
                                     :key="item.id"
-                                    class="ea-body--sm block pt-1"
+                                    class="ea-body--sm block pt-1 !leading-5"
                                 >
                                     {{ $t(`whatYouGet.items.${item.id}.description`) }}
                                 </span>
@@ -119,7 +119,15 @@ const activeVisual = computed(() => {
                                         </span>
                                         <span :id="`solution-body-${item.id}`" class="ea-solution-row__body">
                                             <span class="block">
-                                                <span class="ea-body--sm block pt-1 !text-Neutral/500">
+                                                <!-- 14/20 as drawn, tighter than
+                                                     .ea-body--sm's 24px prose
+                                                     leading. The reserve copy
+                                                     above carries the identical
+                                                     override — if the two ever
+                                                     diverge the height reserve
+                                                     stops reserving the right
+                                                     height. -->
+                                                <span class="ea-body--sm block pt-1 !leading-5 !text-Neutral/500">
                                                     {{ $t(`whatYouGet.items.${item.id}.description`) }}
                                                 </span>
                                             </span>

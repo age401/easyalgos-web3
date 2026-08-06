@@ -97,7 +97,10 @@ export interface MediaAsset {
 export interface HowItWorksStep {
     id: string
     media: MediaAsset
-    /** Walkthrough clip, when one exists. */
+    /** Walkthrough clip, when one exists. Until the files land this stays
+     *  undefined and the card shows `media` alone with no transport control —
+     *  an affordance that does nothing is worse than none. Dropping a clip in
+     *  later is a one-line change per step. */
     video?: string
 }
 
@@ -110,12 +113,26 @@ export interface PricingTier {
     featured?: boolean
 }
 
+/** One quote card on the dark band.
+ *
+ *  The four are drawn in a 2x2 grid of two widths that swap sides row to row —
+ *  a wide card and a narrow one, then the narrow one and a wide one. `variant`
+ *  carries that, and it also decides the card's internals: a `feature` card
+ *  leads with a headline quote and sits its portrait beside the text, a
+ *  `compact` card has no headline and stacks its attribution under a rule. */
 export interface Testimonial {
     id: string
-    /** Square portrait or brand tile. */
+    /** Square portrait. */
     media: MediaAsset
-    /** Brand tiles are logos, not people — rendered without the portrait mask. */
-    isBrand?: boolean
+    variant: 'feature' | 'compact'
+    /** Whether the copy carries a short pull-quote above the body. Only the
+     *  feature cards are drawn with one, but it is stated rather than derived
+     *  so a card can lose its headline without changing width. */
+    headline?: boolean
+    /** Testimonial clip. Undefined until the files exist, and the "Watch
+     *  testimonial" affordance is withheld while it is — same rule as the
+     *  How-it-works steps. */
+    video?: string
 }
 
 export interface ResearchPost {

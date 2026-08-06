@@ -10,3 +10,7 @@ build/
 .playwright-mcp/
 *.jpeg
 shots/
+
+# Python bytecode from scripts/optimize-assets.py
+__pycache__/
+*.pyc

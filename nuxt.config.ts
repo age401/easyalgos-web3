@@ -6,7 +6,7 @@
 //  - no @nuxt/image module — every raster is pre-encoded to AVIF/WebP by
 //    scripts/optimize-assets.mjs and served through a plain <picture>, which costs
 //    one fewer dependency and no runtime transform;
-//  - only the three above-the-fold font faces are preloaded;
+//  - only the above-the-fold font faces are preloaded;
 //  - long-lived immutable cache headers on every static asset directory.
 export default defineNuxtConfig({
     compatibilityDate: '2025-06-01',
@@ -81,7 +81,13 @@ export default defineNuxtConfig({
                 // Only the faces the first viewport actually paints.
                 { rel: 'preload', as: 'font', type: 'font/woff2', href: '/fonts/poppins-latin-500.woff2', crossorigin: '' },
                 { rel: 'preload', as: 'font', type: 'font/woff2', href: '/fonts/poppins-latin-600.woff2', crossorigin: '' },
-                { rel: 'preload', as: 'font', type: 'font/woff2', href: '/fonts/roboto-latin-400.woff2', crossorigin: '' }
+                { rel: 'preload', as: 'font', type: 'font/woff2', href: '/fonts/roboto-latin-400.woff2', crossorigin: '' },
+                // Roboto 500 is above the fold too: the Trustpilot bar renders in
+                // it, and the hero's `100svh - topbar - trustpilot` height math
+                // exists precisely to guarantee that bar is never pushed under.
+                // Without the preload it is the one strip on the first screen
+                // that visibly reflows when the face arrives.
+                { rel: 'preload', as: 'font', type: 'font/woff2', href: '/fonts/roboto-latin-500.woff2', crossorigin: '' }
             ]
         },
         pageTransition: { name: 'page', mode: 'out-in' }

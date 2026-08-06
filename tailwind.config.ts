@@ -151,7 +151,9 @@ export default <Partial<Config>>{
                 // are near-indistinguishable, and it means Rubik never has to be
                 // preloaded into the critical path.
                 rubik: ['"Rubik"', '"Roboto"', 'sans-serif', 'system-ui'],
-                inter: ['"Inter"', 'sans-serif', 'system-ui'],
+                // No `inter`: the Figma file specifies Inter Bold on the
+                // Trustpilot bar and nowhere else, and that now renders in
+                // Roboto rather than dragging a third family into the page.
             },
             fontWeight: {
                 book: '400',
@@ -181,14 +183,38 @@ export default <Partial<Config>>{
                 // (a deep navy that darkens the bottom-left, a cyan that lifts the
                 // top-right) — the layering is what keeps 636px of gradient from
                 // looking flat.
+                //
+                // Derived from Figma 226:5462 by INVERTING each paint's
+                // `gradientTransform` — the matrix Figma stores maps the box back
+                // onto the gradient's unit space, so reading it forwards gives the
+                // wrong angle and extent. The previous values were eyeballed and
+                // were wrong in two ways that showed: the linear axis is 96deg, not
+                // 104, and the navy bloom sits at alpha 0.35 fading to fully
+                // transparent, not 0.85 fading to 0.9 — which was muddying the
+                // entire bottom-left corner.
+                //
+                // The linear's end stops deliberately fall OUTSIDE the box
+                // (29.1% and 126.78%), which is why the drawn band never shows
+                // pure #205EFB or pure #B36DFF. Do not "tidy" them to 0/100%.
                 'ea-banner': [
-                    'radial-gradient(120% 90% at 88% 8%, rgba(64,214,255,0.5) 0%, rgba(29,33,109,0) 71%)',
-                    'radial-gradient(130% 110% at 6% 100%, rgba(21,43,119,0.85) 0%, rgba(9,21,60,0.9) 100%)',
-                    'linear-gradient(104deg, #205EFB 0%, #5959FF 46%, #B36DFF 100%)'
+                    'radial-gradient(51.71% 113.07% at 86% 10%, rgba(64,214,255,0.45) 0%, rgba(29,33,109,0) 70.85%)',
+                    'radial-gradient(35.96% 78.65% at 10% 100%, rgba(21,43,119,0.35) 0%, rgba(9,21,60,0) 100%)',
+                    'linear-gradient(96.14deg, #205EFB 29.1%, #5959FF 74.03%, #B36DFF 126.78%)'
                 ].join(', '),
                 // Pricing: an outer tinted shell holding three near-white cards.
-                'ea-pricing-shell': 'linear-gradient(135deg, #F6F7FF 0%, #E7E9F9 39%, #F2F3FF 100%)',
-                'ea-pricing-card': 'linear-gradient(160deg, #F7F7FB 0%, #FFFFFF 100%)',
+                // Both recovered from Figma 420:1070 / 420:1072 by inverting each
+                // paint's `gradientTransform` back to handles in the node's own
+                // box, then projecting onto the CSS gradient line. The previous
+                // values were eyeballed — the angles were out by ~27deg and ~154deg
+                // respectively, which is why the sheen ran the wrong way across the
+                // cards.
+                //
+                // The card gradient's box is each CARD, not the row, so the same
+                // one definition restarts per column and reads as three separate
+                // sheens. That is Figma's own arrangement: all three tier fills are
+                // byte-identical.
+                'ea-pricing-shell': 'linear-gradient(108.6deg, #F6F7FF -2.45%, #E7E9F9 36.97%, #F2F3FF 97.56%)',
+                'ea-pricing-card': 'linear-gradient(313.9deg, #F7F7FB -0.93%, #FFFFFF 49.08%)',
                 // "EA of the month" ribbon on the featured hero card.
                 'ea-ribbon': 'linear-gradient(95.25deg, #489EFF 0%, #4CA8FF 100%)',
                 // The role cards' inner bubble (Figma 524:2890) — and the same

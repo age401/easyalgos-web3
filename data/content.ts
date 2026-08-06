@@ -27,15 +27,18 @@ export const SOLUTIONS: SolutionItem[] = [
 /** The row whose visual stands in for any row that has none yet. */
 export const SOLUTIONS_FALLBACK_VISUAL = mediaAsset('solutions', 'dashboard', 1100, 660)
 
-/** "How it works" — four steps in a horizontal scroller.
- *  Each card's mockup is a flat export; `video` stays undefined until the
- *  walkthrough clips exist, and the card renders without a play affordance
- *  rather than offering one that does nothing. */
+/** "How it works" — four steps in a horizontal scroller, numbered 01-04 in this
+ *  order. The v3 reference opens on "Apply" and ends on the drag-and-drop step,
+ *  which shifted the whole set along by one from v2.
+ *
+ *  Each card's mockup is a flat export standing in for a walkthrough clip;
+ *  `video` stays undefined until those exist, and the card renders without a
+ *  transport control rather than offering one that does nothing. */
 export const STEPS: HowItWorksStep[] = [
+    { id: 'apply', media: mediaAsset('steps', 'apply', 596, 400) },
     { id: 'connect', media: mediaAsset('steps', 'connect', 596, 400) },
     { id: 'vps', media: mediaAsset('steps', 'vps', 596, 400) },
-    { id: 'deploy', media: mediaAsset('steps', 'deploy', 596, 400) },
-    { id: 'results', media: mediaAsset('steps', 'results', 596, 400) }
+    { id: 'deploy', media: mediaAsset('steps', 'deploy', 596, 400) }
 ]
 
 /** Pricing. The middle tier is emphasised and takes the gradient CTA. */
@@ -45,13 +48,19 @@ export const PRICING_TIERS: PricingTier[] = [
     { id: 'elite', minimumBalance: 20000, minimumTrades: 10 }
 ]
 
-/** Testimonials. The ICMarkets entry is a brand tile rather than a portrait, so
- *  it renders on its own dark plate instead of as a photo. */
+/** Testimonials — four quote cards, drawn in this order across a 2x2 grid whose
+ *  two card widths swap sides on the second row (feature, compact / compact,
+ *  feature). All four are portraits now; the v2 brand tile is gone. */
 export const TESTIMONIALS: Testimonial[] = [
-    { id: 'icmarkets', media: mediaAsset('people', 'icmarkets-tile', 128, 128), isBrand: true },
-    { id: 'forexvps', media: mediaAsset('people', 'kim-shearer', 128, 128) },
-    { id: 'developer', media: mediaAsset('people', 'wim-schrynemakers', 128, 128) }
+    { id: 'icmarkets', media: mediaAsset('people', 'angus-walker', 280, 280), variant: 'feature', headline: true },
+    { id: 'forexvps', media: mediaAsset('people', 'kim-shearer', 200, 200), variant: 'compact' },
+    { id: 'algotradingspace', media: mediaAsset('people', 'petko-alexsandrov', 200, 200), variant: 'compact' },
+    { id: 'developer', media: mediaAsset('people', 'wim-schrynemakers', 280, 280), variant: 'feature', headline: true }
 ]
+
+/** The three "win" rows inside the pricing section's free-model explainer. Ids
+ *  are i18n key suffixes under `pricing.model.bullets`. */
+export const PRICING_MODEL_BULLETS = ['traders', 'developers', 'brokers'] as const
 
 export const RESEARCH_POSTS: ResearchPost[] = [
     { id: 'dashboard', href: '/research/dashboard-upgrade', media: mediaAsset('research', 'dashboard-upgrade', 421, 248) },

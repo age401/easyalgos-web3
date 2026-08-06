@@ -5,6 +5,13 @@
 // The figures come from data/site.ts and are refreshed with the same daily bake
 // as the hero cards.
 //
+// Type note: Figma draws this bar in Inter Bold — the only place in the whole
+// page that reaches for Inter. Rather than pull a third family into the critical
+// path for one strip, it renders in Roboto Medium (`font-franklin`), the closest
+// face already loaded. It was previously Poppins SemiBold, which is a much
+// rounder, wider letterform than either and read noticeably off against the
+// Trustpilot mark beside it.
+//
 // The star row is decorative — the whole rating is announced once, as a sentence,
 // through the visually-hidden label. Below 769px the bar switches to a
 // compact layout (Figma frames "[1024~769]" and "[1920~1025]" render
@@ -43,7 +50,7 @@ function starFill(star: number) {
 
             <div class="flex flex-wrap items-center gap-3 min-[769px]:gap-4" aria-hidden="true">
                 <div class="flex items-center gap-3">
-                    <span class="font-poppins text-[12px] font-semibold tracking-[-0.02em] text-Tinted/800 min-[769px]:text-[14px]">
+                    <span class="font-franklin text-[12px] font-medium tracking-[-0.02em] text-Tinted/800 min-[769px]:text-[14px]">
                         {{ $t('trustpilot.excellent') }}
                     </span>
                     <span class="flex gap-0.5">
@@ -64,7 +71,7 @@ function starFill(star: number) {
                 </div>
 
                 <!-- compact score: <=768px only -->
-                <p class="order-2 font-poppins text-[12px] font-semibold tracking-[-0.02em] text-Tinted/700 min-[769px]:hidden">
+                <p class="order-2 font-franklin text-[12px] font-medium tracking-[-0.02em] text-Tinted/700 min-[769px]:hidden">
                     {{ rating }}
                 </p>
 
@@ -72,7 +79,7 @@ function starFill(star: number) {
                 <span class="order-3 h-1 w-1 shrink-0 rounded-full bg-Tinted/100 min-[769px]:order-2" />
 
                 <!-- full score sentence + reviews link: >=769px only -->
-                <p class="hidden font-poppins text-[12px] font-semibold tracking-[-0.02em] text-Tinted/700 min-[769px]:order-3 min-[769px]:block">
+                <p class="hidden font-franklin text-[12px] font-medium tracking-[-0.02em] text-Tinted/700 min-[769px]:order-3 min-[769px]:block">
                     {{ $t('trustpilot.basedOn', { rating }) }}
                     <a href="https://www.trustpilot.com/" rel="noopener nofollow" target="_blank" class="underline decoration-Tinted/300 underline-offset-2 transition-colors duration-300 hover:text-Tinted/950">
                         {{ $t('trustpilot.reviews', { count: reviews }) }}

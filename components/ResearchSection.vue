@@ -31,7 +31,14 @@ import { RESEARCH_POSTS } from '~/data/content'
                             />
                         </div>
                         <div>
-                            <h3 class="ea-h3 transition-colors duration-300 group-hover:text-Blue/600">
+                            <!-- Not .ea-h3: the research card's title is drawn
+                                 18/26 at every width, where .ea-h3 steps up to
+                                 20/28 at tablet-wide for the how-it-works step
+                                 cards. Same role, two sizes — so this one is
+                                 written out rather than sharing the class. -->
+                            <h3
+                                class="font-poppins text-[18px] font-semibold leading-[26px] tracking-[-0.5px] text-Tinted/950 transition-colors duration-300 group-hover:text-Blue/600"
+                            >
                                 {{ $t(`research.posts.${post.id}.title`) }}
                             </h3>
                             <p class="ea-body--sm mt-2">{{ $t(`research.posts.${post.id}.excerpt`) }}</p>

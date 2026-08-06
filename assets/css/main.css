@@ -38,6 +38,16 @@
     font-display: swap; font-family: 'Roboto'; font-style: normal; font-weight: 400;
     src: url('/fonts/roboto-latin-400.woff2') format('woff2');
 }
+/* The v3 designs ask for Roboto at both 500 and 600 (testimonial names and pull
+   quotes, the pricing bullets, the problem section's role chips). Only 500 is
+   shipped and both roles use it: the two weights are a hair apart at these
+   sizes, and a second 22KB file to carry that difference is not worth it.
+   Without this file at all the browser synthesises the weight from 400, which
+   is visibly heavier and slightly distorted at 13-14px. */
+@font-face {
+    font-display: swap; font-family: 'Roboto'; font-style: normal; font-weight: 500;
+    src: url('/fonts/roboto-latin-500.woff2') format('woff2');
+}
 
 @tailwind base;
 @tailwind components;
@@ -231,8 +241,13 @@
     .ea-body {
         @apply font-franklin text-[0.9375rem] leading-[1.6] text-Tinted/700 tablet:text-[1rem] tablet:leading-[1.625];
     }
+    /* 14/24, which is the research card's excerpt — the only place this size is
+       drawn as prose. "What you get" reuses the size at a tighter 20px leading
+       (it is a list, not a paragraph) and overrides the leading at its two call
+       sites; both of those must carry the SAME override, since one of them is
+       the invisible height reserve that keeps the list from reflowing. */
     .ea-body--sm {
-        @apply font-franklin text-[0.875rem] leading-[1.7] text-Tinted/700;
+        @apply font-franklin text-[0.875rem] leading-6 text-Tinted/700;
     }
 
     /* Inverted prose for the dark bands. */
@@ -1229,17 +1244,6 @@
     }
     .ea-textlink:hover svg {
         transform: translateX(3px);
-    }
-
-    /* Footer links: no layout shift, just a quiet lift in contrast. */
-    .ea-footer-link {
-        @apply font-franklin text-[15px] leading-7 text-Tinted/25 tablet:text-[16px];
-        transition: color 0.25s theme('transitionTimingFunction.smooth'),
-                    transform 0.25s theme('transitionTimingFunction.smooth');
-    }
-    .ea-footer-link:hover {
-        @apply text-white;
-        transform: translateX(2px);
     }
 
     /* Research/step card media: a slow zoom on hover, clipped by the frame. */
