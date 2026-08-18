@@ -74,7 +74,8 @@
         "analytics": "Analytics"
     },
     "accolades": {
-        "tradersLabel": "traders choose us",
+        "heading": "Numbers tell the best story",
+        "tradersLabel": "Traders choose us",
         "volumeValue": "Billions",
         "volumeLabel": "in monthly traded volumes"
     },

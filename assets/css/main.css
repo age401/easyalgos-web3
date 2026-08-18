@@ -271,12 +271,17 @@
     .ea-grad--dark {
         @apply bg-ea-text-dark bg-clip-text;
     }
+    /* The accolades figures — see `ea-text-stat` in tailwind.config.ts. */
+    .ea-grad--stat {
+        @apply bg-ea-text-stat bg-clip-text;
+    }
     @supports not ((background-clip: text) or (-webkit-background-clip: text)) {
         .ea-grad {
             @apply text-Blue/600;
             -webkit-text-fill-color: currentColor;
         }
         .ea-grad--dark { @apply text-Violet/400; }
+        .ea-grad--stat { @apply text-Blue/500; }
     }
 
     /* ============================================================ Buttons == */
@@ -936,6 +941,278 @@
         transform: none;
     }
 
+    /* Accolades mark — the six-pyramid cluster spinning up beside each figure.
+       Geometry and the SVG itself live in AccoladesMark.vue; only the timing is
+       here, as custom properties, so it can be retuned in one place.
+
+       The ring makes two full turns anticlockwise and settles on an ease-out.
+       The pyramids fade in one after another over --ea-mark-fade of the
+       duration each, --ea-mark-step apart, which puts the last one at full
+       opacity exactly at the midpoint (5 x 0.08 + 0.1 = 0.5) — the cluster
+       finishes assembling while the ring is still visibly slowing down.
+
+       Those two fractions are what makes the entrance read as a sequence
+       rather than a single wash: the step is nearly as long as the fade, so
+       each pyramid has almost finished arriving before the next one starts.
+       Widening --ea-mark-fade towards --ea-mark-step * 5 overlaps them back
+       into one blur; narrowing it below the step opens visible gaps.
+
+       `transform-box: view-box` resolves the origin against the 128-unit
+       viewBox, so 64px 64px is the frame centre regardless of the rendered
+       size. The spin group is a direct child of <svg> for exactly that reason:
+       nested inside the 84/128 scale wrapper, the origin would be scaled too. */
+    .ea-accolade-mark {
+        --ea-mark-dur: 3.64s;
+        /* Positive = the ring unwinds anticlockwise into its resting position. */
+        --ea-mark-turns: 720deg;
+        --ea-mark-ease: cubic-bezier(0.17, 0.86, 0.26, 1);
+        --ea-mark-delay: 0ms; /* set per card by the band, to sequence the two */
+        --ea-mark-fade: 0.1; /* fade length, as a fraction of the duration */
+        --ea-mark-step: 0.08; /* gap between consecutive pyramids, likewise */
+        /* Each pyramid's own turn about its perceived centre. MUST stay a
+           multiple of 120deg — that is the shape's rotational symmetry, so any
+           multiple of it lands back on the drawn orientation and the start
+           state is visually identical to the end state. 360 = three visible
+           flips against the ring's two turns.
+           Negative here turns each pyramid AGAINST the ring: the sign is
+           independent of --ea-mark-turns, so flipping it counter-rotates them.
+           Since the tumble now shares the ring's curve exactly, this value is
+           purely an amplitude — it sets the ratio between the two speeds and
+           nothing else. At -720 the two cancel outright and each pyramid holds
+           a fixed absolute orientation while it orbits. */
+        --ea-mark-tumble: -360deg;
+    }
+    .ea-accolade-mark svg {
+        display: block;
+        width: 100%;
+        height: 100%;
+    }
+    .ea-accolade-mark__pyramid path {
+        fill: #a9b2c9;
+    }
+    .ea-accolade-mark__spin {
+        transform-box: view-box;
+        transform-origin: 64px 64px;
+    }
+    /* Gated behind `.js`, like the reveals above: with scripting off the
+       cluster is simply there, at rest, in its drawn position. */
+    .js .ea-accolade-mark__pyramid {
+        opacity: 0;
+    }
+    /* --ea-mark-delay holds the whole mark back so a card can follow another
+       one instead of arriving with it; the band sets it per card. It has to be
+       written AFTER each `animation` shorthand, which would otherwise reset the
+       delay to zero. */
+    .js .ea-accolade-mark.is-playing .ea-accolade-mark__spin {
+        animation: ea-mark-spin var(--ea-mark-dur) var(--ea-mark-ease) both;
+        animation-delay: var(--ea-mark-delay);
+    }
+    .js .ea-accolade-mark.is-playing .ea-accolade-mark__pyramid {
+        animation: ea-mark-fade calc(var(--ea-mark-dur) * var(--ea-mark-fade)) linear both;
+        animation-delay: calc(var(--ea-mark-delay) + var(--ea-mark-dur) * var(--ea-mark-step) * var(--i));
+    }
+    /* The tumble turns about the path's own origin, which the wrapper in
+       AccoladesMark.vue has already parked on the pyramid's perceived centre —
+       so `view-box` + `0 0` is that centre, not the frame's. */
+    .ea-accolade-mark__body {
+        transform-box: view-box;
+        transform-origin: 0 0;
+    }
+    /* Same duration, delay and easing as the ring — deliberately, and this is
+       the whole point of the rule. Sharing one curve makes the tumble's
+       progress equal the ring's at every instant, so a pyramid's angular speed
+       stays a fixed fraction of the ring's (here half, 360 against 720) instead
+       of drifting against it. One deceleration, not two.
+
+       The earlier version gave each pyramid its own delayed, re-stretched copy
+       of the curve so that late arrivals still got a full tumble. That is what
+       read as dissonant: six pyramids each sitting at a different point on a
+       differently-stretched curve, none of them tracking the ring. The cost of
+       fixing it is that a late pyramid now appears already well into the
+       settle and turns less — which is the honest behaviour for something that
+       arrives late to a system that is already slowing down. */
+    .js .ea-accolade-mark.is-playing .ea-accolade-mark__body {
+        animation: ea-mark-tumble var(--ea-mark-dur) var(--ea-mark-ease) both;
+        animation-delay: var(--ea-mark-delay);
+    }
+    @keyframes ea-mark-tumble {
+        from {
+            transform: rotate(var(--ea-mark-tumble));
+        }
+        to {
+            transform: rotate(0deg);
+        }
+    }
+    @keyframes ea-mark-spin {
+        from {
+            transform: rotate(var(--ea-mark-turns));
+        }
+        to {
+            transform: rotate(0deg);
+        }
+    }
+    @keyframes ea-mark-fade {
+        to {
+            opacity: 1;
+        }
+    }
+
+    /* The same fade-and-rise the v-reveal directive gives every other section,
+       but driven by a parent's timeline rather than by the element's own
+       observer. The accolades phrases need it: each one lands a beat after ITS
+       card's figure starts, and the second card is held back by a full card
+       length, which is far too long to express as a transition-delay hanging
+       off a trigger that fires the moment the phrase scrolls into view.
+       Values are copied from .reveal deliberately — it has to be
+       indistinguishable from the rest of the page.
+
+       It also can't flash: the hidden state is in the markup from the first
+       paint (gated on `.js`), where v-reveal applies it in `mounted` and so
+       skips the transition entirely if its observer fires the same frame. */
+    .ea-rise {
+        transition: opacity 0.8s theme('transitionTimingFunction.smooth'),
+                    transform 0.8s theme('transitionTimingFunction.smooth');
+        transition-delay: var(--ea-rise-delay, 0ms);
+    }
+    .js .ea-rise {
+        opacity: 0;
+        transform: translateY(18px);
+    }
+    .ea-rise.is-in {
+        opacity: 1;
+        transform: none;
+    }
+
+    /* Accolades grid — the squares bursting out of the centre beside the second
+       figure. Geometry and the ring numbering live in AccoladesGrid.vue; only
+       the timing is here.
+
+       Travel and fade are two animations on one element, not one animation with
+       an intermediate keyframe, because they need different durations AND
+       different curves. The fade lands at roughly 0.4 of the travel, so a
+       square reaches full strength while it is still moving — it arrives rather
+       than materialises, which is the whole difference in feel.
+
+       The travel curve overshoots (the 1.56 control point): the furthest square
+       travels 40 units, carries ~1.7 past its slot and settles back, which is
+       what sells "shot out" instead of "slid". That is only ~5% of the trip but
+       ~15% of a square's own width, which is the proportion the eye actually
+       reads. The overshoot is outward, away from the centre, so it opens the
+       gap to the inner neighbour rather than closing it — nothing can collide —
+       and the outermost edge peaks at 109.5 of the 128 frame, so it never
+       clips either.
+
+       Delay is per ring, so ring 1 is already arriving as ring 2 leaves. */
+    .ea-accolade-grid {
+        --ea-grid-dur: 1s; /* travel */
+        --ea-grid-in: 0.22s; /* the whole mark arriving, before anything moves */
+        --ea-grid-fade-dur: 0.42s; /* deliberately shorter than the travel */
+        --ea-grid-step: 0.32s; /* between one ring and the next */
+        --ea-grid-delay: 0ms; /* set per card by the band, to sequence the two */
+        --ea-grid-op0: 0.3; /* squares are never invisible, only faint */
+        --ea-grid-ease: cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .ea-accolade-grid svg {
+        display: block;
+        width: 100%;
+        height: 100%;
+    }
+    .ea-accolade-grid__cell {
+        fill: #a9b2c9;
+    }
+    /* The squares rest at --ea-grid-op0 stacked on the centre, and twenty-one of
+       those composite to essentially solid — so without this the card would
+       show a lone square sitting there from the moment the section scrolls into
+       view until this mark's turn came round, most of two seconds later. The
+       whole mark is therefore held at nothing and snapped up as the burst
+       begins: --ea-grid-in is much shorter than either the travel or the
+       per-square fade, so it reads as the mark arriving, not as another fade
+       competing with the two already running inside it.
+
+       Gated behind `.js` like the reveals: with scripting off the grid is
+       simply there, assembled, at rest. */
+    .js .ea-accolade-grid {
+        opacity: 0;
+    }
+    .js .ea-accolade-grid.is-playing {
+        animation: ea-grid-in var(--ea-grid-in) ease-out both;
+        animation-delay: var(--ea-grid-delay);
+    }
+    .js .ea-accolade-grid__cell {
+        opacity: var(--ea-grid-op0);
+        transform: translate(var(--dx), var(--dy));
+    }
+    .js .ea-accolade-grid.is-playing .ea-accolade-grid__cell {
+        animation: ea-grid-shift var(--ea-grid-dur) var(--ea-grid-ease) both,
+                   ea-grid-fade var(--ea-grid-fade-dur) ease-out both;
+        animation-delay: calc(var(--ea-grid-delay) + var(--ea-grid-step) * var(--ring));
+    }
+    @keyframes ea-grid-shift {
+        from {
+            transform: translate(var(--dx), var(--dy));
+        }
+        to {
+            transform: translate(0px, 0px);
+        }
+    }
+    @keyframes ea-grid-fade {
+        from {
+            opacity: var(--ea-grid-op0);
+        }
+        to {
+            opacity: 1;
+        }
+    }
+    @keyframes ea-grid-in {
+        from {
+            opacity: 0;
+        }
+        to {
+            opacity: 1;
+        }
+    }
+
+    /* Scramble text — see ScrambleText.vue, which owns the timing and writes
+       the glyph and opacity of each cell directly.
+
+       Cells are inline-block so the component can lock each one to the width of
+       its settled glyph; without that a narrow random glyph in a wide cell
+       reflows everything after it. Words are nowrap groups so a long
+       translation still breaks at spaces and never mid-word.
+
+       Gated behind `.js` like the reveals: with scripting off the settled text
+       is simply there. Once playing, the component writes inline opacity, which
+       outranks this. */
+    /* Fit-to-width. The figure is drawn at a size English fits — "Billions",
+       "7,435" — but "Miles de millones" and "Milliarden" do not, and a single
+       word cannot wrap its way out of trouble: at 72px "millones" alone is
+       wider than the 268px column beside the mark. Breaking mid-word is the
+       usual escape and it looks like a mistake on a display figure, so the
+       component measures the widest word instead and sets --ea-scramble-fit to
+       shrink the whole thing just enough to hold. It stays 1 — a no-op —
+       whenever the text already fits, so the drawn size is untouched in
+       English. */
+    .ea-scramble {
+        font-size: calc(1em * var(--ea-scramble-fit, 1));
+    }
+    .ea-scramble__word {
+        display: inline-block;
+        white-space: nowrap;
+    }
+    /* The clip is declared here but only bites once the component hands a cell
+       its slice of a gradient; with no background-image it paints nothing and
+       plain-coloured text is unaffected. */
+    .ea-scramble__cell {
+        display: inline-block;
+        text-align: center;
+        background-repeat: no-repeat;
+        background-clip: text;
+        -webkit-background-clip: text;
+    }
+    .js .ea-scramble__cell {
+        opacity: 0;
+    }
+
     /* Headline clip-reveal, one line at a time. */
     .line-mask {
         overflow: hidden;
@@ -1483,10 +1760,33 @@
     .reveal,
     .reveal-fade,
     .reveal-x,
+    .ea-rise,
     .hero-fade,
     .ea-hero-card {
         opacity: 1 !important;
         transform: none !important;
+    }
+    /* The accolades mark staggers its pyramids with animation-DELAY, which the
+       blanket duration collapse above does not touch — left alone they would
+       still snap in one at a time across 0.7s, which is worse than the fade it
+       replaces. Land the whole cluster at once instead. */
+    .ea-accolade-mark__pyramid,
+    .ea-accolade-mark__spin,
+    .ea-accolade-mark__body {
+        animation-delay: 0s !important;
+    }
+    .ea-accolade-grid__cell {
+        animation-delay: 0s !important;
+        transform: none !important;
+    }
+    .ea-accolade-grid {
+        animation-delay: 0s !important;
+    }
+    .ea-accolade-mark__pyramid,
+    .ea-accolade-grid,
+    .ea-accolade-grid__cell,
+    .ea-scramble__cell {
+        opacity: 1 !important;
     }
     .line-mask > span {
         transform: none !important;

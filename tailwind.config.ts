@@ -174,6 +174,13 @@ export default <Partial<Config>>{
                 // The same idea lifted for dark surfaces, so it still reads at 48px
                 // on #171717.
                 'ea-text-dark': 'linear-gradient(90deg, #4379FF 0%, #7272FF 50%, #B571FF 100%)',
+                // The accolades figures. Same three hues as the dark variant but
+                // raked diagonally and inset at both ends, so a short run like
+                // "7435" still travels the whole blue-to-violet sweep instead of
+                // ending mid-blue. Figma 812:5829 / 812:5848 — the file reports
+                // 127.5deg on one card and 137.2deg on the other only because it
+                // measures the angle against each box; it is one gradient.
+                'ea-text-stat': 'linear-gradient(127deg, #4379FF 8%, #7272FF 47%, #B571FF 92%)',
                 // Primary CTA fill. The stops are the Figma band's, laid across a
                 // layer three times the pill's width (see .ea-btn__bg in main.css):
                 // at rest its right end is framed (blue -> violet), on hover it

@@ -50,7 +50,10 @@ useSeoMeta({
                  sits BETWEEN pricing and research now, not up against the
                  particle section as it did in v2 — so it is nowhere near the
                  page tint's fade and is free to paint its own background. -->
-            <LazyAccoladesBand :hydrate-on-visible="{ rootMargin: '300px' }" />
+            <LazyAccoladesBand :hydrate-on-visible="{ rootMargin: '300px' }" /><!--
+                 Kept on visibility hydration: the marks' spin-up is armed by an
+                 observer inside the component, and the 300px margin is what
+                 gets it mounted and observing before the reader arrives. -->
             <LazyResearchSection :hydrate-on-visible="{ rootMargin: '300px' }" />
             <LazyClosingBanner :hydrate-on-visible="{ rootMargin: '300px' }" />
         </main>
