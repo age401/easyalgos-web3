@@ -222,6 +222,15 @@ export default <Partial<Config>>{
                 // byte-identical.
                 'ea-pricing-shell': 'linear-gradient(108.6deg, #F6F7FF -2.45%, #E7E9F9 36.97%, #F2F3FF 97.56%)',
                 'ea-pricing-card': 'linear-gradient(313.9deg, #F7F7FB -0.93%, #FFFFFF 49.08%)',
+                // Trustpilot review shell (Figma 885:2325). The same three-stop wash
+                // as `ea-pricing-shell` — one design-system fill, not a lookalike —
+                // but its own geometry: 94.13deg, with the stops squared off at
+                // 0/39.42/100 instead of the pricing shell's slight overshoot.
+                //
+                // The box is each CARD, so the sheen restarts per review exactly as
+                // it does per pricing tier. Same arrangement as the pricing row: a
+                // tinted outer shell holding a near-white inner card.
+                'ea-review-shell': 'linear-gradient(94.13deg, #F6F7FF 0%, #E7E9F9 39.42%, #F2F3FF 100%)',
                 // "EA of the month" ribbon on the featured hero card.
                 'ea-ribbon': 'linear-gradient(95.25deg, #489EFF 0%, #4CA8FF 100%)',
                 // The role cards' inner bubble (Figma 524:2890) — and the same

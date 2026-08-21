@@ -54,6 +54,12 @@ useSeoMeta({
                  Kept on visibility hydration: the marks' spin-up is armed by an
                  observer inside the component, and the 300px margin is what
                  gets it mounted and observing before the reader arrives. -->
+            <!-- Trustpilot review strip (Figma 885:2323), directly under the
+                 accolades band as drawn. It paints the same white ground, so the
+                 two read as one block: the figures, then the voices behind them.
+                 The band's own bottom padding is the gap between them, which is
+                 why this section carries none of its own on top. -->
+            <LazyTrustpilotReviews :hydrate-on-visible="{ rootMargin: '300px' }" />
             <LazyResearchSection :hydrate-on-visible="{ rootMargin: '300px' }" />
             <LazyClosingBanner :hydrate-on-visible="{ rootMargin: '300px' }" />
         </main>

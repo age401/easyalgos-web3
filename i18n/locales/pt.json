@@ -79,6 +79,14 @@
         "volumeValue": "Milhares de milhões",
         "volumeLabel": "em volume negociado mensal"
     },
+    "trustpilotReviews": {
+        "srHeading": "O que os traders dizem no Trustpilot",
+        "count": "{count} avaliação | {count} avaliações",
+        "srSummary": "{author} avaliou-nos com {rating} de 5 em {date}",
+        "readFull": "Ler a avaliação completa",
+        "readFullFrom": "Ler a avaliação completa de {author}",
+        "goToReview": "Ir para a avaliação {n}"
+    },
     "whatYouGet": {
         "eyebrow": "O que recebe",
         "titleLine1": "Expert Advisors e tudo o resto",

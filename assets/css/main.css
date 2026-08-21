@@ -591,6 +591,114 @@
         @apply flex w-max shrink-0 animate-eaMarquee items-center gap-4 tablet:gap-8;
         will-change: transform;
     }
+
+    /* ================================================ Trustpilot reviews == */
+    /* The review strip (Figma 885:2323). A native snap scroller, not a carousel
+       library and no longer the CSS marquee it started as.
+       
+       IT LOOPS ABOVE `tablet`. The set is rendered three times and the scroll is
+       teleported by exactly one set width whenever it leaves the middle copy —
+       see useLoopingCarousel. That restores the drawing's symmetric bleed, which
+       a finite hand-driven row could not have: there is always another card to
+       the left, so the strip is cut off at both edges again exactly as drawn.
+       
+       ON MOBILE IT DOES NOT. The two duplicate copies are `display: none` below
+       `tablet` (the `hidden tablet:block` on them in TrustpilotReviews), which is
+       the entire switch: measurement counts only rendered children, so with one
+       copy visible there is no set width, nothing to teleport across, and the
+       loop is simply absent. The breakpoint therefore lives here in CSS, not in a
+       script that could fall out of step with it.
+       
+       That is also why the trailing padding below matters. Above `tablet` the end
+       of the strip is never reached and the padding is invisible; on mobile it is
+       reached on the fifth card, and without it that card would sit flush against
+       the edge of the screen. It equally covers reduced motion or a scripting
+       failure leaving a plain finite scroller at any width.
+       
+       Native scroll does the work: touch swipe, trackpad, momentum, keyboard and
+       snapping all come free, and it degrades to a plain scrollable row if
+       scripting fails. The JS only READS scrollLeft to place the indicator, and
+       writes it for a band click or a mouse drag.
+       
+       ONE SOURCE OF TRUTH for the card width: `--ea-review-w`. The cards read it
+       and the mobile centring padding is derived from it, so the two cannot
+       drift apart — which they would if the width were restated in a template
+       class and the padding computed from a literal.
+       
+       Breakpoint px are the tailwind.config screens (tablet 600, tablet-wide
+       1024, desktop 1280) written out, because a CSS variable cannot be set from
+       inside a Tailwind variant. */
+    .ea-reviews {
+        --ea-review-w: 78vw;
+        --ea-review-gap: 12px;
+        @apply relative flex snap-x snap-mandatory overflow-x-auto overscroll-x-contain;
+        scrollbar-width: none;
+        scroll-behavior: smooth;
+        /* The affordance for the drag. Costs text selection inside the strip,
+           which is the accepted trade for click-and-pull. */
+        cursor: grab;
+        /* MOBILE: exactly half the leftover on each side. It has to be exact --
+           any less and card 1 can never reach the centre, because the scroller is
+           already at scrollLeft 0 and has nowhere further left to go. This is
+           what puts one review centred with its neighbours peeking in. */
+        padding-inline: calc((100% - var(--ea-review-w)) / 2);
+    }
+    .ea-reviews::-webkit-scrollbar {
+        display: none;
+    }
+    .ea-reviews > * {
+        scroll-snap-align: center;
+        margin-right: var(--ea-review-gap);
+    }
+    /* No trailing gap: it would add scrollable slack past the last card's snap
+       point, so the row could rest somewhere the indicator calls "off the end". */
+    .ea-reviews > *:last-child {
+        margin-right: 0;
+    }
+
+    /* While the mouse is down. Both of these have to come off or the drag fights
+       the browser: mandatory snapping yanks back against every scrollLeft write,
+       and `scroll-behavior: smooth` animates each one so the row trails the
+       cursor. Dropping the class on release lets snap re-engage and settle on the
+       nearest card, which is the lock-in a reader expects after a drag. */
+    .ea-reviews.is-dragging {
+        cursor: grabbing;
+        scroll-snap-type: none;
+        scroll-behavior: auto;
+        user-select: none;
+    }
+
+    /* TABLET AND UP: the drawn row. Left gutter only, so the first card lines up
+       with the page column while the row runs to the viewport edge and the next
+       card peeks in — the same arrangement as the "How it works" scroller.
+       scroll-padding must match the gutter, because snap alignment is measured
+       against the snapport and not the padding box; without it every card after
+       the first snaps flush to the viewport edge instead of to the gutter. */
+    @media (min-width: 600px) {
+        .ea-reviews {
+            --ea-review-w: 400px;
+            --ea-review-gap: 32px;
+            padding-inline: theme('spacing.8');
+            scroll-padding-inline: theme('spacing.8');
+        }
+        .ea-reviews > * {
+            scroll-snap-align: start;
+        }
+    }
+    @media (min-width: 1024px) {
+        .ea-reviews {
+            --ea-review-w: 440px;
+            padding-inline: theme('spacing.10');
+            scroll-padding-inline: theme('spacing.10');
+        }
+    }
+    @media (min-width: 1280px) {
+        .ea-reviews {
+            padding-inline: max(60px, calc((100% - 1360px) / 2));
+            scroll-padding-inline: max(60px, calc((100% - 1360px) / 2));
+        }
+    }
+
     /* ========================================================= Role cards == */
     /* Float over the particle cluster, labelling the constellation. Figma
        524:2889 for the card, 524:2890 for the bubble, 526:842 for the glyphs.

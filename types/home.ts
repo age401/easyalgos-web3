@@ -192,3 +192,32 @@ export interface DeveloperGroup {
     name: string
     eas: string[]
 }
+
+/** One published Trustpilot review. Figma 885:2325.
+ *
+ *  The prose is the reviewer's own words, so `title` and `body` are NOT i18n
+ *  keys and are never translated — see data/trustpilotReviews.ts. Everything a
+ *  card says ABOUT the review (the "N reviews" line, the date, "Read full
+ *  review") is chrome and does come from the locale files. */
+export interface TrustpilotReview {
+    id: string
+    /** Display name as published. A proper noun. */
+    author: string
+    /** ISO 3166-1 alpha-2 code Trustpilot shows beside the name. Optional
+     *  because Trustpilot omits it for some profiles, and where it is absent the
+     *  bullet separator drops with it rather than leaving a dangling dot. */
+    country?: string
+    /** Reviews this author has published, for the "N reviews" line. */
+    reviewCount: number
+    /** ISO 8601 date. Formatted per locale at render, so the drawn "May 6, 2026"
+     *  becomes "6. Mai 2026" in de without a second string to maintain. */
+    date: string
+    /** 0-5. Fractional is allowed: the row fills by coverage, not by rounding. */
+    rating: number
+    title: string
+    body: string
+    /** Permalink to the full review. Only a card that has one offers the
+     *  "Read full review" affordance — the slot is always laid out, so a card
+     *  without a link keeps the same height as one with it. */
+    url?: string
+}
