@@ -76,8 +76,8 @@ const srSummary = computed(() =>
     <article
         class="h-[342px] w-[var(--ea-review-w,440px)] shrink-0 rounded-[20px] bg-ea-review-shell p-[12px] tablet:h-[358px] tablet:p-[16px]"
     >
-        <div class="flex h-full w-full flex-col rounded-[12px] border-2 border-white bg-Tinted/25 p-[20px] tablet:p-[24px]">
-            <p class="w-full truncate pb-[4px] font-poppins text-[16px] font-medium leading-[22px] text-Neutral/700">
+        <div class="flex h-full w-full flex-col rounded-[12px] border-2 border-white bg-surface p-[20px] tablet:p-[24px]">
+            <p class="w-full truncate pb-[4px] font-poppins text-[16px] font-medium leading-[22px] text-gray-700">
                 {{ review.author }}
             </p>
 
@@ -86,7 +86,7 @@ const srSummary = computed(() =>
             <p class="sr-only">{{ srSummary }}</p>
 
             <div
-                class="flex w-full items-start justify-between pb-[12px] font-franklin text-[14px] font-normal leading-[24px] text-Tinted/700"
+                class="flex w-full items-start justify-between pb-[12px] font-franklin text-[14px] font-normal leading-[24px] text-secondary"
                 aria-hidden="true"
             >
                 <!-- The bullet is drawn as its own text layer between the country
@@ -105,13 +105,13 @@ const srSummary = computed(() =>
             <TrustpilotStars :rating="review.rating" class="pb-[20px] [--ea-star:24px]" />
 
             <blockquote class="min-w-0">
-                <p class="w-full truncate pb-[8px] font-franklin text-[16px] font-medium leading-[22px] text-Tinted/900">
+                <p class="w-full truncate pb-[8px] font-franklin text-[16px] font-medium leading-[22px] text-neutral-900">
                     {{ review.title }}
                 </p>
                 <!-- Four lines at 26px is the 104px the tallest drawn body
                      occupies; the clamp's own ellipsis replaces the "…" the
                      Figma text layers carry inline. -->
-                <p class="line-clamp-4 font-franklin text-[16px] font-normal leading-[26px] text-Tinted/700">
+                <p class="line-clamp-4 font-franklin text-[16px] font-normal leading-[26px] text-secondary">
                     {{ review.body }}
                 </p>
             </blockquote>
@@ -125,7 +125,7 @@ const srSummary = computed(() =>
                 <a
                     v-if="review.url"
                     :href="review.url"
-                    class="font-franklin text-[14px] font-medium leading-[18px] tracking-[0.14px] text-Tinted/800 underline decoration-transparent underline-offset-2 transition-colors duration-300 hover:decoration-Tinted/300"
+                    class="font-franklin text-[14px] font-medium leading-[18px] tracking-[0.14px] text-neutral-800 underline decoration-transparent underline-offset-2 transition-colors duration-300 hover:decoration-neutral-300"
                     :aria-label="$t('trustpilotReviews.readFullFrom', { author: review.author })"
                 >
                     {{ $t('trustpilotReviews.readFull') }}

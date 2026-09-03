@@ -12,7 +12,10 @@ export default defineNuxtConfig({
     compatibilityDate: '2025-06-01',
     devtools: { enabled: false },
     modules: ['@nuxtjs/tailwindcss', '@nuxtjs/i18n'],
-    css: ['~/assets/css/main.css'],
+    // Token custom properties first: main.css and the semantic Tailwind
+    // utilities both resolve against them, and the dark-band sections rely on
+    // [data-theme="dark"] re-declaring them.
+    css: ['~/design-system/tokens.css', '~/assets/css/main.css'],
     // Bare component names (<HeroSection/>) regardless of subfolder.
     components: [{ path: '~/components', pathPrefix: false }],
     // Auto-import the static content modules alongside composables/utils, so a

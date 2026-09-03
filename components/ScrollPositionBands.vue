@@ -45,7 +45,7 @@ const step = computed(() => `calc(var(--p) * (100% + ${props.gap}px))`)
             v-for="n in count"
             :key="n"
             type="button"
-            class="relative h-1 flex-1 rounded-[1px] bg-Tinted/50 before:absolute before:inset-x-0 before:-inset-y-[10px] before:content-['']"
+            class="relative h-1 flex-1 rounded-[1px] bg-surface-alt before:absolute before:inset-x-0 before:-inset-y-[10px] before:content-['']"
             :aria-label="labelFor(n)"
             :aria-current="n - 1 === activeIndex ? 'true' : undefined"
             @click="emit('select', n - 1)"
@@ -54,7 +54,7 @@ const step = computed(() => `calc(var(--p) * (100% + ${props.gap}px))`)
              padded hit area. -->
         <span
             aria-hidden="true"
-            class="pointer-events-none absolute inset-y-[10px] left-0 rounded-[1px] bg-Tinted/200 will-change-transform"
+            class="pointer-events-none absolute inset-y-[10px] left-0 rounded-[1px] bg-neutral-200 will-change-transform"
             :style="{ width: fillWidth, '--p': position, transform: `translateX(${step})` }"
         />
     </div>

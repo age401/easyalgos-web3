@@ -17,7 +17,7 @@
                 <li
                     v-for="brand in BRANDS"
                     :key="brand.id"
-                    class="flex h-[76px] w-[220px] shrink-0 items-center justify-center rounded-md border-2 border-Tinted/25 px-14 transition-colors duration-300 hover:bg-[#F5F6FC] tablet-wide:h-[88px] tablet-wide:w-[270px] tablet-wide:px-[60px]"
+                    class="flex h-[76px] w-[220px] shrink-0 items-center justify-center rounded-md border-2 border-neutral-25 px-14 transition-colors duration-300 hover:bg-[#F5F6FC] tablet-wide:h-[88px] tablet-wide:w-[270px] tablet-wide:px-[60px]"
                 >
                     <img
                         :src="brand.src"
@@ -33,7 +33,7 @@
                 <li
                     v-for="brand in BRANDS"
                     :key="`${brand.id}-echo`"
-                    class="flex h-[76px] w-[220px] shrink-0 items-center justify-center rounded-md border-2 border-Tinted/25 px-14 transition-colors duration-300 hover:bg-[#F5F6FC] tablet-wide:h-[88px] tablet-wide:w-[270px] tablet-wide:px-[60px]"
+                    class="flex h-[76px] w-[220px] shrink-0 items-center justify-center rounded-md border-2 border-neutral-25 px-14 transition-colors duration-300 hover:bg-[#F5F6FC] tablet-wide:h-[88px] tablet-wide:w-[270px] tablet-wide:px-[60px]"
                 >
                     <img :src="brand.src" alt="" width="150" height="40" loading="lazy" class="h-7 w-auto max-w-full tablet-wide:h-10" />
                 </li>

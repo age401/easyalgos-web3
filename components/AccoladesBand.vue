@@ -71,7 +71,7 @@ const { visible } = useRevealOnce(row, { threshold: 0.2 })
                             <ScrambleText :text="n(SITE_STATS.traders, { style: 'decimal' })" />
                         </p>
                         <p
-                            :class="['ea-rise mt-1.5 text-[18px] leading-tight text-Tinted/950 tablet:text-[22px] tablet-wide:text-[24px] desktop:text-[28px] desktop:leading-[32px]', { 'is-in': visible }]"
+                            :class="['ea-rise mt-1.5 text-[18px] leading-tight text-primary tablet:text-[22px] tablet-wide:text-[24px] desktop:text-[28px] desktop:leading-[32px]', { 'is-in': visible }]"
                             :style="{ '--ea-rise-delay': `${LABEL}ms` }"
                         >
                             {{ $t('accolades.tradersLabel') }}
@@ -79,7 +79,7 @@ const { visible } = useRevealOnce(row, { threshold: 0.2 })
                     </div>
                 </div>
 
-                <div class="hidden w-px self-center bg-Tinted/100 tablet-wide:block tablet-wide:h-[128px]" />
+                <div class="hidden w-px self-center bg-sunken tablet-wide:block tablet-wide:h-[128px]" />
 
                 <div class="flex w-full max-w-[420px] items-center gap-4 tablet-wide:w-[420px] desktop:gap-6">
                     <AccoladesGrid
@@ -91,7 +91,7 @@ const { visible } = useRevealOnce(row, { threshold: 0.2 })
                             <ScrambleText :text="$t('accolades.volumeValue')" :delay="CARD_B" />
                         </p>
                         <p
-                            :class="['ea-rise mt-1.5 text-[18px] leading-tight text-Tinted/950 tablet:text-[22px] tablet-wide:text-[24px] desktop:text-[28px] desktop:leading-[32px]', { 'is-in': visible }]"
+                            :class="['ea-rise mt-1.5 text-[18px] leading-tight text-primary tablet:text-[22px] tablet-wide:text-[24px] desktop:text-[28px] desktop:leading-[32px]', { 'is-in': visible }]"
                             :style="{ '--ea-rise-delay': `${CARD_B + LABEL}ms` }"
                         >
                             {{ $t('accolades.volumeLabel') }}

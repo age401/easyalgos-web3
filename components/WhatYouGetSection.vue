@@ -127,7 +127,7 @@ const activeVisual = computed(() => {
                                                      diverge the height reserve
                                                      stops reserving the right
                                                      height. -->
-                                                <span class="ea-body--sm block pt-1 !leading-5 !text-Neutral/500">
+                                                <span class="ea-body--sm block pt-1 !leading-5 !text-gray-500">
                                                     {{ $t(`whatYouGet.items.${item.id}.description`) }}
                                                 </span>
                                             </span>

@@ -102,7 +102,7 @@ async function toggle() {
                  the frame's own fill — see tailwind.config.ts for the derivation. -->
             <div v-reveal="160" class="mt-12 rounded-[20px] bg-ea-pricing-shell p-4 tablet-wide:mt-16">
                 <ul
-                    class="grid grid-cols-1 gap-px overflow-hidden rounded-xl border-2 border-white bg-Tinted/25 tablet-md:grid-cols-3"
+                    class="grid grid-cols-1 gap-px overflow-hidden rounded-xl border-2 border-white bg-surface tablet-md:grid-cols-3"
                 >
                     <!-- Each card carries its own gradient sheen (Figma 420:1072 /
                          1091 / 1107 — three separate fills, identical definitions).
@@ -120,12 +120,12 @@ async function toggle() {
                         :key="tier.id"
                         class="flex flex-col bg-ea-pricing-card p-8 tablet-wide:p-10"
                     >
-                        <h3 class="font-poppins text-[1.75rem] font-medium leading-9 tracking-[-0.5px] text-Neutral/700 tablet-wide:text-[2rem]">
+                        <h3 class="font-poppins text-[1.75rem] font-medium leading-9 tracking-[-0.5px] text-gray-700 tablet-wide:text-[2rem]">
                             {{ $t(`pricing.tiers.${tier.id}.name`) }}
                         </h3>
 
                         <p class="mt-3 flex flex-wrap items-baseline gap-x-2">
-                            <span class="ea-num font-poppins text-[1.75rem] font-medium leading-8 tracking-[-0.5px] text-Tinted/800">
+                            <span class="ea-num font-poppins text-[1.75rem] font-medium leading-8 tracking-[-0.5px] text-neutral-800">
                                 ${{ n(tier.minimumBalance, { style: 'decimal' }) }}
                             </span>
                             <span class="ea-body">{{ $t('pricing.minimumBalance') }}</span>
@@ -134,8 +134,8 @@ async function toggle() {
                         <!-- 14/26, not 14/24: the line sits on the same 26px rhythm as
                              the body copy above it so the two baselines agree. -->
                         <p class="mt-2 flex items-center gap-2">
-                            <span class="h-1 w-1 shrink-0 rounded-full bg-Blue/600" aria-hidden="true" />
-                            <span class="font-franklin text-[14px] leading-[26px] text-Tinted/500">
+                            <span class="h-1 w-1 shrink-0 rounded-full bg-primary" aria-hidden="true" />
+                            <span class="font-franklin text-[14px] leading-[26px] text-tertiary">
                                 {{ $t('pricing.minimumTrades', { count: tier.minimumTrades }) }}
                             </span>
                         </p>
@@ -176,17 +176,17 @@ async function toggle() {
                 <!-- 680px is the measured column in Figma 420:999; the panel is left
                      aligned under the heading, not centred. -->
                 <div class="max-w-[680px] pt-12">
-                    <!-- Roboto 16/26 in Tinted/800 — one step darker than `.ea-body`,
+                    <!-- Roboto 16/26 in neutral-800 — one step darker than `.ea-body`,
                          which is why the type is spelled out here instead of reusing
                          it: `.ea-body` lives in the utilities layer too, so its baked
-                         `text-Tinted/700` beats a `text-Tinted/800` sitting alongside
+                         `text-secondary` beats a `text-neutral-800` sitting alongside
                          it on the same element. The 15px/1.6 mobile step matches
                          `.ea-body`'s so the two still scale together. -->
                     <div class="space-y-2">
                         <p
                             v-for="key in MODEL_INTROS"
                             :key="key"
-                            class="font-franklin text-[0.9375rem] leading-[1.6] text-Tinted/800 tablet:text-[1rem] tablet:leading-[26px]"
+                            class="font-franklin text-[0.9375rem] leading-[1.6] text-neutral-800 tablet:text-[1rem] tablet:leading-[26px]"
                         >
                             {{ $t(`pricing.model.${key}`) }}
                         </p>
@@ -236,13 +236,13 @@ async function toggle() {
                                     fill="url(#ea-pricing-check-mark)"
                                 />
                             </svg>
-                            <span class="font-franklin text-[1rem] font-medium leading-[22px] text-Tinted/900">
+                            <span class="font-franklin text-[1rem] font-medium leading-[22px] text-neutral-900">
                                 {{ $t(`pricing.model.bullets.${id}`) }}
                             </span>
                         </li>
                     </ul>
 
-                    <p class="mt-8 font-franklin text-[0.9375rem] leading-[1.6] text-Tinted/800 tablet:text-[1rem] tablet:leading-[26px]">
+                    <p class="mt-8 font-franklin text-[0.9375rem] leading-[1.6] text-neutral-800 tablet:text-[1rem] tablet:leading-[26px]">
                         {{ $t('pricing.model.outro') }}
                     </p>
                 </div>

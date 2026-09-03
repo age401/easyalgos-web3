@@ -89,7 +89,7 @@ interface Ring {
     /** Radius at scale 1, in box units. */
     radius: number
     stroke: string
-    /** Peak alpha of the Tinted/800 radial wash. 0 = no fill. */
+    /** Peak alpha of the neutral-800 radial wash. 0 = no fill. */
     wash: number
     scale: Track
 }
@@ -386,7 +386,7 @@ onBeforeUnmount(() => {
 
             <svg :viewBox="`0 0 ${BOX} ${BOX}`" class="absolute inset-0 h-full w-full">
                 <defs>
-                    <!-- The rings' inner wash: Tinted/800, clear at the centre and
+                    <!-- The rings' inner wash: neutral-800, clear at the centre and
                          at its faintest against the stroke. -->
                     <radialGradient id="eaRingWash">
                         <stop offset="0" stop-color="#433E68" stop-opacity="0" />

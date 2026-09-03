@@ -45,7 +45,7 @@ const avatar = computed(() => mediaAsset('ea', props.card.avatar, 64, 64))
         </div>
 
         <!-- EA name -->
-        <h3 class="w-full pb-2 font-poppins text-[12px] font-semibold text-Tinted/950">
+        <h3 class="w-full pb-2 font-poppins text-[12px] font-semibold text-primary">
             {{ card.name }}
         </h3>
 
@@ -62,8 +62,8 @@ const avatar = computed(() => mediaAsset('ea', props.card.avatar, 64, 64))
                  the equity curve. The curve is the exported Figma path rather
                  than an approximation, and SVG beats an image here — it stays
                  crisp at any stage scale and weighs nothing. -->
-            <div class="flex h-16 flex-1 flex-col overflow-hidden rounded-lg bg-Tinted/50">
-                <div class="h-1.5 w-full shrink-0 bg-Tinted/200" />
+            <div class="flex h-16 flex-1 flex-col overflow-hidden rounded-lg bg-surface-alt">
+                <div class="h-1.5 w-full shrink-0 bg-neutral-200" />
                 <div class="flex-1 p-1.5">
                     <svg
                         class="h-full w-full rounded"
@@ -114,7 +114,7 @@ const avatar = computed(() => mediaAsset('ea', props.card.avatar, 64, 64))
                             class="h-3.5 w-3.5"
                             aria-hidden="true"
                         />
-                        <span class="font-rubik text-[10px] font-medium leading-3 text-Tinted/700">
+                        <span class="font-rubik text-[10px] font-medium leading-3 text-secondary">
                             {{ $t('card.algoScore') }}
                         </span>
                     </span>
@@ -142,7 +142,7 @@ const avatar = computed(() => mediaAsset('ea', props.card.avatar, 64, 64))
                         v-for="stat in card.stats"
                         :key="stat.key"
                         class="flex h-[18px] items-center justify-between gap-2
-                               font-rubik text-[10px] leading-3 text-Tinted/700"
+                               font-rubik text-[10px] leading-3 text-secondary"
                     >
                         <dt class="font-medium">{{ $t(`card.${stat.key}`) }}</dt>
                         <dd :class="['ea-num shrink-0 text-right', stat.strong ? 'font-semibold' : 'font-medium']">

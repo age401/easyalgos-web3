@@ -22,7 +22,7 @@ import { RESEARCH_POSTS } from '~/data/content'
             <ul class="mt-12 grid grid-cols-1 gap-8 tablet:grid-cols-2 tablet-wide:mt-16 tablet-wide:grid-cols-3 tablet-wide:gap-8">
                 <li v-for="(post, index) in RESEARCH_POSTS" :key="post.id" v-reveal="index * 90">
                     <a :href="post.href" class="group flex h-full flex-col gap-6">
-                        <div class="ea-media ea-media-hover aspect-[421/248] w-full rounded-2xl bg-Tinted/50">
+                        <div class="ea-media ea-media-hover aspect-[421/248] w-full rounded-2xl bg-surface-alt">
                             <AppPicture
                                 :media="post.media"
                                 loading="lazy"
@@ -37,7 +37,7 @@ import { RESEARCH_POSTS } from '~/data/content'
                                  cards. Same role, two sizes — so this one is
                                  written out rather than sharing the class. -->
                             <h3
-                                class="font-poppins text-[18px] font-semibold leading-[26px] tracking-[-0.5px] text-Tinted/950 transition-colors duration-300 group-hover:text-Blue/600"
+                                class="font-poppins text-[18px] font-semibold leading-[26px] tracking-[-0.5px] text-primary transition-colors duration-300 group-hover:text-blue-600"
                             >
                                 {{ $t(`research.posts.${post.id}.title`) }}
                             </h3>

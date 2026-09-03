@@ -116,7 +116,7 @@ function slotStyle(card: { wide: { x: number; y: number } | null; stacked: { x: 
                     class="hero-fade mt-10 flex flex-wrap items-center gap-x-7 gap-y-4 tablet-wide:mt-14"
                     style="--reveal-delay: 620ms"
                 >
-                    <p class="ea-eyebrow ea-eyebrow--bare !text-Neutral/400">{{ $t('hero.partners') }}</p>
+                    <p class="ea-eyebrow ea-eyebrow--bare !text-gray-400">{{ $t('hero.partners') }}</p>
                     <ul class="flex flex-wrap items-center gap-x-7 gap-y-3">
                         <li v-for="partner in HERO_PARTNERS" :key="partner.id">
                             <!-- Inlined, not <img>: each mark is drawn two-tone

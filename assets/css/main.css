@@ -60,8 +60,8 @@
         min-height: 100%;
         scroll-behavior: smooth;
         -webkit-text-size-adjust: 100%;
-        @apply font-poppins text-Tinted/950;
-        background-color: var(--ea-page-bg, theme('colors.Neutral/White'));
+        @apply font-poppins text-primary;
+        background-color: var(--ea-page-bg, theme('colors.white'));
     }
 
     /* The page background follows the dark bands rather than only the section
@@ -85,7 +85,7 @@
        so body would sit at a flat dark while html was mid-fade, and the page would
        show the tint only in the margins outside the body box. */
     html.is-dark-page {
-        --ea-page-bg: theme('colors.Neutral/800');
+        --ea-page-bg: theme('colors.gray.800');
     }
 
     #__nuxt {
@@ -102,14 +102,14 @@
     }
 
     :focus-visible {
-        outline: 2px solid theme('colors.Blue/600');
+        outline: 2px solid theme('colors.blue.600');
         outline-offset: 3px;
         border-radius: 4px;
     }
 
-    /* Inverted focus ring on the dark bands, where Blue/600 disappears. */
+    /* Inverted focus ring on the dark bands, where blue-600 disappears. */
     .ea-dark :focus-visible {
-        outline-color: theme('colors.Violet/400');
+        outline-color: theme('colors.violet.400');
     }
 
     img,
@@ -171,7 +171,7 @@
        pseudo-element rather than an em dash so it keeps its exact length at
        every size and never wraps away from the label. */
     .ea-eyebrow {
-        @apply inline-flex items-center font-poppins text-[12px] font-normal uppercase leading-3 text-Neutral/400;
+        @apply inline-flex items-center font-poppins text-[12px] font-normal uppercase leading-3 text-gray-400;
         letter-spacing: 0.25em;
     }
     .ea-eyebrow::before {
@@ -180,7 +180,7 @@
         opacity: 0.75;
     }
     .ea-eyebrow--invert {
-        @apply text-Neutral/300;
+        @apply text-gray-300;
     }
     /* The hero's partner label drops the rule — it reads as a caption on the
        logo row rather than as a section eyebrow. Scoped to a modifier so the
@@ -198,14 +198,14 @@
        769 and 1921 have no Tailwind step, and rounding them to `tablet` (600)
        or `wide` (1920) would put the wrong size on a drawn frame. */
     .ea-h1 {
-        @apply font-poppins font-medium text-Tinted/950
+        @apply font-poppins font-medium text-primary
                text-[36px] leading-[42px] tracking-[-1.8px]
                min-[769px]:text-[48px] min-[769px]:leading-[56px]
                desktop:text-[56px] desktop:leading-[64px]
                min-[1921px]:text-[64px] min-[1921px]:leading-[74px];
     }
     .ea-h2 {
-        @apply font-poppins font-medium text-Tinted/950
+        @apply font-poppins font-medium text-primary
                text-[1.875rem] leading-[1.2] tracking-[-0.8px]
                tablet:text-[2.25rem] tablet:tracking-[-1.2px]
                tablet-wide:text-[2.5rem] tablet-wide:tracking-[-1.5px]
@@ -220,26 +220,26 @@
                desktop:text-[4rem] desktop:leading-[1.0625] desktop:tracking-[-2px];
     }
     .ea-h3 {
-        @apply font-poppins text-[1.125rem] font-semibold leading-[1.4] tracking-[-0.4px] text-Tinted/950
+        @apply font-poppins text-[1.125rem] font-semibold leading-[1.4] tracking-[-0.4px] text-primary
                tablet-wide:text-[1.25rem] tablet-wide:leading-[1.4] tablet-wide:tracking-[-0.5px];
     }
     .ea-h4 {
-        @apply font-poppins text-[1.5rem] font-medium leading-[1.35] tracking-[-0.6px] text-Tinted/950
+        @apply font-poppins text-[1.5rem] font-medium leading-[1.35] tracking-[-0.6px] text-primary
                tablet-wide:text-[2rem] tablet-wide:leading-[1.375] tablet-wide:tracking-[-1px];
     }
 
     /* Prose. Roboto, generous leading. */
     .ea-lead {
-        @apply font-franklin text-[1.0625rem] leading-[1.6] text-Tinted/700
+        @apply font-franklin text-[1.0625rem] leading-[1.6] text-secondary
                tablet:text-[1.125rem] tablet:leading-[1.65]
                desktop:text-[1.25rem] desktop:leading-[1.5];
     }
     .ea-lead--tight {
-        @apply font-franklin text-[1rem] leading-[1.65] text-Neutral/800
+        @apply font-franklin text-[1rem] leading-[1.65] text-gray-800
                tablet:text-[1.125rem] tablet:leading-[1.667];
     }
     .ea-body {
-        @apply font-franklin text-[0.9375rem] leading-[1.6] text-Tinted/700 tablet:text-[1rem] tablet:leading-[1.625];
+        @apply font-franklin text-[0.9375rem] leading-[1.6] text-secondary tablet:text-[1rem] tablet:leading-[1.625];
     }
     /* 14/24, which is the research card's excerpt — the only place this size is
        drawn as prose. "What you get" reuses the size at a tighter 20px leading
@@ -247,12 +247,12 @@
        sites; both of those must carry the SAME override, since one of them is
        the invisible height reserve that keeps the list from reflowing. */
     .ea-body--sm {
-        @apply font-franklin text-[0.875rem] leading-6 text-Tinted/700;
+        @apply font-franklin text-[0.875rem] leading-6 text-secondary;
     }
 
     /* Inverted prose for the dark bands. */
-    .ea-lead--invert { @apply text-Tinted/100; }
-    .ea-body--invert { @apply text-Tinted/200; }
+    .ea-lead--invert { @apply text-neutral-100; }
+    .ea-body--invert { @apply text-neutral-200; }
 
     /* The brand gradient, clipped to the glyphs. `inline` (not inline-block) so
        a gradient run wraps mid-phrase without breaking the line box, and a
@@ -277,11 +277,11 @@
     }
     @supports not ((background-clip: text) or (-webkit-background-clip: text)) {
         .ea-grad {
-            @apply text-Blue/600;
+            @apply text-blue-600;
             -webkit-text-fill-color: currentColor;
         }
-        .ea-grad--dark { @apply text-Violet/400; }
-        .ea-grad--stat { @apply text-Blue/500; }
+        .ea-grad--dark { @apply text-violet-400; }
+        .ea-grad--stat { @apply text-blue-500; }
     }
 
     /* ============================================================ Buttons == */
@@ -370,13 +370,13 @@
 
     /* Ink ("Dark BG"): solid pill that lightens as it is pressed. */
     .ea-btn--ink {
-        @apply bg-Tinted/900 text-white shadow-ea-pill;
+        @apply bg-neutral-900 text-white shadow-ea-pill;
     }
     .ea-btn--ink:hover {
-        @apply bg-Tinted/800;
+        @apply bg-neutral-800;
     }
     .ea-btn--ink:active {
-        @apply bg-Tinted/700;
+        @apply bg-neutral-700;
         transform: scale(0.985);
     }
 
@@ -384,25 +384,25 @@
        is engaged — 600 -> 400 -> 300 — which is the design's way of showing the
        press without a fill change. No shadow in any state. */
     .ea-btn--stroke {
-        @apply border-2 border-Neutral/100 bg-white tracking-[0.01em] text-Neutral/600;
+        @apply border-2 border-gray-100 bg-white tracking-[0.01em] text-gray-600;
     }
     .ea-btn--stroke:hover {
-        @apply border-Neutral/200 bg-white text-Neutral/400;
+        @apply border-gray-200 bg-white text-gray-400;
     }
     .ea-btn--stroke:active {
-        @apply border-Neutral/100 bg-Neutral/25 text-Neutral/300;
+        @apply border-gray-100 bg-gray-25 text-gray-300;
         transform: scale(0.985);
     }
 
     /* White ("White BG"): for the closing banner and other dark grounds. */
     .ea-btn--white {
-        @apply bg-white tracking-[0.01em] text-Tinted/800 shadow-ea-pill;
+        @apply bg-white tracking-[0.01em] text-neutral-800 shadow-ea-pill;
     }
     .ea-btn--white:hover {
-        @apply bg-Neutral/25 text-Tinted/600;
+        @apply bg-gray-25 text-neutral-600;
     }
     .ea-btn--white:active {
-        @apply bg-Neutral/50 text-Tinted/600;
+        @apply bg-gray-50 text-neutral-600;
         transform: scale(0.985);
     }
 
@@ -414,7 +414,7 @@
        costs no layout width. A real border would leave 236 and shift every
        right-aligned figure in the ledger. */
     .ea-card {
-        @apply rounded-[20px] bg-white shadow-ea-card ring-2 ring-inset ring-Tinted/100;
+        @apply rounded-[20px] bg-white shadow-ea-card ring-2 ring-inset ring-neutral-100;
         transition: transform 0.6s theme('transitionTimingFunction.smooth'),
                     box-shadow 0.6s theme('transitionTimingFunction.smooth');
     }
@@ -532,25 +532,25 @@
 
     .ea-solution-row {
         @apply grid w-full grid-cols-[2rem_1fr] items-start gap-x-5 border-b py-3 text-left;
-        border-color: theme('colors.Tinted/100');
+        border-color: theme('colors.neutral.100');
         transition: border-color 0.5s theme('transitionTimingFunction.smooth');
     }
     .ea-solution-row__title {
-        @apply block font-poppins text-[14px] font-medium leading-5 text-Neutral/800;
+        @apply block font-poppins text-[14px] font-medium leading-5 text-gray-800;
     }
     .ea-solution-row[aria-expanded='true'] {
-        border-color: theme('colors.Tinted/600');
+        border-color: theme('colors.neutral.600');
     }
     .ea-solution-row__index {
-        @apply font-poppins text-[12px] leading-5 text-Tinted/300;
+        @apply font-poppins text-[12px] leading-5 text-neutral-300;
         font-variant-numeric: tabular-nums;
         transition: color 0.4s theme('transitionTimingFunction.smooth');
     }
     .ea-solution-row[aria-expanded='true'] .ea-solution-row__index {
-        @apply font-medium text-Blue/600;
+        @apply font-medium text-blue-600;
     }
     .ea-solution-row:hover .ea-solution-row__index {
-        @apply text-Tinted/600;
+        @apply text-neutral-600;
     }
     .ea-solution-row__body {
         display: grid;
@@ -765,8 +765,8 @@
        the two cannot be collapsed into one declaration. See the token comment in
        tailwind.config.ts. */
     .ea-chip__bubble {
-        @apply grid h-5 w-5 shrink-0 place-items-center rounded-full bg-Bubble/pearl
-               bg-ea-bubble text-Tinted/800 shadow-ea-bubble;
+        @apply grid h-5 w-5 shrink-0 place-items-center rounded-full bg-neutral-200
+               bg-ea-bubble text-neutral-800 shadow-ea-bubble;
     }
 
     /* ====================================================== Hero collage == */
@@ -820,8 +820,8 @@
        page it is matching is the coherent outcome — it is the one case where the
        bar must NOT be treated as an independent animation. */
     .ea-trustpilot {
-        background-color: var(--ea-page-bg, theme('colors.Neutral/White'));
-        border-top: 1px solid rgb(240 241 247 / calc(1 - var(--ea-page-tint, 0))); /* Tinted/50 */
+        background-color: var(--ea-page-bg, theme('colors.white'));
+        border-top: 1px solid rgb(240 241 247 / calc(1 - var(--ea-page-tint, 0))); /* neutral-50 */
         border-bottom: 1px solid rgb(240 241 247 / calc(1 - var(--ea-page-tint, 0)));
     }
     .ea-trustpilot__inner {
@@ -1399,16 +1399,16 @@
        grid cell. */
 
     /* The replay control under the copy — Figma "Playback control" (623:3161).
-       Tinted/500 at 20%, lifting to 50% on hover; the glyph and the ring live in
+       neutral-500 at 20%, lifting to 50% on hover; the glyph and the ring live in
        the component's SVG. Written as rgba because the opacity modifier cannot be
        stacked onto a colour name that already carries a slash. */
     .ea-playback {
         @apply grid h-8 w-8 place-items-center rounded-full;
-        background-color: rgba(122, 127, 163, 0.2); /* Tinted/500 at 20% */
+        background-color: rgba(122, 127, 163, 0.2); /* neutral-500 at 20% */
         transition: background-color 0.2s theme('transitionTimingFunction.smooth');
     }
     .ea-playback:hover {
-        background-color: rgba(122, 127, 163, 0.5); /* Tinted/500 at 50% */
+        background-color: rgba(122, 127, 163, 0.5); /* neutral-500 at 50% */
     }
 
     /* The line that drops out of the resolved mark. It starts at the centre of
@@ -1419,7 +1419,7 @@
         position: absolute;
         left: 50%;
         top: 50%;
-        background-color: theme('colors.Neutral/White');
+        background-color: theme('colors.white');
         will-change: height;
     }
 
@@ -1461,21 +1461,21 @@
        specificity. */
     .ea-header__link {
         @apply relative h-[40px] items-center justify-center whitespace-nowrap rounded-full px-5
-               font-poppins text-[14px] font-medium tracking-[0.01em] text-Tinted/950;
+               font-poppins text-[14px] font-medium tracking-[0.01em] text-primary;
         transition: background-color var(--ea-hover, 0.3s) theme('transitionTimingFunction.smooth'),
                     color var(--ea-hover, 0.3s) theme('transitionTimingFunction.smooth');
     }
     .ea-header__link:hover {
-        @apply cursor-pointer bg-Tinted/50;
+        @apply cursor-pointer bg-surface-alt;
     }
     .ea-header__link:active,
     .ea-header__link[aria-current='page'] {
-        @apply bg-Tinted/100;
+        @apply bg-sunken;
     }
 
     /* Audience switch ("Site Mode Switch", node 498:2738/498:2715). */
     .ea-header__switch {
-        @apply flex items-center gap-1 rounded-[9px] bg-Tinted/50 p-1;
+        @apply flex items-center gap-1 rounded-[9px] bg-surface-alt p-1;
         transition: background-color var(--ea-hover, 0.3s) theme('transitionTimingFunction.smooth');
     }
     /* 28px tall, not the 38 a 12px line box would give: Figma trims the label to
@@ -1483,15 +1483,15 @@
        rather than inherited from the leading. */
     .ea-header__switch-item {
         @apply flex h-7 items-center justify-center rounded-[7px] px-2.5
-               font-poppins text-[12px] font-normal tracking-[0.01em] text-Tinted/600;
+               font-poppins text-[12px] font-normal tracking-[0.01em] text-neutral-600;
         transition: color var(--ea-hover, 0.3s) theme('transitionTimingFunction.smooth');
     }
     .ea-header__switch-item--current {
-        @apply bg-Tinted/600 text-Tinted/25;
+        @apply bg-neutral-600 text-neutral-25;
         filter: drop-shadow(-2px 0 4px rgba(67, 62, 104, 0.2)) drop-shadow(-2px 0 2px rgba(67, 62, 104, 0.12));
     }
     .ea-header__switch-idle:hover {
-        @apply cursor-pointer text-Tinted/950;
+        @apply cursor-pointer text-primary;
     }
     /* Inside the menu the switch spans the panel and the two halves split it. */
     .ea-header__switch--wide {
@@ -1548,13 +1548,13 @@
         transition: background-color 0.2s theme('transitionTimingFunction.smooth');
     }
     .ea-header__burger:hover {
-        @apply cursor-pointer bg-Tinted/50;
+        @apply cursor-pointer bg-surface-alt;
     }
     .ea-header__burger:active {
-        @apply bg-Tinted/100;
+        @apply bg-sunken;
     }
     .ea-header__burger span {
-        @apply absolute left-1/2 -ml-2 h-0.5 w-4 bg-Tinted/900;
+        @apply absolute left-1/2 -ml-2 h-0.5 w-4 bg-neutral-900;
         /* Closing: un-rotate first, then slide back apart. */
         transition: rotate 0.2s cubic-bezier(0.5, 0, 0.5, 1) 0s,
                     translate 0.2s linear 0.2s,
@@ -1636,18 +1636,18 @@
        Padding is 6, not the file's 8: the 2px stroke is drawn INSIDE in Figma,
        and `border-box` counts a CSS border, so 2+6+30+6+2 is the drawn 46x36. */
     .ea-lang__trigger {
-        @apply flex h-9 w-[46px] items-center justify-center rounded-xl border-2 border-Tinted/800 bg-Neutral/800 p-1.5;
+        @apply flex h-9 w-[46px] items-center justify-center rounded-xl border-2 border-neutral-800 bg-gray-800 p-1.5;
         transition: background-color var(--ea-hover, 0.3s) theme('transitionTimingFunction.smooth'),
                     border-color var(--ea-hover, 0.3s) theme('transitionTimingFunction.smooth');
     }
     .ea-lang__trigger:hover {
-        @apply cursor-pointer border-Tinted/600 bg-Tinted/900;
+        @apply cursor-pointer border-neutral-600 bg-neutral-900;
     }
     /* Pressed and open share a skin — while the panel is up the chip should read
        as engaged, which is what the drawn Pressed state is for. */
     .ea-lang__trigger:active,
     .ea-lang__trigger[aria-expanded='true'] {
-        @apply border-Tinted/400 bg-Tinted/900;
+        @apply border-neutral-400 bg-neutral-900;
     }
 
     /* Opens upward: the chip sits at the top of a very long footer, so downward
@@ -1657,29 +1657,29 @@
        the left edge). Anchoring the 200px panel to `right-0` at every width
        sends it ~150px off the left of a 390px viewport. */
     .ea-lang__panel {
-        @apply absolute bottom-full left-0 z-30 mb-2 w-[200px] rounded-[20px] bg-Tinted/900 p-3 shadow-ea-menu
+        @apply absolute bottom-full left-0 z-30 mb-2 w-[200px] rounded-[20px] bg-neutral-900 p-3 shadow-ea-menu
                tablet-wide:left-auto tablet-wide:right-0;
     }
     .ea-lang__option {
         @apply flex w-full items-center gap-3 rounded-lg px-3 py-2.5
-               font-poppins text-[16px] font-medium leading-4 tracking-[0.02em] text-Neutral/100;
+               font-poppins text-[16px] font-medium leading-4 tracking-[0.02em] text-gray-100;
         transition: background-color var(--ea-hover, 0.3s) theme('transitionTimingFunction.smooth'),
                     color var(--ea-hover, 0.3s) theme('transitionTimingFunction.smooth');
     }
     /* Figma's Hover fill for an option is #2F2A4A — which is exactly the panel's
-       own ground, so as drawn the hover is invisible. Tinted/800 (the file's
+       own ground, so as drawn the hover is invisible. neutral-800 (the file's
        "Current" fill) is used instead: it is the next step up the same ramp and
        is the only value in the set that actually reads against the panel.
        Flagged for Diego. */
     .ea-lang__option:hover,
     .ea-lang__option:focus-visible {
-        @apply cursor-pointer bg-Tinted/800 text-white;
+        @apply cursor-pointer bg-neutral-800 text-white;
     }
     .ea-lang__option:active {
-        @apply bg-Tinted/600 text-white;
+        @apply bg-neutral-600 text-white;
     }
     .ea-lang__option[aria-current='true'] {
-        @apply bg-Tinted/800 text-white;
+        @apply bg-neutral-800 text-white;
     }
 
     .ea-lang-enter-active,
@@ -1744,7 +1744,7 @@
         transition: opacity 0.35s theme('transitionTimingFunction.smooth');
     }
     .ea-slide__frame {
-        @apply relative h-full w-full overflow-hidden rounded-xl bg-Tinted/25 tablet-wide:rounded-3xl;
+        @apply relative h-full w-full overflow-hidden rounded-xl bg-surface tablet-wide:rounded-3xl;
     }
 
     /* The handheld slide's slot. Opens and closes on grid-template-rows 0fr <-> 1fr
@@ -1759,11 +1759,11 @@
 
     /* The step scroller's progress bars. */
     .ea-progress {
-        @apply h-1 rounded-sm bg-Tinted/50;
+        @apply h-1 rounded-sm bg-surface-alt;
         transition: background-color 0.45s theme('transitionTimingFunction.smooth');
     }
     .ea-progress[data-active='true'] {
-        @apply bg-Tinted/200;
+        @apply bg-neutral-200;
     }
 
     /* Horizontal snap scroller — native scrolling, no JS carousel. */

@@ -177,11 +177,11 @@ onMounted(() => {
             <article
                 v-for="(step, index) in STEPS"
                 :key="step.id"
-                class="flex w-[min(86vw,660px)] shrink-0 flex-col gap-6 rounded-3xl border-2 border-Tinted/100 bg-white
+                class="flex w-[min(86vw,660px)] shrink-0 flex-col gap-6 rounded-3xl border-2 border-default bg-white
                        p-5 pb-8 tablet-wide:p-[30px] tablet-wide:pb-[46px]"
                 :aria-label="`${index + 1}. ${$t(`howItWorks.steps.${step.id}.title`)}`"
             >
-                <div class="ea-media ea-media-hover aspect-[596/400] w-full rounded-xl bg-Tinted/100">
+                <div class="ea-media ea-media-hover aspect-[596/400] w-full rounded-xl bg-sunken">
                     <AppPicture
                         :media="step.media"
                         loading="lazy"
@@ -220,7 +220,7 @@ onMounted(() => {
                              glyphs would otherwise be read out as "zero one". -->
                         <span
                             class="ea-num font-poppins text-[1.25rem] font-semibold leading-5 transition-colors duration-500"
-                            :class="index === activeIndex ? 'text-Blue/600' : 'text-Tinted/300'"
+                            :class="index === activeIndex ? 'text-blue-600' : 'text-neutral-300'"
                             aria-hidden="true"
                         >
                             {{ String(index + 1).padStart(2, '0') }}
@@ -249,7 +249,7 @@ onMounted(() => {
                     v-for="(step, index) in STEPS"
                     :key="step.id"
                     type="button"
-                    class="relative h-1 flex-1 rounded-[1px] bg-Tinted/50 before:absolute before:inset-x-0
+                    class="relative h-1 flex-1 rounded-[1px] bg-surface-alt before:absolute before:inset-x-0
                            before:-inset-y-[10px] before:content-['']"
                     :aria-label="$t('common.goToStep', { n: index + 1 })"
                     :aria-current="index === activeIndex ? 'true' : undefined"
@@ -262,7 +262,7 @@ onMounted(() => {
                 <span
                     aria-hidden="true"
                     class="pointer-events-none absolute inset-y-[10px] left-0 w-[calc((100%-30px)/4)] rounded-[1px]
-                           bg-Tinted/200 will-change-transform"
+                           bg-neutral-200 will-change-transform"
                     :style="{ '--p': position, transform: 'translateX(calc(var(--p) * (100% + 10px)))' }"
                 />
             </div>

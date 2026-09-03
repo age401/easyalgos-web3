@@ -50,7 +50,7 @@ function starFill(star: number) {
 
             <div class="flex flex-wrap items-center gap-3 min-[769px]:gap-4" aria-hidden="true">
                 <div class="flex items-center gap-3">
-                    <span class="font-franklin text-[12px] font-medium tracking-[-0.02em] text-Tinted/800 min-[769px]:text-[14px]">
+                    <span class="font-franklin text-[12px] font-medium tracking-[-0.02em] text-neutral-800 min-[769px]:text-[14px]">
                         {{ $t('trustpilot.excellent') }}
                     </span>
                     <span class="flex gap-0.5">
@@ -71,17 +71,17 @@ function starFill(star: number) {
                 </div>
 
                 <!-- compact score: <=768px only -->
-                <p class="order-2 font-franklin text-[12px] font-medium tracking-[-0.02em] text-Tinted/700 min-[769px]:hidden">
+                <p class="order-2 font-franklin text-[12px] font-medium tracking-[-0.02em] text-secondary min-[769px]:hidden">
                     {{ rating }}
                 </p>
 
                 <!-- separator dot: before the score on >=769px, after it on <=768px -->
-                <span class="order-3 h-1 w-1 shrink-0 rounded-full bg-Tinted/100 min-[769px]:order-2" />
+                <span class="order-3 h-1 w-1 shrink-0 rounded-full bg-sunken min-[769px]:order-2" />
 
                 <!-- full score sentence + reviews link: >=769px only -->
-                <p class="hidden font-franklin text-[12px] font-medium tracking-[-0.02em] text-Tinted/700 min-[769px]:order-3 min-[769px]:block">
+                <p class="hidden font-franklin text-[12px] font-medium tracking-[-0.02em] text-secondary min-[769px]:order-3 min-[769px]:block">
                     {{ $t('trustpilot.basedOn', { rating }) }}
-                    <a href="https://www.trustpilot.com/" rel="noopener nofollow" target="_blank" class="underline decoration-Tinted/300 underline-offset-2 transition-colors duration-300 hover:text-Tinted/950">
+                    <a href="https://www.trustpilot.com/" rel="noopener nofollow" target="_blank" class="underline decoration-neutral-300 underline-offset-2 transition-colors duration-300 hover:text-primary">
                         {{ $t('trustpilot.reviews', { count: reviews }) }}
                     </a>
                 </p>

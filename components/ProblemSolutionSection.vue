@@ -89,7 +89,7 @@ function phaseState(index: number): 'pending' | 'active' | 'past' {
     if (phase.value === -1) return index === 0 ? 'past' : 'pending'
     return index < phase.value ? 'past' : 'pending'
 }
-const { active: tinted } = usePageTint(sectionRef, [23, 23, 23], isPinned) // Neutral/800
+const { active: tinted } = usePageTint(sectionRef, [23, 23, 23], isPinned) // gray-800
 
 // The cards are "the different places" — see ROLE_CARDS for the geometry and why
 // each one is where it is. Collapsing their container toward its own centre pulls
@@ -141,7 +141,7 @@ function onConverged() {
         data-dark-band
         data-dark-page="off"
         class="ea-dark relative pinned:h-[380vh] stacked:overflow-x-clip"
-        :class="tinted ? 'bg-transparent' : 'bg-Neutral/800'"
+        :class="tinted ? 'bg-transparent' : 'bg-gray-800'"
     >
         <!-- A viewport-tall floor on the stacked layout, so the piece always plays
              on a full screen of its own dark rather than in a band the reader can

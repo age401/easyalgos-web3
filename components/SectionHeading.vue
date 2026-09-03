@@ -40,7 +40,7 @@ const headingTag = computed(() => `h${props.level}`)
             :class="[
                 level === 1 ? 'ea-h1' : 'ea-h2',
                 eyebrow ? 'mt-6 tablet-wide:mt-9' : '',
-                // Important: .ea-h2 bakes in text-Tinted/950 via @apply, and a
+                // Important: .ea-h2 bakes in text-primary via @apply, and a
                 // plain `text-white` utility is the same specificity — which of
                 // the two wins then depends on stylesheet order. Force it.
                 invert ? '!text-white' : ''

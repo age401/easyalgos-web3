@@ -86,7 +86,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-    <header ref="root" class="ea-header relative z-50 w-full border-b border-Tinted/100 bg-white">
+    <header ref="root" class="ea-header relative z-50 w-full border-b border-default bg-white">
         <div class="ea-header__inner">
             <!-- Wordmark + audience switch -->
             <div class="flex shrink-0 items-center gap-6">
@@ -111,7 +111,7 @@ onBeforeUnmount(() => {
                 <!-- Audience switch. This is the traders site, so Traders is the
                      current segment and Developers is the link away. -->
                 <div class="hidden items-center gap-2 min-[841px]:flex">
-                    <span class="font-franklin text-[12px] leading-4 text-Tinted/400">{{ $t('common.for') }}</span>
+                    <span class="font-franklin text-[12px] leading-4 text-neutral-400">{{ $t('common.for') }}</span>
                     <div class="ea-header__switch">
                         <span aria-current="page" class="ea-header__switch-item ea-header__switch-item--current">
                             {{ $t('common.traders') }}
@@ -218,7 +218,7 @@ onBeforeUnmount(() => {
 
                 <div>
                     <div class="py-3">
-                        <div class="h-px w-full bg-Tinted/100" />
+                        <div class="h-px w-full bg-sunken" />
                     </div>
                     <div class="flex flex-col gap-4">
                         <a :href="LOGIN_HREF" class="ea-header__link flex w-full" @click="close">

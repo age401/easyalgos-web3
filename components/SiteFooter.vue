@@ -38,11 +38,11 @@ const year = new Date().getFullYear()
 
 // The four footer-link components in Figma (445:1756 mail, 445:1759 telegram,
 // 445:1764 youtube, 445:1842 plain text) share ONE type ramp and ONE interaction:
-// Roboto Regular 16, ls 2%, and a 60ms ease-out colour change to Violet/400
+// Roboto Regular 16, ls 2%, and a 60ms ease-out colour change to violet-400
 // (#8B7EFF) on hover. Nothing moves — the design has no hover translate.
 //
 // They differ in exactly two ways, both handled in the template rather than here:
-//  - resting colour: Tinted/25 for the plain links, Tinted/200 for the contacts;
+//  - resting colour: neutral-25 for the plain links, neutral-200 for the contacts;
 //  - the mail link has NO icon. Only telegram and youtube carry one (20x20,
 //    1.5px stroke in the text colour, 12px gap).
 //
@@ -54,16 +54,16 @@ const year = new Date().getFullYear()
 // letter-spacing and a white + translateX(2px) hover, none of which the Figma
 // components do.
 const LINK_TYPE = 'font-franklin text-[15px] leading-5 tracking-[0.02em] tablet:text-[16px]'
-const LINK_HOVER = 'transition-colors duration-[60ms] ease-out hover:text-Violet/400'
+const LINK_HOVER = 'transition-colors duration-[60ms] ease-out hover:text-violet-400'
 
 /** A clickable footer link. */
-const LINK = `${LINK_TYPE} ${LINK_HOVER} text-Tinted/25`
+const LINK = `${LINK_TYPE} ${LINK_HOVER} text-neutral-25`
 /** An EA name. Same ramp, but these are not links yet, so no hover affordance. */
-const LEAF = `${LINK_TYPE} text-Tinted/25`
+const LEAF = `${LINK_TYPE} text-neutral-25`
 /** A column heading, and the developer names, which are typed as headings. */
-const HEADING = `${LINK_TYPE} mb-3 text-Tinted/500`
-/** The 2px rule between blocks. Figma 676:2239 — Neutral/700, full-bleed. */
-const RULE = 'my-16 h-0.5 border-0 bg-Neutral/700 tablet-wide:my-24'
+const HEADING = `${LINK_TYPE} mb-3 text-tertiary`
+/** The 2px rule between blocks. Figma 676:2239 — gray-700, full-bleed. */
+const RULE = 'my-16 h-0.5 border-0 bg-gray-700 tablet-wide:my-24'
 
 // Only telegram and youtube are drawn with a mark; mail is text alone.
 const CONTACT_ITEMS = [
@@ -74,7 +74,7 @@ const CONTACT_ITEMS = [
 </script>
 
 <template>
-    <footer data-dark-band class="ea-dark bg-Neutral/800 py-16 tablet-wide:py-24">
+    <footer data-dark-band class="ea-dark bg-gray-800 py-16 tablet-wide:py-24">
         <div class="ea-container">
             <!-- Head, row 1: the wordmark, alone. -->
             <!-- `flex w-fit`, not `inline-flex`: an inline-level box sits on a
@@ -101,7 +101,7 @@ const CONTACT_ITEMS = [
                     :href="item.href"
                     :rel="item.id === 'email' ? undefined : 'noopener'"
                     :target="item.id === 'email' ? undefined : '_blank'"
-                    :class="[LINK_TYPE, LINK_HOVER, 'inline-flex items-center gap-3 justify-self-start text-Tinted/200']"
+                    :class="[LINK_TYPE, LINK_HOVER, 'inline-flex items-center gap-3 justify-self-start text-neutral-200']"
                 >
                     <!-- The mail component (445:1756) is text only — deliberately
                          no envelope mark, unlike telegram and youtube. -->
@@ -190,7 +190,7 @@ const CONTACT_ITEMS = [
                  which is why the row gap is the full 96px rather than a tighter
                  in-block value. -->
             <div>
-                <h2 :class="[LINK_TYPE, 'mb-10 text-Violet/500']">{{ $t('footer.groups.developers') }}</h2>
+                <h2 :class="[LINK_TYPE, 'mb-10 text-violet-500']">{{ $t('footer.groups.developers') }}</h2>
                 <div class="grid grid-cols-2 gap-x-6 gap-y-12 tablet-wide:grid-cols-4 tablet-wide:gap-x-14 tablet-wide:gap-y-24">
                     <div v-for="developer in FOOTER_DEVELOPERS" :key="developer.name">
                         <h3 :class="HEADING">{{ developer.name }}</h3>
@@ -212,7 +212,7 @@ const CONTACT_ITEMS = [
                 <p
                     v-for="(paragraph, index) in LEGAL_NATURE_OF_BUSINESS"
                     :key="`nature-${index}`"
-                    class="mt-6 font-franklin text-[12px] leading-4 text-Neutral/300"
+                    class="mt-6 font-franklin text-[12px] leading-4 text-gray-300"
                 >
                     {{ paragraph }}
                 </p>
@@ -223,15 +223,15 @@ const CONTACT_ITEMS = [
                 <p
                     v-for="(paragraph, index) in LEGAL_EARNINGS_AND_RISK"
                     :key="`earnings-${index}`"
-                    class="mt-6 font-franklin text-[12px] leading-4 text-Neutral/300"
+                    class="mt-6 font-franklin text-[12px] leading-4 text-gray-300"
                 >
                     {{ paragraph }}
                 </p>
             </div>
 
-            <hr class="mt-16 h-0.5 border-0 bg-Neutral/700 tablet-wide:mt-24" />
+            <hr class="mt-16 h-0.5 border-0 bg-gray-700 tablet-wide:mt-24" />
 
-            <p class="mt-6 text-center font-franklin text-[14px] leading-4 text-Neutral/400">
+            <p class="mt-6 text-center font-franklin text-[14px] leading-4 text-gray-400">
                 {{ $t('footer.copyright', { year }) }}
             </p>
         </div>

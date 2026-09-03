@@ -54,7 +54,7 @@ const ROWS = [TESTIMONIALS.slice(0, 2), TESTIMONIALS.slice(2)]
 <template>
     <section
         data-dark-band
-        class="ea-dark ea-section bg-Neutral/800"
+        class="ea-dark ea-section bg-gray-800"
         :aria-label="$t('testimonials.srLabel')"
     >
         <div class="ea-container flex flex-col gap-12">
@@ -118,7 +118,7 @@ const ROWS = [TESTIMONIALS.slice(0, 2), TESTIMONIALS.slice(2)]
                              feature cards; the compact cards have nothing to indent
                              from. -->
                         <p
-                            class="font-franklin text-[16px] leading-[24px] tracking-[0.01em] text-Neutral/50"
+                            class="font-franklin text-[16px] leading-[24px] tracking-[0.01em] text-gray-50"
                             :class="item.headline ? 'tablet:pl-6' : ''"
                         >
                             &ldquo;{{ $t(`testimonials.items.${item.id}.quote`) }}&rdquo;
@@ -128,7 +128,7 @@ const ROWS = [TESTIMONIALS.slice(0, 2), TESTIMONIALS.slice(2)]
                         <a
                             v-if="item.video"
                             :href="item.video"
-                            class="mt-1 inline-flex items-center gap-2.5 self-start rounded-full border border-Neutral/600 py-2 pl-2 pr-3 font-poppins text-[12px] leading-3 tracking-[0.01em] text-Neutral/300 transition-colors hover:border-Neutral/500 hover:text-white tablet:self-end"
+                            class="mt-1 inline-flex items-center gap-2.5 self-start rounded-full border border-gray-600 py-2 pl-2 pr-3 font-poppins text-[12px] leading-3 tracking-[0.01em] text-gray-300 transition-colors hover:border-gray-500 hover:text-white tablet:self-end"
                         >
                             <span class="h-4 w-4 rounded-full bg-[rgba(122,127,163,0.2)]" aria-hidden="true" />
                             {{ $t('testimonials.watch') }}
@@ -139,16 +139,16 @@ const ROWS = [TESTIMONIALS.slice(0, 2), TESTIMONIALS.slice(2)]
                         :class="
                             item.variant === 'feature'
                                 ? 'tablet:col-start-1 tablet:row-start-2'
-                                : 'border-t border-Neutral/600 pt-8 tablet:col-start-2 tablet:row-start-2 tablet:mt-8'
+                                : 'border-t border-gray-600 pt-8 tablet:col-start-2 tablet:row-start-2 tablet:mt-8'
                         "
                     >
                         <!-- Drawn SemiBold; rendered Medium. Only Roboto 500 is
                              self-hosted, and 600 would be synthesised — a real
                              500 reads closer to the drawing than a faked 600. -->
-                        <p class="font-franklin text-[14px] font-medium leading-[18px] text-Tinted/50">
+                        <p class="font-franklin text-[14px] font-medium leading-[18px] text-neutral-50">
                             {{ $t(`testimonials.items.${item.id}.name`) }}
                         </p>
-                        <p class="mt-0.5 font-franklin text-[13px] leading-4 text-Neutral/300">
+                        <p class="mt-0.5 font-franklin text-[13px] leading-4 text-gray-300">
                             {{ $t(`testimonials.items.${item.id}.role`) }}
                         </p>
                     </figcaption>

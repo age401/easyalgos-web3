@@ -1,10 +1,39 @@
 import type { Config } from 'tailwindcss'
-import colors from 'tailwindcss/colors'
+import { eaTheme } from './design-system/tailwind.tokens'
 import { PINNED_MEDIA, STACKED_MEDIA } from './utils/breakpoints'
 
-// EasyAlgos design system (ported verbatim from PROJECT_STACK_GUIDE_FOR_AI.md §17)
-// plus the v2 "Ledger" additions at the bottom of the colors map. Ship as-is for
-// copy-paste compatibility with the main EasyAlgos client.
+// Colour, typography, space and shape come from the EasyAlgos Web Design System
+// (design-system/tokens.json, mirrored in Figma). They are imported wholesale
+// from design-system/tailwind.tokens.ts rather than restated here, so the
+// codebase and the Figma library cannot drift.
+//
+// What stays local to this file is the page's own machinery: the breakpoints,
+// the ea-* brand gradients and elevation stacks measured off the design, and the
+// motion keyframes. Those are compositions of the tokens, not tokens themselves.
+// ---- Deliberately outside the design system ----
+// Because textColor/backgroundColor/borderColor are replaced wholesale below,
+// anything added only to `colors` would never reach those utilities. These are
+// spread into all four maps.
+const projectColors = {
+    // Six ecosystem role identity colours. An identity set, not a state set, so
+    // folding them into feedback/* would be wrong and folding them into data/*
+    // would shift four of the six. If roles spread beyond the home page,
+    // promote them to a role/* semantic group with these exact values rather
+    // than remapping them.
+    'Role/trader': '#BC78FF',
+    'Role/developer': '#42DBE0',
+    'Role/broker': '#00F070',
+    'Role/vps': '#C9C2FF',
+    'Role/community': '#B1C4F1',
+    'Role/analytics': '#F1D8B1',
+    // The role chip's shell. #3E4153 is a 14%-saturation blue-grey that falls in
+    // the gap between neutral/* (25–28% saturation) and gray/* (0%) — nothing in
+    // the system lands within ΔE 11 of it. A `neutral-muted` step would close
+    // the gap; until then it stays local.
+    'Chip/bg': '#0E0E10',
+    'Chip/edge': '#3E4153',
+}
+
 export default <Partial<Config>>{
     content: [
         './pages/**/*.{vue,js}',
@@ -31,115 +60,14 @@ export default <Partial<Config>>{
             // and `max-tablet-wide` itself). They are registered as plain variants
             // at the foot of this file instead.
         },
-        colors: {
-            ...colors,
-            'VIOLET': '#4134BC',
-            'VIOLET/100': '#E4E0FF',
-            'VIOLET/200': '#C9C2FF',
-            'VIOLET/300': '#AFA3FF',
-            'VIOLET/400': '#8B7EFF',
-            'VIOLET/500': '#7D73EA',
-            'VIOLET/600': '#7469D7',
-            'VIOLET/700': '#5A50C9',
-            'VIOLET/800': '#4134BC',
-            'PURPLE': '#8B7EFF',
-            'EXTRA-PURPLE': '#8B23FE',
-            'BLUE/BASE': '#205EFB',
-            'BLUE/00': '#F1F4F9',
-            'BLUE/01': '#DEE1EF',
-            'BLUE/02': '#ACBCF0',
-            'BLUE/03': '#7A96F2',
-            'BLUE/04': '#4871F3',
-            'BLUE/05': '#285FF7',
-            'BLUE/05/20': 'rgba(32, 94, 251, 0.2)',
-            'BLUE/05/40': 'rgba(32, 94, 251, 0.4)',
-            'BLUE/06': '#074CFB',
-            'BW/00': '#FFFFFF',
-            'BW/01': '#F0F0F0',
-            'BW/02': '#D2D2D2',
-            'BW/03': '#B4B4B4',
-            'BW/04': '#969696',
-            'BW/05': '#696969',
-            'BW/06': '#4B4B4B',
-            'BW/07': '#2D2D2D',
-            'BW/08': '#1E1E1E',
-            'BW/09': '#222128',
-            'error': '#F04438',
-            'dark-title': '#2E2E2E',
-            'PINK': '#B36DFF',
-            'WARNING': '#FF3437',
-            'Neutral/White': '#FFFFFF',
-            'Neutral/25': '#FAFAFA',
-            'Neutral/50': '#F5F5F5',
-            'Neutral/100': '#E5E5E5',
-            'Neutral/200': '#D4D4D4',
-            'Neutral/300': '#A3A3A3',
-            'Neutral/400': '#737373',
-            'Neutral/500': '#525252',
-            'Neutral/600': '#404040',
-            'Neutral/700': '#262626',
-            'Neutral/800': '#171717',
-            'Tinted/25': '#F7F7FB',
-            'Tinted/50': '#F0F1F7',
-            'Tinted/100': '#E4E6F0',
-            'Tinted/200': '#C9CCDD',
-            'Tinted/300': '#AEB2C9',
-            'Tinted/400': '#9499B6',
-            'Tinted/500': '#7A7FA3',
-            'Tinted/600': '#62678F',
-            'Tinted/700': '#51567A',
-            'Tinted/800': '#433E68',
-            'Tinted/900': '#2F2A4A',
-            'Tinted/950': '#1C1833',
-            'Green/10': '#F0FDF4',
-            'Green/50': '#ADEBC5',
-            'Green/100': '#00DB63',
-            'Green/200': '#00BA38',
-            'Blue/25': '#F5F8FF',
-            'Blue/50': '#EBF1FF',
-            'Blue/100': '#074CFB',
-            'Blue/200': '#A6BFFD',
-            'Blue/400': '#5481F9',
-            'Blue/500': '#3D71F8',
-            'Blue/600': '#285FF7',
-            'Red/10': '#F1B1B1',
-            'Red/50': '#FEF2F2',
-            'Red/100': '#FF1519',
-            'Red/200': '#DC2626',
-            'Gray/200': '#787878',
-            'Orange/100': '#FB951E',
-            // v2 "Ledger" additions — the institutional ink ramp, anchored to the
-            // wordmark ink (#0B1125). Used for dark surfaces instead of pure black.
-            'Ink/950': '#0B1125',
-            'Ink/900': '#101731',
-            'Ink/800': '#161F3E',
-            'Ink/edge': '#232D52',
-            // v3 additions, read off the Figma file.
-            // Mixed-case Violet ramp mirroring the legacy uppercase VIOLET/* one.
-            // The v3 file names its variables this way, so matching it keeps the
-            // classes in the markup readable straight off the design.
-            'Violet/100': '#E4E0FF',
-            'Violet/200': '#C9C2FF',
-            'Violet/300': '#AFA3FF',
-            'Violet/400': '#8B7EFF',
-            'Violet/500': '#7D73EA',
-            'Violet/600': '#7469D7',
-            'Violet/700': '#5A50C9',
-            'Violet/800': '#4134BC',
-            // The role cards floating over the particle cluster.
-            'Chip/bg': '#0E0E10',
-            'Chip/edge': '#3E4153',
-            // The body of a card's bubble, under the `ea-bubble` wash. Shared with
-            // the star map's orbiting dots, which are the same object drawn in SVG.
-            'Bubble/pearl': '#C5CDD5',
-            // Chip label colours — one per ecosystem role, from the Indicators set.
-            'Role/trader': '#BC78FF',
-            'Role/developer': '#42DBE0',
-            'Role/broker': '#00F070',
-            'Role/vps': '#C9C2FF',
-            'Role/community': '#B1C4F1',
-            'Role/analytics': '#F1D8B1',
-        },
+        // ---- Design system colour (design-system/tailwind.tokens.ts) ----
+        // Primitives are literal hex so /opacity modifiers still work.
+        // The per-utility maps below add the semantic roles on top, as var()
+        // so a [data-theme="dark"] subtree flips them with no dark: variants.
+        colors: { ...eaTheme.colors, ...projectColors },
+        textColor: { ...eaTheme.textColor, ...projectColors },
+        backgroundColor: { ...eaTheme.backgroundColor, ...projectColors },
+        borderColor: { ...eaTheme.borderColor, ...projectColors },
         extend: {
             fontFamily: {
                 poppins: ['"Poppins"', 'ui-serif', 'system-ui'],
@@ -154,6 +82,11 @@ export default <Partial<Config>>{
                 // No `inter`: the Figma file specifies Inter Bold on the
                 // Trustpilot bar and nowhere else, and that now renders in
                 // Roboto rather than dragging a third family into the page.
+                //
+                // The design system's own names for the same three faces.
+                // `poppins`/`franklin`/`rubik` above are the legacy aliases and
+                // still resolve; prefer display/text/data in new markup.
+                ...eaTheme.extend.fontFamily,
             },
             fontWeight: {
                 book: '400',
@@ -250,6 +183,9 @@ export default <Partial<Config>>{
                 // is always square, so the two are the same thing here.
                 'ea-bubble':
                     'radial-gradient(ellipse 70.31% 70.31% at 50% 29.69%, rgba(120, 124, 154, 0) 0%, rgba(55, 63, 120, 0.2) 55%, rgba(68, 77, 141, 0.8) 90%)',
+                // The design system's four published gradients. The ea-* entries
+                // above are page-specific compositions and stay as they are.
+                ...eaTheme.extend.backgroundImage,
             },
             boxShadow: {
                 'primary': '0px 16px 20px 0px rgba(63, 97, 235, 0.16)',
@@ -292,14 +228,18 @@ export default <Partial<Config>>{
                 // instead of from the side. Figma 626:7817.
                 'ea-slide-sm':
                     '0 0 60px 0 rgba(128, 123, 143, 0.12), 0 0 48px 0 rgba(37, 32, 51, 0.04), 0 0 24px 0 rgba(37, 32, 51, 0.02), 0 6px 8px 0 rgba(84, 107, 197, 0.04), 0 3px 6px 0 rgba(84, 107, 197, 0.04)',
+                // shadow-card / shadow-raised / shadow-action / shadow-overlay.
+                ...eaTheme.extend.boxShadow,
             },
-            borderRadius: {
-                '1.5xl': '.875rem',
-                '2.5xl': '1.25rem',
-                '4xl': '2rem',
-                '5xl': '2.5rem',
-            },
+            // ---- Design system scales (design-system/tailwind.tokens.ts) ----
+            // The 13-step size ramp, ratio leading, optical tracking, the 4-based
+            // space scale and the six radii measured off the WEB3 design.
+            fontSize: eaTheme.extend.fontSize,
+            letterSpacing: eaTheme.extend.letterSpacing,
             lineHeight: {
+                // The design system's ratio leading.
+                ...eaTheme.extend.lineHeight,
+                // Page-specific fixed leadings, kept from before the migration.
                 '3.5': '.875rem',
                 '4.25': '1.0625rem',
                 '4.5': '1.125rem',
@@ -310,13 +250,16 @@ export default <Partial<Config>>{
                 '15': '4.875rem',
                 '20': '6rem',
             },
-            fontSize: {
-                'xl': '1.3125rem',
-                '3.5xl': '2rem',
-                '3.6xl': '2.125rem',
-                '4.5xl': '2.625rem',
-                '6xl': '4rem',
-            },
+
+            // NOTE — do NOT spread eaTheme.extend.spacing / .borderRadius here.
+            // The design system names space tokens by their pixel value
+            // (space/16 = 16px) while Tailwind's numeric scale is quarter-rems
+            // (4 = 16px). Merging them silently redefines the whole scale:
+            // gap-2 becomes 2px instead of 8px, p-4 becomes 4px instead of 16px.
+            // Same trap on radius, where DS radius/8 would redefine rounded-8.
+            // The DS space and radius scales are exposed as --space-* and
+            // --radius-* custom properties in design-system/tokens.css for
+            // hand-written CSS; Tailwind keeps its own (already 4-based) scale.
             spacing: {
                 '6.5': '1.625rem',
                 '13': '3.25rem',
@@ -324,6 +267,12 @@ export default <Partial<Config>>{
                 '21': '5.5rem',
                 '25': '6.25rem',
                 '29': '7.5rem',
+            },
+            borderRadius: {
+                '1.5xl': '.875rem',
+                '2.5xl': '1.25rem',
+                '4xl': '2rem',
+                '5xl': '2.5rem',
             },
             keyframes: {
                 fadeIn: {
