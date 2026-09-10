@@ -39,12 +39,13 @@ export default defineNuxtConfig({
     },
 
     nitro: {
-        prerender: { routes: ['/'], crawlLinks: false },
+        prerender: { routes: ['/', '/results'], crawlLinks: false },
         compressPublicAssets: { gzip: true, brotli: true }
     },
 
     routeRules: {
         '/': { prerender: true },
+        '/results': { prerender: true },
         // Static assets are content-addressed by the optimize script or stable by
         // name; a year of immutable caching is safe and removes revalidation RTTs.
         '/fonts/**': { headers: { 'cache-control': 'public,max-age=31536000,immutable' } },

@@ -167,12 +167,49 @@
         font-feature-settings: 'tnum';
     }
 
+    /* ---- Design system: the four SEMANTIC text styles ---------------------
+       Figma file 2JF3OpcHBK2A1NediaVEJ7, group "Display - Semantic" /
+       "Body - Semantic". The size ramp lives in tailwind.config.ts as
+       `text-display-*` / `text-body-*`; these four are the styles the system
+       names by ROLE, and they are what a module should reach for. Each bundles
+       all five properties a Figma text style carries — family, weight, size,
+       leading, tracking — plus the colour the design pairs it with, so a module
+       heading is one class rather than six utilities repeated per page.
+
+       The responsive steps ARE the ramp: every breakpoint below lands on a real
+       `display/size/*` token and inherits that token's own leading and tracking,
+       which is exactly why the ramp tokens carry all three values. Nothing here
+       invents a size.
+
+       Colours come from the legacy `Tinted/*` ramp, which is what the WEB3 file
+       is back on — the typography system carries no colour of its own. */
+    .ea-module-heading {
+        @apply font-poppins font-medium text-Tinted/950
+               text-display-28 tablet:text-display-32 tablet-wide:text-display-40 desktop:text-display-48;
+    }
+    /* `Display/Semantic/Module Eyebrow`. Identical metrics to `.ea-eyebrow`
+       below, which is not a coincidence — the system was read off this page. The
+       difference is the 16px rule: `.ea-eyebrow` draws one, this does not. */
+    .ea-module-eyebrow {
+        @apply font-poppins text-module-eyebrow font-normal uppercase text-Neutral/400;
+    }
+    .ea-module-description {
+        @apply font-franklin font-normal text-Tinted/800
+               text-module-description-sm tablet-wide:text-module-description;
+    }
+    .ea-body-text {
+        @apply font-franklin text-body-text font-normal text-Tinted/800;
+    }
+
     /* Eyebrow: a 16px rule, then tracked-out small caps. The rule is a
        pseudo-element rather than an em dash so it keeps its exact length at
-       every size and never wraps away from the label. */
+       every size and never wraps away from the label.
+
+       Metrics now come from `text-module-eyebrow` (12 / 12px / 0.25em) rather
+       than being spelled out — the same three values this rule already carried,
+       so the emitted CSS is unchanged. */
     .ea-eyebrow {
-        @apply inline-flex items-center font-poppins text-[12px] font-normal uppercase leading-3 text-Neutral/400;
-        letter-spacing: 0.25em;
+        @apply inline-flex items-center font-poppins text-module-eyebrow font-normal uppercase text-Neutral/400;
     }
     .ea-eyebrow::before {
         content: '';
@@ -204,12 +241,18 @@
                desktop:text-[56px] desktop:leading-[64px]
                min-[1921px]:text-[64px] min-[1921px]:leading-[74px];
     }
+    /* The desktop step is `Display/Size/48` verbatim — 48 / 125% / -2px — so it
+       reads from the ramp token instead of restating the three values. The three
+       steps below it are NOT on the ramp (36/-1.2px and 40/-1.5px have no
+       equivalent, and both run at 120% where the ramp says 125%), so they stay
+       as authored. Migrating them is a visual change, not a refactor; the module
+       styles above are the on-system alternative. */
     .ea-h2 {
         @apply font-poppins font-medium text-Tinted/950
                text-[1.875rem] leading-[1.2] tracking-[-0.8px]
                tablet:text-[2.25rem] tablet:tracking-[-1.2px]
                tablet-wide:text-[2.5rem] tablet-wide:tracking-[-1.5px]
-               desktop:text-[3rem] desktop:leading-[1.25] desktop:tracking-[-2px];
+               desktop:text-display-48;
     }
     /* The closing banner runs a heavier weight than the section headings. */
     .ea-h2--display {
@@ -421,6 +464,209 @@
     .ea-card-hover:hover {
         @apply shadow-ea-card-hover;
         transform: translateY(-6px);
+    }
+
+    /* ====================================================== Results table == */
+    /* Figma "module - Results table" (node 3039:14223).
+
+       Scoped to element selectors inside `.ea-results` rather than a class per
+       cell. The table is 20x7 - 140 cells carrying six utilities each reads far
+       worse than this does, and the markup is then free to carry only what
+       actually varies per column (alignment, tone, which breakpoint hides it).
+
+       Type is the design system's: `display-12` for the head, `display-14` for
+       the platform name, `body-14` for every figure.
+
+       Two structural notes. Body cells are matched as `:is(td, th)` because the
+       platform name is a `<th scope="row">` — it is the row's label, and a
+       screen reader should announce it before each figure. And the per-column
+       modifiers are written `:is(td, th).ea-results__x` rather than the bare
+       class, because the base rule would otherwise outrank them and the class
+       would silently do nothing. */
+    .ea-results {
+        @apply w-full;
+        /* `separate`, not `collapse`, and both takes need it: `collapse` drops
+           the header row's 8px radius (a collapsed row cannot be rounded) and
+           breaks `position: sticky` on the Ledger take's frozen columns. With
+           spacing at 0 it is visually identical to `collapse` here, because the
+           only rules drawn are single bottom borders that never meet. */
+        border-collapse: separate;
+        border-spacing: 0;
+        /* Column widths come from the header row, not a <colgroup>: a `<col>`
+           cannot be hidden with `display: none` reliably, and the Reveal take
+           needs to drop whole columns at a breakpoint. */
+        table-layout: fixed;
+        /* Every figure column is money or a percentage, so the digits have to be
+           one width - otherwise the comma groups in "20,000" and "7,200" sit at
+           different x and the column stops reading as a column. */
+        font-variant-numeric: tabular-nums;
+        font-feature-settings: 'tnum';
+    }
+    /* No `text-align` in either base rule: alignment is per column and is set by
+       a plain utility in the markup, which only has to beat the UA stylesheet. */
+    .ea-results thead th {
+        @apply h-8 whitespace-nowrap bg-Table/TH-Background px-2 align-middle
+               font-poppins text-display-12 font-medium uppercase text-Neutral/200;
+    }
+    .ea-results thead th:first-child {
+        @apply rounded-l-lg;
+    }
+    .ea-results thead th:last-child {
+        @apply rounded-r-lg;
+    }
+    /* The row rule, on its own semantic token rather than a hex literal. */
+    .ea-results tbody :is(td, th) {
+        @apply h-10 whitespace-nowrap border-b border-Table/TD-Stroke px-2 align-middle
+               font-franklin text-body-14 font-medium text-white;
+    }
+    /* Rows that draw no rule: the last one, and any row holding an open drawer -
+       that one hands its rule to the drawer beneath it, so the two read as one
+       band rather than as a row followed by a block.
+       `border-transparent` and NOT `border-b-0`, which is the whole point of
+       this rule existing separately. The cells are `h-10` under
+       `box-sizing: border-box`, so dropping the border does not change the cell
+       height - it hands the border's 1px back to the CONTENT box, 39 becomes 40,
+       and `align-middle` re-centres every cell 0.5px lower. Opening a row would
+       then nudge its logo and name down half a pixel (a full device pixel at 2x,
+       with the mark re-rasterising as it moves), and the last row would sit half
+       a pixel below the other nineteen for good. Painting the border transparent
+       leaves the geometry untouched, and what shows through is the panel fill
+       the row sits on anyway, so it is invisible. */
+    .ea-results tbody tr:last-child > :is(td, th),
+    .ea-results tbody tr.ea-results__row--open > :is(td, th) {
+        @apply border-transparent;
+    }
+    /* The rank gutter. Drawn at 11px, which is not on the ramp (10 and 12 are),
+       so it snaps UP to `display-12` -- the same step as the column headers, so
+       the gutter reads as chrome rather than as a fourth text size. `display-10`
+       is the other legal answer but the system reserves it for the densest
+       interface text, and Tinted/400 already does the work of keeping the
+       numeral quiet. */
+    .ea-results tbody :is(td, th).ea-results__rank {
+        @apply px-1 font-poppins text-display-12 font-medium text-Tinted/400
+               tablet-wide:px-2;
+    }
+    /* The one cell set in the display face - it is a name, not a figure.
+       It is also the only cell with two children, so it is a flex row: the mark
+       holds its 20px and the label takes the rest and truncates. The clipping
+       has to sit on the LABEL, not the cell - a `text-overflow` on the cell
+       would have no effect once the cell became a flex container. */
+    .ea-results tbody :is(td, th).ea-results__name {
+        @apply font-poppins text-display-14 font-medium text-white;
+    }
+    .ea-results__platform {
+        @apply flex items-center gap-2;
+    }
+    .ea-results__platform > span {
+        @apply overflow-hidden text-ellipsis;
+    }
+    /* Radius 4, which is the instance override the rows carry (the icon
+       COMPONENTS are square; only the placed instances are rounded).
+       `shrink-0` because the mark is fixed width and the label is the elastic
+       half of the row.
+
+       20px is the drawn size and it holds from 1024 up. Below that it steps to
+       16 for two reasons: those four pixels come straight off the broker name,
+       which is the row's only elastic content and the first thing to ellipsise
+       on a phone; and against 14px text in a 40px row, a 20px mark is visually
+       heavy once the row has nothing else in it. */
+    .ea-results__mark {
+        @apply h-4 w-4 shrink-0 rounded tablet-wide:h-5 tablet-wide:w-5;
+    }
+    .ea-results tbody :is(td, th).ea-results__date {
+        @apply font-normal text-Tinted/200;
+    }
+    /* Indicators/Green Excellent 50 and Indicators/Red Poor 50, written as hex
+       rather than added to the colour map: the results page is the only thing
+       using the Indicators ramp, and the just-reverted colour system is not mine
+       to extend unasked. Promote them the moment a second page needs them. */
+    .ea-results tbody :is(td, th).ea-results__up {
+        @apply text-[#00F070];
+    }
+    .ea-results tbody :is(td, th).ea-results__down {
+        @apply text-[#FF4D50];
+    }
+
+    /* There was a phone-width tightening here - gutters and the mark's gap
+       halving to 4px below 390 - and the tighter container gutters have paid it
+       off. At a 360px layout the platform column is now 182px and the longest
+       name in the set ("Blueberry Markets") clears it by ~15px, so every phone
+       gets the drawn 8px spacing and there is no width at which the table stops
+       looking like the artboard. Worth keeping in view: 15px is the whole
+       margin, so a broker name much longer than that one will ellipsise at 360
+       and the tightening is the thing to bring back. */
+
+    /* ---- The row disclosure ----------------------------------------------- */
+    /* The chevron is the only thing that moves, and it moves on transform, so
+       opening a row never costs a layout pass on the other nineteen.
+
+       The button is 36x36 rather than the icon's 24: nothing of it is visible at
+       rest, so the larger target is free, and 24px on a side is not a thumb
+       target. Not the full 40px row, though - a table cell's `height` is a
+       minimum and its border sits inside the border box, so a 40px child inside
+       a 40px cell overflows by that 1px and every row grows to 41. */
+    .ea-results__disclose {
+        @apply flex h-9 w-9 items-center justify-center rounded-md text-Tinted/200;
+        transition: color var(--ea-hover, 0.3s) theme('transitionTimingFunction.smooth'),
+                    background-color var(--ea-hover, 0.3s) theme('transitionTimingFunction.smooth');
+    }
+    .ea-results__disclose:hover {
+        @apply bg-Table/TH-Background text-white;
+    }
+    .ea-results__disclose svg {
+        transition: transform 0.3s theme('transitionTimingFunction.smooth');
+    }
+    .ea-results__disclose[aria-expanded='true'] {
+        @apply text-white;
+    }
+    .ea-results__disclose[aria-expanded='true'] svg {
+        transform: rotate(180deg);
+    }
+    /* The 36px gutter the chevron sits in, with no padding of its own: the
+       button carries the target size and centres the 24px icon itself. `p-0`
+       and not `px-0` because the UA stylesheet's own `padding: 1px` on cells
+       survives a horizontal-only rule, and 2px of it is enough to push a 36px
+       button past what the 40px row can hold. */
+    .ea-results tbody :is(td, th).ea-results__disclose-cell {
+        @apply p-0;
+    }
+    /* `ea-results__row--open` itself is set with the rules that decide which
+       rows draw a border, up beside the base row rule.
+
+       The drawer cell has to undo the row cell's box - it holds a block, not a
+       figure on a 40px row.
+
+       It also OWNS the rule between this row and the next one: the open row's
+       own border is painted out, and the 8px of bottom padding here puts a
+       visible one below the drawer instead, so the row and its drawer sit
+       inside one ruled band. Without this the drawer reads as a separate
+       twenty-first row that happens to be indented. */
+    .ea-results tbody :is(td, th).ea-results__drawer-cell {
+        @apply h-auto whitespace-normal border-b border-Table/TD-Stroke px-0 pb-2 pt-0;
+    }
+    /* A definition list, so a screen reader still gets the label/value pairing
+       that the header row gives the columns above.
+       A row per pair, rather than a two-column grid, because which pairs are in
+       the drawer changes with the viewport: a row can be dropped with a single
+       `tablet:hidden`, where a grid child would leave its column behind. */
+    /* Darker than the panel, not lighter. The drawer is not chrome like the
+       header row is - it is the row's own contents, pushed open - and a recess
+       says that where a raised surface would say "new section". It runs the full
+       width of the table - the recess is the row's own footprint, not an indent
+       within it - and the 8px of cell padding underneath is what separates its
+       rounded bottom edge from the rule. The `dt` labels still take the header
+       row's colour, because they ARE the column headers. */
+    .ea-results__drawer {
+        @apply flex flex-col gap-2 rounded-lg bg-Table/Drawer-Background p-3;
+    }
+    .ea-results__drawer-row {
+        @apply flex items-baseline justify-between gap-4;
+    }
+    .ea-results__drawer dt {
+        @apply font-poppins text-display-12 font-medium uppercase text-Neutral/200;
+    }
+    .ea-results__drawer dd {
+        @apply text-right font-franklin text-body-14 font-medium text-white;
     }
 
     /* ------------------------------------------- Hero partner logo strip -- */

@@ -21,5 +21,11 @@ useHead({ htmlAttrs: { lang: language } })
 </script>
 
 <template>
-    <NuxtPage />
+    <!-- <NuxtLayout> is what lets an inner page opt into `layouts/page.vue` (the
+         topbar / banner / footer shell). The home page keeps assembling its own
+         chrome: `layouts/default.vue` renders nothing but the slot, so wrapping
+         it here changes not one byte of what pages/index.vue emits. -->
+    <NuxtLayout>
+        <NuxtPage />
+    </NuxtLayout>
 </template>
