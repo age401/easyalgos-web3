@@ -45,6 +45,18 @@
         "eaOfTheMonth": "EA del mes",
         "trackRecord": "Historial"
     },
+    "devHero": {
+        "eyebrow": "Expert Advisor destacado",
+        "title": "Consigue los Expert Advisors de {name}, sin pagar por ellos"
+    },
+    "devCard": {
+        "role": "Desarrollador",
+        "website": "Web del desarrollador"
+    },
+    "devBanner": {
+        "title": "¿Quieres operar con los Expert Advisors de {name} sin pagar por ellos?",
+        "cta": "Únete a EasyAlgos"
+    },
     "trustpilot": {
         "excellent": "Excelente",
         "basedOn": "{rating} sobre 5 según",

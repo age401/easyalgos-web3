@@ -188,6 +188,14 @@
     .ea-eyebrow--bare::before {
         content: none;
     }
+    /* The developer landing page draws the rule as the brand gradient rather
+       than a dimmed currentColor, and sits it 8px off the label instead of 12
+       (Figma 3157:19080). Scoped to a modifier so every existing eyebrow keeps
+       the grey rule it is drawn with. */
+    .ea-eyebrow--brand::before {
+        @apply mr-2 bg-ea-text;
+        opacity: 1;
+    }
 
     /* Display scale. Poppins Medium with negative tracking that grows with the
        size — the drawn 64px sits at -1.8px, and letting that ride down to the
@@ -282,6 +290,48 @@
         }
         .ea-grad--dark { @apply text-Violet/400; }
         .ea-grad--stat { @apply text-Blue/500; }
+    }
+
+    /* A gradient run inside a heading, anchored to the WHOLE heading.
+       -------------------------------------------------------------------------
+       `.ea-grad` puts the gradient on the run itself, which is right when the
+       run IS the line. It is wrong for a sentence like "Get <name>'s Expert
+       Advisors for free", where Figma paints one gradient across the entire
+       headline box and the highlighted name only occupies its top-left corner —
+       so the drawn name reads near-solid blue and never reaches violet, while
+       `.ea-grad` would restart the full blue-to-violet sweep on each of its
+       lines.
+
+       So the gradient goes on the HEADING, clipped to its glyphs, and the
+       heading's own text stays ink and paints over the top of it — which is
+       exactly Figma's layering. Only the highlighted run turns its text fill
+       transparent, and the heading's background shows through there. Painting
+       ink over the gradient rather than the other way round is what lets the
+       surrounding words be bare text nodes: the message comes out of `<i18n-t>`
+       with the name as a slot, so there is nothing to hang a class on.
+
+       The clipped background belongs to the heading element, so the heading
+       itself may carry a transform (the `.hero-fade` entrance does) — but a
+       DESCENDANT must not, or its glyphs would slide out from under the clip.
+       That is why this heading fades in as one block instead of using the
+       per-line `.line-mask` reveal, which transforms each line.
+
+       See `ea-text-run` in tailwind.config.ts for how the stops are placed. */
+    .ea-grad-run {
+        @apply bg-ea-text-run bg-clip-text;
+        -webkit-background-clip: text;
+    }
+    .ea-grad-run__accent {
+        color: transparent;
+        -webkit-text-fill-color: transparent;
+    }
+    @supports not ((background-clip: text) or (-webkit-background-clip: text)) {
+        /* No clip means no gradient anywhere, so the run needs a flat colour of
+           its own or the highlight vanishes into the ink around it. */
+        .ea-grad-run__accent {
+            @apply text-Blue/600;
+            -webkit-text-fill-color: currentColor;
+        }
     }
 
     /* ============================================================ Buttons == */
@@ -1003,6 +1053,183 @@
         transform: translate3d(0, var(--m-from, 800px), 0);
     }
     .is-loaded .ea-hero-card {
+        transform: translate3d(0, 0, 0);
+    }
+
+    /* ============================================ Developer landing hero == */
+    /* Figma 3157:7881. The same shape as the home hero — copy left, cards right
+       — but the object on the right is a real profile card with real links, not
+       a pile of decoration, and that changes two decisions:
+         - the card is never transform-scaled. It goes fluid instead, so its
+           name, location and three link buttons keep their drawn type sizes and
+           stay tappable at any width. The home collage can be scaled to 0.4
+           because nobody clicks it;
+         - the FIELD behind it (the six EA cards and the white wash) is drawn at
+           its Figma size at every width and simply bleeds off the section,
+           which is what it is drawn to do — 182px past the card on both sides.
+       See data/developerHero.ts for both boxes and every coordinate. */
+    .ea-dev-hero {
+        position: relative;
+        /* Clipped on three sides with the top extended — the same arrangement,
+           and the same two reasons, as `.ea-hero`: the sides and bottom hide the
+           field's bleed, and a hard cut at the top would draw a visible line
+           across the copy through the front cards' 250px ambient shadow. */
+        clip-path: inset(-400px 0 0 0);
+    }
+    .ea-dev-hero__inner {
+        @apply flex flex-col;
+    }
+    .ea-dev-hero__stage {
+        position: relative;
+    }
+    /* The pile, hung off the card's box rather than laid out beside it. */
+    /* Sized from data/developerHero.ts, which the section root publishes as
+       custom properties — the drawn numbers live in one place, not two. */
+    .ea-dev-hero__field {
+        position: absolute;
+        width: var(--field-w);
+        height: var(--field-h);
+        pointer-events: none;
+    }
+    /* Positioned per disposition — see each branch below. */
+    .ea-dev-hero__field-card {
+        position: absolute;
+    }
+    /* Transparent at the top, the page's white at the bottom, so the pile
+       dissolves into the ground instead of being cut off by the clip above. It
+       is a sibling of the field rather than a child of it because the two
+       layouts anchor it differently — see each branch below. */
+    .ea-dev-hero__fade {
+        position: absolute;
+        /* Aligned to the field, not to the drawn wash rectangle. The drawn one
+           overhangs the field's left edge by 78px, which covers nothing (the
+           left-most card sits 30px inside the field) and which, once the copy
+           column is being capped at narrow widths, would reach back into the
+           copy. Its y and its ramp ARE the drawn ones. */
+        width: var(--field-w);
+        /* Long enough that the solid end below the ramp always covers the
+           deepest card in the pile — Syna overhangs the card's bottom by 104px
+           — however tall the copy pushes the section. The drawn rectangle stops
+           at the field's bottom, which holds only while the copy is shorter
+           than the card: add a line to the headline, as the CTA revision did,
+           and the pile's tail reappears under the wash. */
+        height: 480px;
+        /* The white stop is placed in px, not at 100%, so the box can be taller
+           than the ramp and everything past it stays solid white. */
+        background-image: linear-gradient(180deg, rgb(255 255 255 / 0) 0,
+                                          theme('colors.Neutral/White') var(--fade-ramp, var(--fade-h)));
+        pointer-events: none;
+    }
+
+    /* ---- Wide, >= 1160: copy left, card flush with the content column ---- */
+    @media (min-width: 1160px) {
+        .ea-dev-hero__inner {
+            @apply flex-row items-center justify-between gap-15;
+        }
+        /* 520px is the gap between the content column's RIGHT edge and the
+           left-most card drawn in the field: 368 (card) + 182 (bleed) - 30 (that
+           card's own inset). Capping the copy at whatever is left over is what
+           keeps the two apart at every width, with no scale factor and no
+           second breakpoint — above ~1370 the drawn 680px column wins and the
+           layout is exactly as drawn; below it the copy yields instead.
+
+           The 48 on top of it is a gutter. Without it the copy stops EXACTLY on
+           the card's left edge, so through the ~1160-1320 band — where the copy
+           is being capped rather than sitting at its drawn 680 — a full-measure
+           line of the paragraph runs right up against the card and reads as
+           touching it. 48 is the narrowest gap that still reads as a gap at
+           this type size, and it costs that band 48px of measure and nothing
+           anywhere else. */
+        .ea-dev-hero__copy {
+            flex: none;
+            width: min(680px, 100% - 520px - 48px);
+        }
+        .ea-dev-hero__stage {
+            flex: none;
+            width: var(--card-w);
+        }
+        .ea-dev-hero__field {
+            left: var(--field-x);
+            top: var(--field-y);
+        }
+        .ea-dev-hero__fade {
+            left: var(--field-x);
+            top: calc(var(--field-y) + var(--fade-y));
+        }
+        .ea-dev-hero__field-card {
+            left: var(--x-wide);
+            top: var(--y-wide);
+        }
+    }
+
+    /* ---- Stacked, <= 1159: copy on top, card centred below --------------- */
+    /* The switch is where the copy would otherwise fall under 560px, which is
+       about as narrow as a 48px headline reads. */
+    @media (max-width: 1159px) {
+        .ea-dev-hero__copy {
+            @apply max-w-[680px];
+        }
+        /* 60px below the copy, as the stacked frame draws it; a little tighter
+           on a phone, where the drawn frame has no counterpart. */
+        .ea-dev-hero__stage {
+            @apply mx-auto mt-12 w-full tablet:mt-15;
+            max-width: var(--card-w);
+        }
+        /* 732 is exactly 368 + 2x182, so the field is symmetric about the card's
+           centre line and one `left: 50%` re-centres it on whatever width the
+           card has resolved to — no second coordinate set for this layout. */
+        .ea-dev-hero__field {
+            left: 50%;
+            top: var(--field-y);
+            margin-left: calc(var(--field-w) / -2);
+        }
+        /* Re-anchored to the CARD's bottom edge rather than the field's. The
+           drawn wash is placed against the field's full 794px, which is only
+           ever what the wide layout shows; here the card is shorter than the
+           field and is the only fixed reference, so the ramp starts 140px above
+           its bottom and finishes 80px below it. Without this the field's tail
+           shows under the card as a 30px strip of half-washed figures, which
+           reads as debris rather than as depth. */
+        /* The ramp is the drawn one, re-anchored from the field to the CARD's
+           bottom edge — which is the same place, as long as the card is the
+           drawn 602px. It is not, once it goes fluid, and the card is the only
+           reference that stays put. 124 of the 220 sit above that edge, so the
+           wash is ~56% at the card's bottom and reaches white 96px below it,
+           which is exactly the relationship the drawn frames hold and is what
+           leaves the Syna card readable-but-fading rather than erased. The
+           solid tail past the ramp then covers whatever the section's clip
+           doesn't. */
+        .ea-dev-hero__fade {
+            left: 50%;
+            top: calc(100% - 124px);
+            margin-left: calc(var(--field-w) / -2);
+        }
+        /* The second disposition (Figma 3191:7514). Every y is the wide one's;
+           only the x values move, because stacking puts clear space on BOTH
+           sides of the profile card instead of only to its left — so the
+           right-hand cards slide outward far enough to show a real edge rather
+           than hiding behind it. */
+        .ea-dev-hero__field-card {
+            left: var(--x-stack);
+            top: var(--y-stack);
+        }
+    }
+
+    /* ---- Entrance -------------------------------------------------------- */
+    /* Same curve and the same "start below your own height, let the clip hide
+       the travel" idea as `.ea-hero-card`, restated rather than reused: that
+       class also owns the home collage's two-disposition positioning, which
+       would override the single coordinate pair this stage has. Timings are in
+       data/developerHero.ts. */
+    .ea-dev-rise {
+        transition: transform var(--m-duration, 900ms)
+                    cubic-bezier(0.793, 0, 0.664, 1)
+                    var(--m-delay, 0ms);
+    }
+    .js .ea-dev-rise {
+        transform: translate3d(0, var(--m-from, 800px), 0);
+    }
+    .is-loaded .ea-dev-rise {
         transform: translate3d(0, 0, 0);
     }
 
@@ -1870,7 +2097,8 @@
     .reveal-x,
     .ea-rise,
     .hero-fade,
-    .ea-hero-card {
+    .ea-hero-card,
+    .ea-dev-rise {
         opacity: 1 !important;
         transform: none !important;
     }

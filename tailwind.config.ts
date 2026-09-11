@@ -174,6 +174,24 @@ export default <Partial<Config>>{
                 // The same idea lifted for dark surfaces, so it still reads at 48px
                 // on #171717.
                 'ea-text-dark': 'linear-gradient(90deg, #4379FF 0%, #7272FF 50%, #B571FF 100%)',
+                // A gradient RUN inside a larger heading — the developer landing
+                // page's "Get <name>'s Expert Advisors for free" and the invite
+                // banner's "Want to trade with <name>'s ...". Figma 3157:7885 /
+                // 3157:7251, which carry the same paint: the brand ramp raked
+                // across the WHOLE heading box, not across the highlighted words.
+                //
+                // That distinction is the whole reason this token exists. Anchored
+                // to the heading, a two-line name sitting at the top-left only ever
+                // traverses the blue-to-indigo start of the ramp, which is why the
+                // drawn name reads near-solid blue and never reaches violet.
+                // `ea-text` anchored to the run's own box would restart the full
+                // blue-to-violet sweep on every line instead.
+                //
+                // Reproduced by pushing the stops OUTSIDE the box, so a run of
+                // ordinary length lands inside the same window Figma paints:
+                // measuring the drawn H1 gives #2E5DFC at the name's first glyph
+                // and #6D5DFF at its last, against #265DFB / #6C5DFF here.
+                'ea-text-run': 'linear-gradient(120deg, #205EFB -9%, #5959FF 78%, #B36DFF 180%)',
                 // The accolades figures. Same three hues as the dark variant but
                 // raked diagonally and inset at both ends, so a short run like
                 // "7435" still travels the whole blue-to-violet sweep instead of
@@ -231,6 +249,14 @@ export default <Partial<Config>>{
                 // it does per pricing tier. Same arrangement as the pricing row: a
                 // tinted outer shell holding a near-white inner card.
                 'ea-review-shell': 'linear-gradient(94.13deg, #F6F7FF 0%, #E7E9F9 39.42%, #F2F3FF 100%)',
+                // The invite banner's shell (Figma 3157:7248) — the third box to
+                // carry this one wash, after the pricing row and the review cards.
+                // Same three stops as `ea-review-shell`, squared off at
+                // 0/39.42/100; the angle differs only because the paint is
+                // measured against a 1360x244 box instead of a review card's, so
+                // do not "reconcile" the three angles into one. Recovered by
+                // inverting the paint's `gradientTransform`, as those two were.
+                'ea-cta-shell': 'linear-gradient(108.14deg, #F6F7FF 0%, #E7E9F9 39.42%, #F2F3FF 100%)',
                 // "EA of the month" ribbon on the featured hero card.
                 'ea-ribbon': 'linear-gradient(95.25deg, #489EFF 0%, #4CA8FF 100%)',
                 // The role cards' inner bubble (Figma 524:2890) — and the same

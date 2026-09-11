@@ -69,6 +69,13 @@ JOBS = [
     ('person1.png', 'people/icmarkets-tile', None, None),
     ('person2.png', 'people/kim-shearer', None, None),
     ('person3.png', 'people/wim-schrynemakers', None, None),
+    # --- Developer landing page portrait -------------------------------------
+    # The one asset on the page that is 1x rather than 2x, and deliberately: the
+    # image fill uploaded to Figma IS 320x320, which is exactly the drawn slot,
+    # so there is no 2x source to encode. Do not upscale it — that would add
+    # bytes and no detail. If a larger original ever lands, drop it in and the
+    # declared dimensions in data/developerProfile.ts stay as they are.
+    ('dev-bogdan-ion-puscasu.png', 'people/bogdan-ion-puscasu', None, None),
     # --- Hero veiled cards. Two assets, reused for every veiled slot in the
     #     collage — the Figma layouts repeat a single "Card Blurred A" and a
     #     single "Card Blurred B", so there is nothing per-slot to export.

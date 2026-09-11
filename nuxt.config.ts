@@ -39,12 +39,16 @@ export default defineNuxtConfig({
     },
 
     nitro: {
-        prerender: { routes: ['/'], crawlLinks: false },
+        prerender: { routes: ['/', '/developer'], crawlLinks: false },
         compressPublicAssets: { gzip: true, brotli: true }
     },
 
     routeRules: {
         '/': { prerender: true },
+        // The developer landing page. Same terms as the home page: its figures
+        // and the developer's own profile are baked in at build time, so there
+        // is no server work to do per request.
+        '/developer': { prerender: true },
         // Static assets are content-addressed by the optimize script or stable by
         // name; a year of immutable caching is safe and removes revalidation RTTs.
         '/fonts/**': { headers: { 'cache-control': 'public,max-age=31536000,immutable' } },
