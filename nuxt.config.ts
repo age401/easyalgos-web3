@@ -39,7 +39,7 @@ export default defineNuxtConfig({
     },
 
     nitro: {
-        prerender: { routes: ['/', '/developer', '/results'], crawlLinks: false },
+        prerender: { routes: ['/', '/developer', '/for-developers', '/results'], crawlLinks: false },
         compressPublicAssets: { gzip: true, brotli: true }
     },
 
@@ -49,6 +49,10 @@ export default defineNuxtConfig({
         // and the developer's own profile are baked in at build time, so there
         // is no server work to do per request.
         '/developer': { prerender: true },
+        // "EasyAlgos for Developers" — a different page from the above, aimed at
+        // EA developers rather than traders (see pages/for-developers.vue). Static
+        // for the same reason: nothing on it is per-request.
+        '/for-developers': { prerender: true },
         '/results': { prerender: true },
         // Static assets are content-addressed by the optimize script or stable by
         // name; a year of immutable caching is safe and removes revalidation RTTs.

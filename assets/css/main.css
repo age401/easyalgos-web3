@@ -1875,7 +1875,7 @@
        becomes a LIST instead: its groups hand over on scroll only, so unpinned
        there is nothing pacing them and a cross-fade would be three sentences the
        reader may never finish. That is done with `stacked:` utilities on the
-       groups themselves (see DeveloperSolutionSection) rather than a rule here,
+       groups themselves (see ForDevSolutionSection) rather than a rule here,
        so the breakpoint keeps its single definition in utils/breakpoints.ts. */
 
     /* The replay control under the copy — Figma "Playback control" (623:3161).

@@ -1,5 +1,15 @@
 <script setup lang="ts">
-// "module - The Solution" on the developer landing page — Figma 3199:8780.
+// "module - The Solution" (Figma 3199:8780) on the EASYALGOS FOR DEVELOPERS page
+// — frame 3191:11677, the route /for-developers.
+//
+// Not to be confused with the Developer landing page (/developer, frame
+// 3157:7222), which is a different page for a different reader: that one sells one
+// named developer's EAs to TRADERS ("Get X's Expert Advisors, without paying for
+// them"), this one recruits EA DEVELOPERS ("Build Expert Advisors once. Earn
+// recurring revenues for life."). They share the topbar, the closing banner and
+// the footer, and nothing else — the heroes are unrelated designs. Hence the
+// `forDev*` prefix on this page's components and i18n keys, against the `dev*` of
+// the other: the two were mixed together once already.
 //
 // The same piece of choreography as the home page's problem/solution section, and
 // deliberately so: Diego asked for that section's criteria applied here. What that
@@ -120,18 +130,18 @@ const { active: tinted } = usePageTint(sectionRef, [23, 23, 23], isPinned) // Ne
              Bottom padding is the drawn 119 (64 inside the heading component plus
              the 55 to the stage), which `.ea-section--tight` already is. -->
         <div class="ea-container ea-section--tight">
-            <p v-reveal class="ea-eyebrow ea-eyebrow--invert">{{ $t('devSolution.eyebrow') }}</p>
+            <p v-reveal class="ea-eyebrow ea-eyebrow--invert">{{ $t('forDevSolution.eyebrow') }}</p>
 
             <h2 v-reveal="90" class="ea-module-heading mt-6 !text-white">
-                {{ $t('devSolution.titleLine1') }}
-                <span class="ea-grad ea-grad--dark">{{ $t('devSolution.titleAccent') }}</span><br />
-                {{ $t('devSolution.titleLine2') }}
+                {{ $t('forDevSolution.titleLine1') }}
+                <span class="ea-grad ea-grad--dark">{{ $t('forDevSolution.titleAccent') }}</span><br />
+                {{ $t('forDevSolution.titleLine2') }}
             </h2>
 
             <!-- 640px is the drawn cap, and `max-w-full` under it so the cap never
                  wins on a viewport where the container is already tighter. -->
             <p v-reveal="180" class="ea-module-description mt-6 max-w-[640px] !text-Neutral/200">
-                {{ $t('devSolution.lead') }}
+                {{ $t('forDevSolution.lead') }}
             </p>
         </div>
 
@@ -213,9 +223,9 @@ const { active: tinted } = usePageTint(sectionRef, [23, 23, 23], isPinned) // Ne
                             :data-state="phraseState(index)"
                         >
                             <p class="ea-module-heading !text-white">
-                                {{ $t(`devSolution.phrase${index + 1}`) }}
+                                {{ $t(`forDevSolution.phrase${index + 1}`) }}
                                 <span class="ea-grad ea-grad--dark block">{{
-                                    $t(`devSolution.phrase${index + 1}Accent`)
+                                    $t(`forDevSolution.phrase${index + 1}Accent`)
                                 }}</span>
                             </p>
                         </div>

@@ -109,7 +109,7 @@ const BREATH_MS = [2600, 5200]
  *
  *  So the field's last act is to go, on the same beat the last phrase group
  *  clears. The stage then releases empty, and the wash plays out over flat dark
- *  with nothing on it to spoil. `RESOLVED_T` in DeveloperSolutionSection is the
+ *  with nothing on it to spoil. `RESOLVED_T` in ForDevSolutionSection is the
  *  other side of this number — the frame the stacked layout rests on, which has
  *  to be before the field starts leaving. */
 const EXIT_FROM = 0.94

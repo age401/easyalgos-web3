@@ -57,7 +57,11 @@
         "title": "Möchtest du mit {name}s Expert Advisors handeln, ohne dafür zu bezahlen?",
         "cta": "EasyAlgos beitreten"
     },
-    "devSolution": {
+    "forDev": {
+        "seoTitle": "Entwickle Expert Advisors einmal. Verdiene lebenslang laufende Einnahmen.",
+        "seoDescription": "Erreiche Tausende Trader und verdiene Provisionen aus jedem Trade, den deine EAs platzieren — ohne Lizenzen zu verkaufen oder deinen Code offenzulegen."
+    },
+    "forDevSolution": {
         "eyebrow": "Die Lösung",
         "titleLine1": "So verdienst du",
         "titleAccent": "lebenslange Provisionen",

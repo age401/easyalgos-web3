@@ -57,7 +57,11 @@
         "title": "Quer negociar com os Expert Advisors de {name} sem pagar por eles?",
         "cta": "Junte-se à EasyAlgos"
     },
-    "devSolution": {
+    "forDev": {
+        "seoTitle": "Crie Expert Advisors uma vez. Ganhe receitas recorrentes para toda a vida.",
+        "seoDescription": "Chegue a milhares de traders e ganhe comissões em cada operação que os seus EAs abrem, sem vender licenças nem expor o seu código."
+    },
+    "forDevSolution": {
         "eyebrow": "A solução",
         "titleLine1": "É assim que ganha",
         "titleAccent": "comissões para toda a vida",

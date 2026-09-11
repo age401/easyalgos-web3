@@ -18,7 +18,7 @@ import { norm } from '~/utils/keyframes'
 // there, the acts are a fixed running order baked into the file — a collapse, a
 // star map, two copy groups that hand over once. Here the section is a RUN of
 // interchangeable copy groups over one continuous graphic, so the act table is the
-// caller's (see DeveloperSolutionSection) and the group count is not knowable
+// caller's (see ForDevSolutionSection) and the group count is not knowable
 // here. Generalising the home page's table to cover both would have made a proven
 // piece of choreography configurable for the sake of one call site. This is the
 // piece of it that genuinely is generic: the geometry read, and the cut.

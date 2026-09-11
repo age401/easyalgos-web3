@@ -57,7 +57,11 @@
         "title": "Want to trade with {name}’s Expert Advisors at no cost?",
         "cta": "Join EasyAlgos"
     },
-    "devSolution": {
+    "forDev": {
+        "seoTitle": "Build Expert Advisors once. Earn recurring revenues for life.",
+        "seoDescription": "Reach thousands of traders and earn commissions from every trade your EAs place, without selling licenses or exposing your code."
+    },
+    "forDevSolution": {
         "eyebrow": "The solution",
         "titleLine1": "How you earn",
         "titleAccent": "lifetime commissions",
