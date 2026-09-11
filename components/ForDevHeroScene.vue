@@ -68,15 +68,42 @@ const MAX_DPR = 2
  *  sees fewer of them across, rather than the whole field shrinking to specks on
  *  a phone. */
 const YMAG = 13.668339320591517
-/** And the authored horizontal half-extent, which is a HARD CEILING rather than a
- *  starting point. Each cube carries its own note from the authoring tool —
- *  "Zero visibility throughout reset; shrink/reveal entirely outside camera
- *  bounds" — so the conveyor hides every wrap by doing it just beyond this edge.
- *  Show a wider field than the scene was composed for and the reader watches
- *  cubes pop in and out of existence in the margins. Past this aspect the box is
- *  fitted by WIDTH instead, which shows less vertically and never reveals the
- *  guard zone. */
-const XMAG = 31.892791748046875
+/** The half-width the FIELD actually occupies — not the camera's.
+ *
+ *  The authored camera is 31.89 wide, but sampling every cube across the whole
+ *  loop (excluding the frames where one is parked off stage for its reset) puts
+ *  them in x -21.95 .. 21.85. So a third of the authored frame is empty margin,
+ *  and shooting the scene through its own camera leaves the cubes stopping short
+ *  of both edges. Framed on the field instead, the outermost cubes run to the
+ *  edges of the viewport, which is what this wants to do.
+ *
+ *  It is also still the ceiling the wrap guard needs: each cube's export note
+ *  reads "Zero visibility throughout reset; shrink/reveal entirely outside camera
+ *  bounds", and every reset parks the cube 512 units away, so nothing pops into
+ *  view inside this box. Showing WIDER than the field is what would expose the
+ *  margin; showing wider still would expose the guard.
+ *
+ *  Re-measure after a re-export if the conveyor's travel changes. */
+const FIELD_HALF_W = 21.95
+
+/** Playback rate. 1 is the authored 15s loop. */
+const SPEED = 0.5
+
+/** Where the reduced-motion still is taken, as a position on the AUTHORED
+ *  timeline — the conveyor spread across the field, rather than t=0 where several
+ *  cubes are mid-reset. */
+const POSE_T = 4
+
+/** The cube outlines, overriding the export's own `MAT_fine_silver_outline`.
+ *
+ *  That material is Tinted/100 (#E4E6F0) — the artist was already on the site's
+ *  ramp — which at hero scale is so close to the white ground that the field
+ *  barely reads. This is two steps down the same ramp. To nudge it, move it one
+ *  step rather than picking a colour: Tinted/200 #C9CCDD is lighter, Tinted/500
+ *  #7A7FA3 is much heavier. The white faces (`MAT_paper_white`) are left alone —
+ *  they are the ground showing through, not ink. */
+const OUTLINE_MATERIAL = 'MAT_fine_silver_outline'
+const OUTLINE_INK = 0xaeb2c9 // Tinted/300
 /** And a FLOOR on it, for the other end. The cubes sit roughly ten units apart
  *  along the conveyor, so holding the drawn vertical extent on a portrait hero
  *  would leave about nineteen units of field on screen — one cube, adrift. Below
@@ -129,10 +156,10 @@ function resize() {
     renderer.setSize(rect.width, rect.height, false)
     const aspect = rect.width / rect.height
     // Fit by height in the middle of the range, and by width at both ends — past
-    // XMAG because the scene has no more field to show, below MIN_HALF_W because
-    // what is left is too little of it. Uniform either way: no axis is ever
-    // stretched independently, so the cubes stay cubes.
-    const halfW = Math.min(Math.max(YMAG * aspect, MIN_HALF_W), XMAG)
+    // FIELD_HALF_W because there is no more field to show, below MIN_HALF_W
+    // because what is left is too little of it. Uniform either way: no axis is
+    // ever stretched independently, so the cubes stay cubes.
+    const halfW = Math.min(Math.max(YMAG * aspect, MIN_HALF_W), FIELD_HALF_W)
     const halfH = halfW / aspect
     camera.top = halfH
     camera.bottom = -halfH
@@ -235,6 +262,25 @@ async function boot() {
         scene.add(camera)
     }
 
+    // The outlines, before anything is drawn with them. Materials are shared
+    // across the twenty cubes, so this is a handful of objects, not 3,447 —
+    // but guard against the name changing in a re-export rather than silently
+    // recolouring nothing.
+    let repainted = 0
+    scene.traverse((node) => {
+        const mesh = node as THREE_NS.Mesh
+        if (!mesh.isMesh) return
+        for (const material of Array.isArray(mesh.material) ? mesh.material : [mesh.material]) {
+            const lit = material as THREE_NS.MeshBasicMaterial
+            if (lit?.name !== OUTLINE_MATERIAL || !lit.color) continue
+            lit.color.setHex(OUTLINE_INK) // setHex reads sRGB and converts, so this is the token value
+            repainted++
+        }
+    })
+    if (!repainted && import.meta.dev) {
+        console.warn(`[ForDevHeroScene] no material named ${OUTLINE_MATERIAL} — outlines left as exported`)
+    }
+
     // 58 clips, one per animated node — the exporter splits them rather than
     // emitting one timeline — so they all have to run together for the scene to
     // be the scene.
@@ -244,12 +290,13 @@ async function boot() {
     resize()
 
     if (reduced) {
-        // Still show the composition, just not the conveyor: advance to a frame
-        // with cubes spread across the field rather than the authored t=0, which
-        // is mid-teleport for several of them.
-        mixer.update(4)
+        // Still show the composition, just not the conveyor. Seeking here rather
+        // than after the rate is applied, so POSE_T stays a position on the
+        // authored timeline and does not move when SPEED changes.
+        mixer.update(POSE_T)
         render()
     }
+    mixer.timeScale = SPEED
 
     ready.value = true
     sync()
