@@ -139,6 +139,27 @@ export default <Partial<Config>>{
             'Role/vps': '#C9C2FF',
             'Role/community': '#B1C4F1',
             'Role/analytics': '#F1D8B1',
+            // ---- Semantic: the data table's surfaces ----
+            // The `Table/*` group Diego added to the WEB3 file's variable
+            // collection. These are the first tokens in this project named for a
+            // ROLE rather than a ramp position, and they are deliberately not on
+            // either neutral ramp: at 6-8% saturation they sit between the
+            // violet-tinted `Tinted/*` and the true-neutral `Neutral/*`, which is
+            // what makes a dark data surface read as chrome rather than as brand.
+            //
+            // Figma writes the last two with a space ("Table/TH Background").
+            // A space cannot appear in a class name, so it becomes a hyphen here
+            // and nothing else about the path changes.
+            'Table/Background': '#312F3A',
+            'Table/TH-Background': '#3A3947',
+            'Table/TD-Stroke': '#3B3A47',
+            // The disclosure drawer's surface, and the one Table tone that goes
+            // DARKER than the panel - which is what makes an open row read as a
+            // recess in the table rather than as a second header.
+            // It arrived on the mobile artboard as a raw fill; it is now
+            // `Table/Drawer Background` in the WEB3 file's collection alongside
+            // the other three, and the artboard's drawer frame is bound to it.
+            'Table/Drawer-Background': '#282730',
         },
         extend: {
             fontFamily: {
@@ -335,6 +356,28 @@ export default <Partial<Config>>{
                 '14': '4.5rem',
                 '15': '4.875rem',
                 '20': '6rem',
+                // ---- Design system: `text/line-height/*` -------------------
+                // Ratios, not pixels — see the note on `letterSpacing` below.
+                // No text style consumes these (every style carries its own
+                // leading); they exist so a one-off can still land on-system.
+                'short': '1.15',
+                'medium': '1.2',
+                'tall': '1.25',
+            },
+            // ---- Design system: `text/letter-spacing/*` -----------------------
+            // Figma stores these as PIXELS and they are reproduced as pixels, so
+            // `tracking-tight-2` is -2px at any size — the same thing the design
+            // does. Every ramp token below already carries the correct tracking
+            // for its size, so reach for these only when you are overriding one.
+            // `tracking-tight` is left alone: Tailwind already defines it as
+            // -0.025em and the DS value (-0.5px) is a different quantity.
+            letterSpacing: {
+                'none': '0px',
+                'tight-0': '-0.5px',
+                'tight-1': '-1px',
+                'tight-2': '-2px',
+                'loose': '1.5px',
+                'looser': '2px',
             },
             fontSize: {
                 'xl': '1.3125rem',
@@ -342,6 +385,83 @@ export default <Partial<Config>>{
                 '3.6xl': '2.125rem',
                 '4.5xl': '2.625rem',
                 '6xl': '4rem',
+
+                // ================================================================
+                // EasyAlgos Design System — Typography
+                // Figma file 2JF3OpcHBK2A1NediaVEJ7, page "Typography".
+                //
+                // A text style in that system is (family, weight, size, leading,
+                // tracking). Tailwind's `fontSize` carries three of the five, so
+                // each token below is a COMPLETE metric set: `text-display-48`
+                // emits 48px AND its 125% leading AND its -2px tracking, exactly
+                // as the style does. Family and weight stay separate utilities
+                // (`font-poppins font-medium`) because Tailwind has no way to
+                // fold them in — the `.ea-*` composites in main.css bundle all
+                // five for the styles that carry meaning.
+                //
+                // Two families, two ramps:
+                //   display/*  Poppins  — headings, labels, buttons, navigation
+                //   body/*     Roboto   — running copy only
+                //
+                // Names mirror the Figma token paths (`display/size/48` ->
+                // `display-48`) so a value read off the design maps to a class
+                // without a lookup table. Do not add sizes that are not on the
+                // ramp; add them in Figma first.
+                //
+                // Leading is a ratio here where Figma stores a percentage, and
+                // tracking is px where Figma stores px. Figma's `Module Heading`
+                // is the one style that stores leading in PIXELS (60 on 48) —
+                // that is 125%, i.e. identical to `display-48`, and it is
+                // written as a ratio here so it scales with the responsive step.
+                // ================================================================
+
+                // ---- display/size/* — Poppins Medium (500) ----
+                'display-10': ['0.625rem', { lineHeight: '1.4', letterSpacing: '0px' }],
+                'display-12': ['0.75rem', { lineHeight: '1.4', letterSpacing: '0px' }],
+                'display-14': ['0.875rem', { lineHeight: '1.4', letterSpacing: '0px' }],
+                'display-16': ['1rem', { lineHeight: '1.4', letterSpacing: '0px' }],
+                'display-18': ['1.125rem', { lineHeight: '1.4', letterSpacing: '-0.5px' }],
+                'display-20': ['1.25rem', { lineHeight: '1.4', letterSpacing: '-1px' }],
+                'display-24': ['1.5rem', { lineHeight: '1.35', letterSpacing: '-1px' }],
+                'display-28': ['1.75rem', { lineHeight: '1.35', letterSpacing: '-1px' }],
+                'display-32': ['2rem', { lineHeight: '1.3', letterSpacing: '-1px' }],
+                'display-40': ['2.5rem', { lineHeight: '1.25', letterSpacing: '-1px' }],
+                'display-48': ['3rem', { lineHeight: '1.25', letterSpacing: '-2px' }],
+                'display-56': ['3.5rem', { lineHeight: '1.25', letterSpacing: '-2px' }],
+                'display-64': ['4rem', { lineHeight: '1.2', letterSpacing: '-2px' }],
+                'display-72': ['4.5rem', { lineHeight: '1.2', letterSpacing: '-2px' }],
+
+                // ---- body/size/* — Roboto Regular (400) ----
+                // Flat 140% / 0 tracking at every step; that consistency is the
+                // family's identity. If a line reads too airy it wants a
+                // `display-*` step, not a leading override.
+                'body-8': ['0.5rem', { lineHeight: '1.4', letterSpacing: '0px' }],
+                'body-10': ['0.625rem', { lineHeight: '1.4', letterSpacing: '0px' }],
+                'body-12': ['0.75rem', { lineHeight: '1.4', letterSpacing: '0px' }],
+                'body-14': ['0.875rem', { lineHeight: '1.4', letterSpacing: '0px' }],
+                'body-16': ['1rem', { lineHeight: '1.4', letterSpacing: '0px' }],
+                'body-18': ['1.125rem', { lineHeight: '1.4', letterSpacing: '0px' }],
+                'body-20': ['1.25rem', { lineHeight: '1.4', letterSpacing: '0px' }],
+                'body-24': ['1.5rem', { lineHeight: '1.4', letterSpacing: '0px' }],
+                'body-28': ['1.75rem', { lineHeight: '1.4', letterSpacing: '0px' }],
+
+                // ---- The semantic styles ----
+                // These are the four the system names by ROLE rather than by
+                // size, and they are the ones a module should reach for. Each is
+                // wrapped with its family and weight as an `.ea-*` class in
+                // main.css — use those, not these, in markup.
+                //
+                // `module-heading` is not listed as a responsive set because its
+                // steps ARE ramp tokens (28/32/40/48); only the two that step
+                // off-ramp carry a `-sm` companion.
+                'module-heading': ['3rem', { lineHeight: '1.25', letterSpacing: '-2px' }],
+                'module-eyebrow': ['0.75rem', { lineHeight: '0.75rem', letterSpacing: '0.25em' }],
+                'module-description': ['1.125rem', { lineHeight: '1.65', letterSpacing: '0px' }],
+                // Same 165% leading at the phone size: the paragraph rhythm is
+                // the point of the style, so the size steps and the leading does
+                // not. `body-16` would give 140% and read cramped under a heading.
+                'module-description-sm': ['1rem', { lineHeight: '1.65', letterSpacing: '0px' }],
+                'body-text': ['0.875rem', { lineHeight: '1.55', letterSpacing: '0px' }],
             },
             spacing: {
                 '6.5': '1.625rem',

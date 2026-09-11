@@ -250,6 +250,26 @@
             }
         }
     },
+    "results": {
+        "heading": "See what your results could look like",
+        "lead": "Every account on this page is real and connected to EasyAlgos. These aren't backtests, simulations or demo accounts - they're live client results, tracked and verified in real time. If you're wondering what kind of performance to expect, this is your clearest reference point.",
+        "panelTitle": "Client's Accounts",
+        "lastUpdate": "Last update",
+        "tableCaption": "The top 20 client accounts connected to EasyAlgos",
+        "detailsColumn": "Details",
+        "toggleDetails": "Show the remaining figures for {platform}",
+        "scarcity": "Only {remaining} spots remaining of {total} total",
+        "columns": {
+            "rank": "Rank",
+            "platform": "Platform",
+            "connected": "Connected since",
+            "initial": "Initial balance",
+            "current": "Current balance",
+            "growth": "Account growth",
+            "growthShort": "Growth",
+            "profit": "Total profit"
+        }
+    },
     "banner": {
         "eyebrow": "Stop looking elsewhere",
         "titleLine1": "Discover why",

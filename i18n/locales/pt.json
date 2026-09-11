@@ -250,6 +250,26 @@
             }
         }
     },
+    "results": {
+        "heading": "Veja como podem ser os seus resultados",
+        "lead": "Todas as contas desta página são reais e estão ligadas à EasyAlgos. Não são backtests, simulações nem contas de demonstração: são resultados reais de clientes, registados e verificados em tempo real. Se quer saber que desempenho esperar, esta é a sua referência mais clara.",
+        "panelTitle": "Contas de clientes",
+        "lastUpdate": "Última atualização",
+        "tableCaption": "As 20 melhores contas de clientes ligadas a EasyAlgos",
+        "detailsColumn": "Detalhes",
+        "toggleDetails": "Mostrar os restantes valores de {platform}",
+        "scarcity": "Restam apenas {remaining} vagas de {total} no total",
+        "columns": {
+            "rank": "Posição",
+            "platform": "Plataforma",
+            "connected": "Ligada desde",
+            "initial": "Saldo inicial",
+            "current": "Saldo atual",
+            "growth": "Crescimento",
+            "growthShort": "Crescimento",
+            "profit": "Lucro total"
+        }
+    },
     "banner": {
         "eyebrow": "Pare de procurar noutro lado",
         "titleLine1": "Descubra porque",

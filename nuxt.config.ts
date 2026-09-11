@@ -39,7 +39,7 @@ export default defineNuxtConfig({
     },
 
     nitro: {
-        prerender: { routes: ['/', '/developer'], crawlLinks: false },
+        prerender: { routes: ['/', '/developer', '/results'], crawlLinks: false },
         compressPublicAssets: { gzip: true, brotli: true }
     },
 
@@ -49,6 +49,7 @@ export default defineNuxtConfig({
         // and the developer's own profile are baked in at build time, so there
         // is no server work to do per request.
         '/developer': { prerender: true },
+        '/results': { prerender: true },
         // Static assets are content-addressed by the optimize script or stable by
         // name; a year of immutable caching is safe and removes revalidation RTTs.
         '/fonts/**': { headers: { 'cache-control': 'public,max-age=31536000,immutable' } },
