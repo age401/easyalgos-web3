@@ -57,6 +57,19 @@
         "title": "Want to trade with {name}’s Expert Advisors at no cost?",
         "cta": "Join EasyAlgos"
     },
+    "devSolution": {
+        "eyebrow": "The solution",
+        "titleLine1": "How you earn",
+        "titleAccent": "lifetime commissions",
+        "titleLine2": "from every trade — not every sale",
+        "lead": "You focus on improving your EAs while we handle distribution and payouts.",
+        "phrase1": "Thousands of traders access your EAs",
+        "phrase1Accent": "for free",
+        "phrase2": "Every trade they place pays you a",
+        "phrase2Accent": "recurring commission",
+        "phrase3": "No licences to sell, no support queue —",
+        "phrase3Accent": "just your EAs at work"
+    },
     "trustpilot": {
         "excellent": "Excellent",
         "basedOn": "{rating} out of 5 based on",

@@ -57,6 +57,19 @@
         "title": "Quer negociar com os Expert Advisors de {name} sem pagar por eles?",
         "cta": "Junte-se à EasyAlgos"
     },
+    "devSolution": {
+        "eyebrow": "A solução",
+        "titleLine1": "É assim que ganha",
+        "titleAccent": "comissões para toda a vida",
+        "titleLine2": "em cada operação — não em cada venda",
+        "lead": "Concentre-se em melhorar os seus EAs — a distribuição e os pagamentos ficam do nosso lado.",
+        "phrase1": "Milhares de traders acedem aos seus EAs",
+        "phrase1Accent": "gratuitamente",
+        "phrase2": "Cada operação que abrem paga-lhe uma",
+        "phrase2Accent": "comissão recorrente",
+        "phrase3": "Sem licenças para vender, sem fila de suporte —",
+        "phrase3Accent": "apenas os seus EAs a trabalhar"
+    },
     "trustpilot": {
         "excellent": "Excelente",
         "basedOn": "{rating} em 5 com base em",

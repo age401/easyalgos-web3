@@ -57,6 +57,19 @@
         "title": "Möchtest du mit {name}s Expert Advisors handeln, ohne dafür zu bezahlen?",
         "cta": "EasyAlgos beitreten"
     },
+    "devSolution": {
+        "eyebrow": "Die Lösung",
+        "titleLine1": "So verdienst du",
+        "titleAccent": "lebenslange Provisionen",
+        "titleLine2": "aus jedem Trade — nicht aus jedem Verkauf",
+        "lead": "Du konzentrierst dich darauf, deine EAs zu verbessern — Vertrieb und Auszahlungen übernehmen wir.",
+        "phrase1": "Tausende Trader nutzen deine EAs",
+        "phrase1Accent": "kostenlos",
+        "phrase2": "Jeder Trade, den sie platzieren, bringt dir eine",
+        "phrase2Accent": "laufende Provision",
+        "phrase3": "Keine Lizenzen zu verkaufen, keine Support-Warteschlange —",
+        "phrase3Accent": "nur deine EAs bei der Arbeit"
+    },
     "trustpilot": {
         "excellent": "Hervorragend",
         "basedOn": "{rating} von 5 auf Basis von",
