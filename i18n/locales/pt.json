@@ -57,9 +57,21 @@
         "title": "Quer negociar com os Expert Advisors de {name} sem pagar por eles?",
         "cta": "Junte-se à EasyAlgos"
     },
-    "forDev": {
-        "seoTitle": "Crie Expert Advisors uma vez. Ganhe receitas recorrentes para toda a vida.",
-        "seoDescription": "Chegue a milhares de traders e ganhe comissões em cada operação que os seus EAs abrem, sem vender licenças nem expor o seu código."
+    "forDevHero": {
+        "titleLine1": "Crie Expert Advisors uma vez.",
+        "titleLine2": "Ganhe receitas recorrentes para toda a vida.",
+        "lead": "Chegue a milhares de traders e ganhe comissões em cada operação que os seus EAs abrem, sem vender licenças nem expor o seu código.",
+        "bookDemo": "Marcar uma demo"
+    },
+    "forDevProblem": {
+        "eyebrow": "O problema",
+        "titleLine1": "Porque criar",
+        "titleAccent": "ótimos EAs",
+        "titleLine2": "já não é suficiente.",
+        "lead": "Vendas únicas, suporte para toda a vida, pirataria constante — e a pressão sem fim de lançar o “próximo” EA",
+        "one": "Porque é que recebo uma vez, mas dou suporte a este EA para sempre?",
+        "two": "Porque é que o meu EA é crackeado e partilhado poucos dias após o lançamento?",
+        "three": "Porque é que tenho de continuar a lançar “novos” EAs só para manter o rendimento?"
     },
     "forDevSolution": {
         "eyebrow": "A solução",

@@ -57,9 +57,21 @@
         "title": "Want to trade with {name}’s Expert Advisors at no cost?",
         "cta": "Join EasyAlgos"
     },
-    "forDev": {
-        "seoTitle": "Build Expert Advisors once. Earn recurring revenues for life.",
-        "seoDescription": "Reach thousands of traders and earn commissions from every trade your EAs place, without selling licenses or exposing your code."
+    "forDevHero": {
+        "titleLine1": "Build Expert Advisors once.",
+        "titleLine2": "Earn recurring revenues for life.",
+        "lead": "Reach thousands of traders and earn commissions from every trade your EAs place, without selling licenses or exposing your code.",
+        "bookDemo": "Book a demo"
+    },
+    "forDevProblem": {
+        "eyebrow": "The problem",
+        "titleLine1": "Why building",
+        "titleAccent": "great EAs",
+        "titleLine2": "isn’t enough anymore.",
+        "lead": "One-time sales, lifetime support, constant piracy — and the never-ending pressure to launch the “next” EA",
+        "one": "Why do I get paid once, but support this EA forever?",
+        "two": "Why is my EA being cracked and shared days after launch?",
+        "three": "Why do I need to keep releasing “new” EAs just to maintain income?"
     },
     "forDevSolution": {
         "eyebrow": "The solution",

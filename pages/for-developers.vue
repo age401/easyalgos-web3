@@ -13,35 +13,27 @@
 //                    once. Earn recurring revenues for life.", over a wireframe
 //                    field, with Apply now / Book a demo and the Trustpilot bar.
 //
-// What the frame draws, in order, and where each part stands:
+// What the frame draws, in order:
 //
-//   Topbar                                   SiteHeader                    built
-//   module Hero (3196:7953)                   —                        NOT BUILT
-//   module - How We Make It Easier (3191:11681) —                      NOT BUILT
-//   module - The Solution (3199:8780)        ForDevSolutionSection         built
-//   Banner - Discover why traders choose us  ClosingBanner                 built
-//   Footer                                   SiteFooter                    built
+//   Topbar                                      SiteHeader
+//   module Hero (3196:7953)                     ForDevHero
+//   module - How We Make It Easier (3191:11681) ForDevProblemSection
+//   module - The Solution (3199:8780)           ForDevSolutionSection
+//   Banner - Discover why traders choose us     ClosingBanner
+//   Footer                                      SiteFooter
 //
-// The two unbuilt modules are deliberately absent rather than stubbed. One
-// consequence worth knowing while they are: the solution module's arrival is
-// supposed to DARKEN the page as it climbs into view, and with nothing above it
-// the module starts at the top of the document, so the page is already dark on
-// load and that transition cannot be seen. Nothing is wrong with it — it is
-// measured working on a page that has a hero — it just has no runway here yet.
-//
-// Same assembly rules as pages/index.vue: the header hydrates normally because it
-// is the first thing touched, and everything below hydrates on visibility with a
-// 300px margin, which is also what lets the v-reveal directive arm its hidden
-// state off-screen instead of the content flashing in already-visible.
+// Same assembly rules as pages/index.vue: the header and hero hydrate normally
+// because they are the first thing touched, and everything below hydrates on
+// visibility with a 300px margin, which is also what lets the v-reveal directive
+// arm its hidden state off-screen instead of the content flashing in
+// already-visible.
 const { t } = useI18n()
 
-// From the drawn hero, which is the page's own headline even though the hero
-// itself is not built yet — the keys are the ones it will read when it lands.
 useSeoMeta({
-    title: () => `EasyAlgos — ${t('forDev.seoTitle')}`,
-    ogTitle: () => t('forDev.seoTitle'),
-    description: () => t('forDev.seoDescription'),
-    ogDescription: () => t('forDev.seoDescription')
+    title: () => `EasyAlgos — ${t('forDevHero.titleLine1')} ${t('forDevHero.titleLine2')}`,
+    ogTitle: () => `${t('forDevHero.titleLine1')} ${t('forDevHero.titleLine2')}`,
+    description: () => t('forDevHero.lead'),
+    ogDescription: () => t('forDevHero.lead')
 })
 </script>
 
@@ -56,7 +48,9 @@ useSeoMeta({
 
         <SiteHeader />
 
-        <main id="top">
+        <main>
+            <ForDevHero />
+            <LazyForDevProblemSection :hydrate-on-visible="{ rootMargin: '300px' }" />
             <!-- The 300px hydration margin earns its keep twice over on this
                  module: its scroll listeners and its canvas are mounted before the
                  reader arrives, AND the page tint is already measuring, so the

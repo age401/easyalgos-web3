@@ -57,9 +57,21 @@
         "title": "Möchtest du mit {name}s Expert Advisors handeln, ohne dafür zu bezahlen?",
         "cta": "EasyAlgos beitreten"
     },
-    "forDev": {
-        "seoTitle": "Entwickle Expert Advisors einmal. Verdiene lebenslang laufende Einnahmen.",
-        "seoDescription": "Erreiche Tausende Trader und verdiene Provisionen aus jedem Trade, den deine EAs platzieren — ohne Lizenzen zu verkaufen oder deinen Code offenzulegen."
+    "forDevHero": {
+        "titleLine1": "Entwickle Expert Advisors einmal.",
+        "titleLine2": "Verdiene lebenslang laufende Einnahmen.",
+        "lead": "Erreiche Tausende Trader und verdiene Provisionen aus jedem Trade, den deine EAs platzieren — ohne Lizenzen zu verkaufen oder deinen Code offenzulegen.",
+        "bookDemo": "Demo buchen"
+    },
+    "forDevProblem": {
+        "eyebrow": "Das Problem",
+        "titleLine1": "Warum",
+        "titleAccent": "gute EAs zu bauen",
+        "titleLine2": "heute nicht mehr reicht.",
+        "lead": "Einmalige Verkäufe, lebenslanger Support, ständige Raubkopien — und der endlose Druck, den „nächsten“ EA zu veröffentlichen",
+        "one": "Warum werde ich einmal bezahlt, betreue diesen EA aber für immer?",
+        "two": "Warum wird mein EA wenige Tage nach dem Launch gecrackt und geteilt?",
+        "three": "Warum muss ich immer wieder „neue“ EAs veröffentlichen, nur um mein Einkommen zu halten?"
     },
     "forDevSolution": {
         "eyebrow": "Die Lösung",

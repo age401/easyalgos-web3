@@ -27,11 +27,18 @@ interface Props {
     /** A page heading is the page's <h1> by default. Pass 2 where the page
      *  already has one above it. */
     level?: 1 | 2
+    /** `white` paints the ground, which is what an inner page wants. `none`
+     *  leaves it transparent, for a hero that has something of its own behind the
+     *  copy — the developer-recruitment hero puts a 3D field back there. Only the
+     *  FILL changes: the drawn padding and the type scale are the template and
+     *  stay whichever way this goes. */
+    surface?: 'white' | 'none'
 }
 const props = withDefaults(defineProps<Props>(), {
     eyebrow: undefined,
     align: 'center',
-    level: 1
+    level: 1,
+    surface: 'white'
 })
 
 const headingTag = computed(() => `h${props.level}`)
@@ -39,7 +46,10 @@ const headingTag = computed(() => `h${props.level}`)
 
 <template>
     <section
-        class="bg-white pt-14 pb-10 tablet:pt-[72px] tablet:pb-12 tablet-wide:pt-[88px] tablet-wide:pb-14 desktop:pt-24 desktop:pb-16"
+        :class="[
+            surface === 'white' ? 'bg-white' : '',
+            'pt-14 pb-10 tablet:pt-[72px] tablet:pb-12 tablet-wide:pt-[88px] tablet-wide:pb-14 desktop:pt-24 desktop:pb-16'
+        ]"
     >
         <div
             :class="[
