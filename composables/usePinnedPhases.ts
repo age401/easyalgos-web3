@@ -71,6 +71,17 @@ export function phaseAt(windows: readonly PhaseWindow[], progress: number): numb
  */
 export function usePinnedPhases(travel: Ref<HTMLElement | null>, enabled: Ref<boolean>) {
     const progress = ref(0)
+    /** The same measurement WITHOUT the clamp: negative while the stage is still
+     *  below the viewport top, past 1 once the wrapper has run out underneath it,
+     *  in the same units as `progress` (fractions of the held stretch).
+     *
+     *  `progress` is the one that means anything, and the clamp is why — a piece
+     *  of choreography wants 0 for "not started" whether the reader is one pixel
+     *  or one screen short of the stage. This is for the one question the clamp
+     *  makes unanswerable: how far OUTSIDE the hold the reader has gone. Anything
+     *  that arms or resets on leaving needs that, because at the boundary
+     *  `progress` is 0 on both sides of a one-pixel scroll. */
+    const unclamped = ref(0)
     const reduced = ref(false)
     let ticking = false
 
@@ -85,10 +96,12 @@ export function usePinnedPhases(travel: Ref<HTMLElement | null>, enabled: Ref<bo
             // than divide by zero, so the piece reads as finished instead of
             // frozen at its first frame.
             progress.value = 1
+            unclamped.value = 1
             return
         }
         // -rect.top is how far the wrapper's top has passed above the viewport
         // top, which is exactly the distance the stage has been held.
+        unclamped.value = -rect.top / held
         progress.value = norm(-rect.top, 0, held)
     }
 
@@ -112,6 +125,7 @@ export function usePinnedPhases(travel: Ref<HTMLElement | null>, enabled: Ref<bo
             // graphic is fully lit. main.css unpins the stage in this mode, so
             // there is no held stretch to report on.
             progress.value = 1
+            unclamped.value = 1
             return
         }
         if (!enabled.value) return detach()
@@ -133,5 +147,5 @@ export function usePinnedPhases(travel: Ref<HTMLElement | null>, enabled: Ref<bo
 
     onBeforeUnmount(detach)
 
-    return { progress, reduced }
+    return { progress, unclamped, reduced }
 }

@@ -79,12 +79,15 @@
         "titleAccent": "lebenslange Provisionen",
         "titleLine2": "aus jedem Trade — nicht aus jedem Verkauf",
         "lead": "Du konzentrierst dich darauf, deine EAs zu verbessern — Vertrieb und Auszahlungen übernehmen wir.",
-        "phrase1": "Tausende Trader nutzen deine EAs",
+        "phrase1": "Tausende Trader nutzen deine Expert Advisors",
         "phrase1Accent": "kostenlos",
-        "phrase2": "Jeder Trade, den sie platzieren, bringt dir eine",
-        "phrase2Accent": "laufende Provision",
-        "phrase3": "Keine Lizenzen zu verkaufen, keine Support-Warteschlange —",
-        "phrase3Accent": "nur deine EAs bei der Arbeit"
+        "phrase1Lead": "Trader erhalten über einen vorkonfigurierten EasyVPS sofort Zugang zu deinem EA",
+        "phrase2": "Sie starten den Handel mit deinen EAs",
+        "phrase2Accent": "in wenigen Minuten",
+        "phrase2Lead": "Trader melden sich in ihren MetaTrader-Konten an, ziehen deinen EA per Drag-and-drop hinein und handeln innerhalb von Minuten",
+        "phrase3": "Du wirst bezahlt",
+        "phrase3Accent": "bei jedem Trade, ein Leben lang",
+        "phrase3Lead": "Jeder Trade erzeugt Provisionen über die IB-Rebates des Brokers, die direkt mit dir geteilt werden"
     },
     "trustpilot": {
         "excellent": "Hervorragend",

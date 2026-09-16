@@ -79,12 +79,15 @@
         "titleAccent": "lifetime commissions",
         "titleLine2": "from every trade — not every sale",
         "lead": "You focus on improving your EAs while we handle distribution and payouts.",
-        "phrase1": "Thousands of traders access your EAs",
+        "phrase1": "Thousands of traders access your Expert Advisors",
         "phrase1Accent": "for free",
-        "phrase2": "Every trade they place pays you a",
-        "phrase2Accent": "recurring commission",
-        "phrase3": "No licences to sell, no support queue —",
-        "phrase3Accent": "just your EAs at work"
+        "phrase1Lead": "Traders get instant access to your EA through a pre-configured EasyVPS",
+        "phrase2": "They start trading with your EAs",
+        "phrase2Accent": "within minutes",
+        "phrase2Lead": "Traders log in to their MetaTrader accounts, drag and drop your EA, and start trading within minutes",
+        "phrase3": "You get paid",
+        "phrase3Accent": "on every trade, for life",
+        "phrase3Lead": "Each trade generates commissions via broker IB rebates, which are shared directly with you"
     },
     "trustpilot": {
         "excellent": "Excellent",

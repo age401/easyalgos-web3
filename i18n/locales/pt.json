@@ -79,12 +79,15 @@
         "titleAccent": "comissões para toda a vida",
         "titleLine2": "em cada operação — não em cada venda",
         "lead": "Concentre-se em melhorar os seus EAs — a distribuição e os pagamentos ficam do nosso lado.",
-        "phrase1": "Milhares de traders acedem aos seus EAs",
+        "phrase1": "Milhares de traders acedem aos seus Expert Advisors",
         "phrase1Accent": "gratuitamente",
-        "phrase2": "Cada operação que abrem paga-lhe uma",
-        "phrase2Accent": "comissão recorrente",
-        "phrase3": "Sem licenças para vender, sem fila de suporte —",
-        "phrase3Accent": "apenas os seus EAs a trabalhar"
+        "phrase1Lead": "Os traders obtêm acesso instantâneo ao seu EA através de um EasyVPS pré-configurado",
+        "phrase2": "Começam a operar com os seus EAs",
+        "phrase2Accent": "em minutos",
+        "phrase2Lead": "Os traders entram nas suas contas MetaTrader, arrastam e largam o seu EA e começam a operar em minutos",
+        "phrase3": "Você recebe",
+        "phrase3Accent": "em cada operação, para toda a vida",
+        "phrase3Lead": "Cada operação gera comissões através dos rebates IB da corretora, que são partilhados diretamente consigo"
     },
     "trustpilot": {
         "excellent": "Excelente",
