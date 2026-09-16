@@ -29,16 +29,25 @@ interface Props {
     level?: 1 | 2
     /** `white` paints the ground, which is what an inner page wants. `none`
      *  leaves it transparent, for a hero that has something of its own behind the
-     *  copy — the developer-recruitment hero puts a 3D field back there. Only the
-     *  FILL changes: the drawn padding and the type scale are the template and
+     *  copy — the developer-recruitment hero puts a ripple field back there. Only
+     *  the FILL changes: the drawn padding and the type scale are the template and
      *  stay whichever way this goes. */
     surface?: 'white' | 'none'
+    /** Drops the template's vertical padding — the one thing that can take it off.
+     *
+     *  The drawn 96/64 is what gives a heading air at the TOP of a page. In a box
+     *  that CENTRES it, which is what the full-height developer-recruitment hero
+     *  does, that job belongs to the box, and the asymmetry works against it: 96
+     *  above against 64 below leaves the copy sitting 16px low of the centre it
+     *  was just centred on. The type scale is still the template either way. */
+    flush?: boolean
 }
 const props = withDefaults(defineProps<Props>(), {
     eyebrow: undefined,
     align: 'center',
     level: 1,
-    surface: 'white'
+    surface: 'white',
+    flush: false
 })
 
 const headingTag = computed(() => `h${props.level}`)
@@ -48,7 +57,9 @@ const headingTag = computed(() => `h${props.level}`)
     <section
         :class="[
             surface === 'white' ? 'bg-white' : '',
-            'pt-14 pb-10 tablet:pt-[72px] tablet:pb-12 tablet-wide:pt-[88px] tablet-wide:pb-14 desktop:pt-24 desktop:pb-16'
+            flush
+                ? ''
+                : 'pt-14 pb-10 tablet:pt-[72px] tablet:pb-12 tablet-wide:pt-[88px] tablet-wide:pb-14 desktop:pt-24 desktop:pb-16'
         ]"
     >
         <div

@@ -1302,6 +1302,26 @@
         transform: translate3d(0, 0, 0);
     }
 
+    /* ======================================= For-developers hero height == */
+    /* The topbar and the hero fill one screen between them, so the hero takes
+       whatever is left — the same subtraction the home hero makes above, and for
+       the same reason: the two are not siblings, because the header sits outside
+       <main>.
+       `--ea-topbar-h` is the bar's DRAWN height; the extra pixel is its own
+       bottom hairline, which sits on top of that and would otherwise push the
+       pair one pixel past the screen.
+
+       `vh` first and `svh` second, the progressive pair `.ea-hero` uses: a
+       browser without `svh` keeps the tall-viewport value, and one with it gets
+       the SMALL viewport, which is the one that is always on screen. `dvh` is
+       the wrong answer here despite sounding like the right one — it changes as
+       mobile chrome retracts, and every change would re-size and re-render the
+       canvas behind the copy mid-scroll. */
+    .ea-fordev-hero {
+        min-height: calc(100vh - var(--ea-topbar-h) - 1px);
+        min-height: calc(100svh - var(--ea-topbar-h) - 1px);
+    }
+
     /* ============================================ Developer landing hero == */
     /* Figma 3157:7881. The same shape as the home hero — copy left, cards right
        — but the object on the right is a real profile card with real links, not
