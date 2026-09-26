@@ -100,6 +100,26 @@ JOBS = [
     ('ea-range-breakout.png', 'ea/range-breakout', None, (128, 128)),
     ('ea-little-crazy.png', 'ea/little-crazy', None, (128, 128)),
     ('ea-quantum-athena.png', 'ea/quantum-athena', None, (128, 128)),
+    # --- /for-developers "The Edge" card panels (2x of the 416x400 slot) -----
+    # The five "img Animation Card 01 - Frame 1" frames under 3295:10251. Cards
+    # 4 and 5 sit outside the scroller's clip, so a direct export renders them
+    # cropped or empty: clone each frame to open canvas, rescale(2), export,
+    # delete the clone. Rasters on purpose — Diego's call, and card 4 carries a
+    # full dashboard whose SVG runs past 200KB.
+    # The exports carry the frame's 12px corner cut to alpha, which alone forces
+    # a ~600KB PNG fallback. They were composited onto white before encoding
+    # (the card behind them is white) and the corner is drawn in CSS instead, so
+    # the fallback is a ~40KB JPEG. Re-running these through main() without that
+    # flatten brings the PNGs back.
+    ('edge-01.png', 'for-developers/edge-referrals', None, None),
+    ('edge-02.png', 'for-developers/edge-ib-rebates', None, None),
+    ('edge-03.png', 'for-developers/edge-ai', None, None),
+    ('edge-04.png', 'for-developers/edge-dashboard', None, None),
+    ('edge-05.png', 'for-developers/edge-remote-support', None, None),
+    # --- /for-developers testimonial portraits (632 image fills, shown 192) ---
+    # Black-and-white, as drawn — not the colour portrait /developer uses.
+    ('testimonial-bogdan-bw.png', 'people/bogdan-ion-puscasu-bw', None, (384, 384)),
+    ('testimonial-paveludo.png', 'people/paveludo', None, (384, 384)),
 ]
 
 # Panels with no usable Figma export yet. Rendered as a flat tinted card so the

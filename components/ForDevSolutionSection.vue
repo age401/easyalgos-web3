@@ -43,28 +43,32 @@
 //      departure is not decoration — see EXIT_FROM in SolutionGlobe.vue for what
 //      it is avoiding.
 //
-// The module is 560vh on the pinned layout (a viewport of stage plus 460 of
-// travel, so each group owns roughly a viewport of scrolling) and at least a
-// viewport tall on every layout.
+// The module is 560vh (a viewport of stage plus 460 of travel, so each group
+// owns roughly a viewport of scrolling), and the stage is a full viewport tall.
 //
-// TWO behaviours, on the same line the home page draws it — see
-// utils/breakpoints.ts for why that line is an area rather than a width:
+// It pins at EVERY size — Diego's call on 2026-09-25, against the home page's
+// problem/solution section, which still stacks below the PINNED_MEDIA line in
+// utils/breakpoints.ts. That line (and the `pinned:`/`stacked:` variants built
+// from it) therefore means nothing here; this module used to share it and lay
+// its groups out as a list on phones. What changes with width is the
+// composition, not the behaviour:
 //
-//   pinned   what is described above.
-//   stacked  nothing is pinned and nothing is taken. The copy reads as a list,
-//            heading first, and the globe follows it lit and breathing. The
-//            handover is a scroll flourish that needs several viewports of travel
-//            to play; on a phone that travel is exactly what the reader does not
-//            want to spend, and four cross-fading groups they cannot pace
-//            themselves is worse than four they can read. The page tint stands
-//            down there too (a ramp needs viewports to fade across) and the
-//            section paints its own dark instead.
+//   two columns (1024 up)  globe left, copy right — 3237:8038.
+//   one column             copy on top, globe under it — the phone frame
+//                          3404:13278 (360 wide: 48/20 padding, 40 between the
+//                          lead and a 320x177 graphic, i.e. the 1.81 frame).
+//
+// Only reduced motion unpins it; main.css turns the stage static there and
+// shows every group as a list.
 import type { PhaseWindow } from '~/composables/usePinnedPhases'
 
 const sectionRef = ref<HTMLElement | null>(null)
 const travelRef = ref<HTMLElement | null>(null)
 
-const isPinned = useMediaQuery(PINNED_MEDIA)
+/** Always true now (see the header). Kept as a ref rather than deleted so every
+ *  consumer below — the tint, the wave, the loop — still reads one switch, and
+ *  a future breakpoint guard is one line. */
+const isPinned = ref(true)
 
 /** The act table: when each copy group is on stage, as fractions of the held
  *  stretch. Read it as the running order — it is the only place the timing lives,
@@ -130,7 +134,7 @@ const { progress: wake } = useTriggeredRun(armed, WAKE_MS)
 
 /** What the globe is given.
  *
- *  Where there is no held stretch — the stacked layout, and reduced motion — there
+ *  Where there is no held stretch — reduced motion — there
  *  is also no moment to trigger on and no scrub to leave on, so the field is
  *  simply lit and staying: the wave resolved, the departure nowhere near. A
  *  graphic parked at its FIRST frame would be a dormant Tinted/900 ghost above
@@ -152,9 +156,8 @@ const globeT = computed(() => (isPinned.value && !reduced.value ? progress.value
  *  The heading gets none of it: the wave is still crossing then, and it is the
  *  only thing that should be.
  *
- *  Stacked has no stage and no windows, so the groups are simply on the page — it
- *  gets the fullest state, and the component's own observer decides when it runs.
- *  Reduced motion is the one place the loop is refused outright: a loop with no end
+ *  (`!isPinned` gets the fullest state, since unpinned the groups would simply be
+ *  on the page; nothing takes that branch today, see the header.) Reduced motion is the one place the loop is refused outright: a loop with no end
  *  is the exact thing that mode is asking not to be given, and unlike the wave it
  *  has no resolved end state to sit at. */
 const globeLoop = computed(() => {
@@ -187,9 +190,7 @@ const { active: tinted } = usePageTint(sectionRef, [23, 23, 23], isPinned) // Ne
          is air a module like this cannot use: the stage is centred in a viewport
          it fills, so on the pinned layout the padding only pushed the pin down
          the page by that much (and made the section's box and the travel's two
-         different distances for no gain), and on the stacked layout it stacked on
-         top of the stage's own `py-12`/`py-[96px]` — the padding that is actually
-         doing the work there. `min-h-svh` in its place is the floor the module
+         different distances for no gain). `min-h-svh` in its place is the floor the module
          needs whatever the layout: a viewport, never less. `svh` rather than `vh`
          so a phone's collapsing URL bar cannot make it briefly overflow. -->
     <section
@@ -206,18 +207,20 @@ const { active: tinted } = usePageTint(sectionRef, [23, 23, 23], isPinned) // Ne
              begins. The two stay separate elements because they answer different
              questions — this one owns the scroll budget, the section owns the
              dark band and the `min-h-svh` floor — and because the height each
-             wants differs on the stacked and reduced-motion layouts.
+             wants differs under reduced motion.
 
              `motion-reduce:!h-auto` collapses it: in that mode main.css unpins the
              stage and the composable never attaches a listener, so every viewport
              of this would be empty space the reader scrolls through for nothing.
-             `!` to beat the `pinned:` height, which is a size query and still
-             applies. -->
-        <div ref="travelRef" class="pinned:h-[560vh] motion-reduce:!h-auto">
+             `!` so it beats the plain height whatever the stylesheet order. -->
+        <div ref="travelRef" class="h-[560vh] motion-reduce:!h-auto">
             <div
-                class="ea-pinned__stage flex items-center
-                       stacked:!static stacked:!h-auto stacked:min-h-svh stacked:py-12 tablet:stacked:py-[96px]"
+                class="ea-pinned__stage flex items-center py-12 tablet-wide:py-0"
             >
+                <!-- py-12 is the phone frame's 48 top and bottom; it keeps the copy
+                     off the header and the globe off the fold on a short screen.
+                     The two-column stage centres in its viewport with room to
+                     spare, so it needs none. -->
                 <!-- 760 of globe, 60 of gap, 540 of copy — the drawn 1360 column.
                      One column below 1024, where the copy would be too narrow to
                      hold a 48px line. -->
@@ -235,46 +238,51 @@ const { active: tinted } = usePageTint(sectionRef, [23, 23, 23], isPinned) // Ne
                          size and loses only air. 1.81 IS 760/420, written as a
                          number because that is what `aspect-ratio` wants.
 
-                         `stacked:order-2` is the one place the two layouts disagree
-                         about the composition rather than about the motion. In one
-                         column, source order is reading order, and the module's
-                         heading now lives in the copy column — leaving the globe
-                         first would open the module with an unexplained dot map and
-                         put its title underneath. The pinned-but-single-column band
-                         keeps the globe on top, because there the copy below it is
-                         one group at a time on a stage, not a list.
+                         `order-2` below tablet-wide puts the globe UNDER the copy, as
+                         the phone frame 3404:13278 draws it: the module opens on its
+                         heading rather than on an unexplained dot map. Every
+                         single-column width follows the phone frame — the tablet
+                         band used to keep the globe on top, but it has no frame of
+                         its own and two orders a few pixels apart read as a bug.
 
-                         The last class is that band: a tablet in portrait, or a
-                         short desktop window. `!` because a custom variant sorts
-                         ahead of the screen variants, so without it the plain
-                         `max-w-[760px]` would win on source order and the cap would
-                         silently do nothing. -->
+                         The `max-tablet-wide:` cap sizes the globe by viewport
+                         HEIGHT in one column, so heading + globe always fit the
+                         sticky stage. `!` because the max-* variant sorts ahead of
+                         the plain `max-w-[760px]`, which would otherwise win on
+                         source order.
+
+                         On a phone (the `max-tablet:` group) the MAP, not just its
+                         box, runs out to 8px off each screen edge — Diego's call,
+                         it read too small inside the 320 column the phone frame
+                         gives it. Two layers of side air go: the page's 20px
+                         gutters, and the frame's own. The field is 654.67 of the
+                         drawn 760 (0.8614), with the rest as air either side, so
+                         the box is sized to (column + 2x12px) / 0.8614 and that
+                         air overhangs the screen, where the page's overflow-x-clip
+                         cuts it. About 30% larger than the column-width map.
+                         The item is wider than its grid track and
+                         `justify-self-center` centres it (a grid centres an
+                         overflowing item), so the copy above keeps its gutters.
+                         The height cap loosens to 60svh there: on a 640-tall phone
+                         it binds first and keeps heading + globe inside the stage. -->
                     <SolutionGlobe
                         :wake="globeWake"
                         :t="globeT"
                         :loop="globeLoop"
-                        class="mx-auto w-full max-w-[760px] [--globe-frame:1.81] stacked:order-2
-                               tablet-wide:mx-0 tablet-wide:[--globe-frame:1]
-                               pinned:max-tablet-wide:!max-w-[min(560px,52svh)]"
+                        class="order-2 mx-auto w-full max-w-[760px] [--globe-frame:1.81]
+                               tablet-wide:order-1 tablet-wide:mx-0 tablet-wide:[--globe-frame:1]
+                               max-tablet-wide:!max-w-[min(560px,52svh)]
+                               max-tablet:!mx-0 max-tablet:w-[calc((100%+24px)/0.8614)] max-tablet:justify-self-center
+                               max-tablet:!max-w-[min(calc((100%+24px)/0.8614),60svh)]"
                     />
 
-                    <!-- The copy. All four groups occupy the SAME grid cell on the
-                         pinned layout, so the handover cannot move anything: the
-                         row is sized by the tallest — the heading — and the shorter
-                         ones simply have room to spare.
-
-                         On the stacked layout they become a list — the `stacked:`
-                         classes on each group take it out of that shared cell and
-                         force it visible whatever its state, because there the
-                         reader is pacing themselves and all four should read. `!`
-                         on each: `.ea-phase[data-state]` in main.css and the
-                         `col-start-1`/`row-start-1` utilities are emitted in the
-                         same layer as these, so without it the outcome would rest
-                         on source order. -->
-                    <div
-                        class="relative grid stacked:!block stacked:order-1 stacked:space-y-10
-                               pinned:min-h-[424px]"
-                    >
+                    <!-- The copy. All four groups occupy the SAME grid cell, so the
+                         handover cannot move anything: the row is sized by the
+                         tallest — the heading — and the shorter ones simply have
+                         room to spare. That is also what keeps the globe still
+                         under the copy on a phone. Under reduced motion main.css
+                         gives each group a row of its own and shows them all. -->
+                    <div class="relative order-1 grid tablet-wide:order-2 tablet-wide:min-h-[424px]">
                         <!-- Group 1 of 4: the module heading — the Figma "Intro"
                              frame (3237:11519), which is the "Module Heading"
                              component (3109:7069) restaged into the column. Built
@@ -292,9 +300,7 @@ const { active: tinted } = usePageTint(sectionRef, [23, 23, 23], isPinned) // Ne
                              and two mechanisms writing opacity and transform on one
                              element is one too many. -->
                         <div
-                            class="ea-phase col-start-1 row-start-1
-                                   stacked:!col-auto stacked:!row-auto stacked:!transform-none
-                                   stacked:!opacity-100 stacked:!pointer-events-auto"
+                            class="ea-phase col-start-1 row-start-1"
                             :data-state="phraseState(0)"
                         >
                             <p class="ea-eyebrow ea-eyebrow--invert">{{ $t('forDevSolution.eyebrow') }}</p>
@@ -304,7 +310,7 @@ const { active: tinted } = usePageTint(sectionRef, [23, 23, 23], isPinned) // Ne
                                 <span class="ea-grad ea-grad--dark">{{
                                     $t('forDevSolution.titleAccent')
                                 }}</span
-                                ><br />
+                                ><br class="hidden tablet-wide:inline" />
                                 {{ $t('forDevSolution.titleLine2') }}
                             </h2>
 
@@ -337,9 +343,7 @@ const { active: tinted } = usePageTint(sectionRef, [23, 23, 23], isPinned) // Ne
                         <div
                             v-for="n in 3"
                             :key="n"
-                            class="ea-phase col-start-1 row-start-1
-                                   stacked:!col-auto stacked:!row-auto stacked:!transform-none
-                                   stacked:!opacity-100 stacked:!pointer-events-auto"
+                            class="ea-phase col-start-1 row-start-1"
                             :data-state="phraseState(n)"
                         >
                             <p class="ea-module-heading !text-white">

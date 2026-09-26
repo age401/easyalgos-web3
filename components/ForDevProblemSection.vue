@@ -15,7 +15,14 @@
 // the same kind, which is what a screen reader should hear. The chevron in front
 // of each is drawn as a text character and stays one, inside the item rather than
 // as a marker, so it travels with the line when the question wraps.
-const QUESTIONS = ['one', 'two', 'three'] as const
+//
+// Each question has its own glyph (icn24-Infinite / -Piracy / -Copy-Multiples,
+// exported from the file); they sit in the shared ForDevIconBubble.
+const QUESTIONS = [
+    { id: 'one', icon: '/img/icons/infinite.svg' },
+    { id: 'two', icon: '/img/icons/piracy.svg' },
+    { id: 'three', icon: '/img/icons/copy-multiples.svg' }
+] as const
 </script>
 
 <template>
@@ -34,7 +41,7 @@ const QUESTIONS = ['one', 'two', 'three'] as const
                  take the type token's Tinted/950 here, because a two-unit
                  difference in ink mid-sentence is not a thing anyone can see and
                  encoding it would mean a second colour on the display scale. -->
-            <h2 v-reveal="90" class="ea-module-heading mt-6 max-w-[1100px]">
+            <h2 v-reveal="90" class="ea-module-heading mt-6">
                 {{ $t('forDevProblem.titleLine1') }}
                 <span class="ea-grad">{{ $t('forDevProblem.titleAccent') }}</span>
                 {{ $t('forDevProblem.titleLine2') }}
@@ -51,43 +58,28 @@ const QUESTIONS = ['one', 'two', 'three'] as const
                  row is too narrow for a 20px question. -->
             <ul class="mt-12 grid list-none gap-3 tablet-wide:mt-16 tablet-wide:grid-cols-3">
                 <li
-                    v-for="(id, index) in QUESTIONS"
-                    :key="id"
+                    v-for="(q, index) in QUESTIONS"
+                    :key="q.id"
                     v-reveal="240 + index * 90"
-                    class="flex flex-col items-start rounded-3xl border-2 border-Tinted/100 bg-white px-8 pb-12 pt-6"
+                    class="flex items-center gap-4 rounded-3xl border-2 border-Tinted/100 bg-white px-[18px] py-[22px]
+                           tablet-md:flex-col tablet-md:items-start tablet-md:gap-0 tablet-md:px-8 tablet-md:pb-12 tablet-md:pt-6"
                 >
-                    <!-- The drawn 48px bubble: a 2px near-white ring over an
-                         off-centre wash that lights it from the top left. The wash
-                         is Tinted/500 at 20% falling to nothing — a gradient, not
-                         an asset, so it stays crisp at any zoom.
-                         #F5F6FF is a one-off drawn value; the nearest token
-                         (Tinted/25, #F7F7FB) is a touch warmer and reads grey
-                         against the blue-white ring beside it. -->
-                    <span
-                        class="mb-4 mt-1 grid size-12 place-items-center rounded-full border-2 border-[#F5F6FF]"
-                        style="
-                            background: radial-gradient(
-                                circle at 26% 12%,
-                                rgb(122 127 163 / 0) 55%,
-                                rgb(122 127 163 / 0.12) 80%,
-                                rgb(122 127 163 / 0.2) 100%
-                            );
-                        "
-                    >
-                        <img
-                            src="/img/icons/server-config.svg"
-                            alt=""
-                            width="24"
-                            height="24"
-                            loading="lazy"
-                            aria-hidden="true"
-                            class="size-6"
-                        />
-                    </span>
+                    <!-- The drawn 48px bubble. Below 800 the card turns into a row
+                         (bubble beside the question, both centred, 24/20 padding
+                         with the 2px inside stroke taken out) and the bubble loses
+                         its padding; from 800 it is the column the desktop draws,
+                         with 4px of air on the bubble's top, left and right and 16
+                         under it (the "Icon" frame's padding). -->
+                    <ForDevIconBubble :icon="q.icon" class="tablet-md:mb-4 tablet-md:ml-1 tablet-md:mt-1" />
 
-                    <p class="flex gap-2 font-poppins text-[20px] font-semibold leading-7 tracking-[-0.5px] text-Ink/950">
-                        <span class="w-3 shrink-0 text-Blue/600" aria-hidden="true">›</span>
-                        <span>{{ $t(`forDevProblem.${id}`) }}</span>
+                    <!-- 16 / 140% on a phone, 18 at 600, the drawn 20/28 from 800. -->
+                    <p
+                        class="flex gap-2 font-poppins text-[16px] font-semibold leading-[1.4] text-Ink/950
+                               tablet:text-[18px] tablet:tracking-[-0.5px] tablet-md:text-[20px] tablet-md:leading-7"
+                    >
+                        <!-- Hidden in the row layout, as the mobile frames hide it. -->
+                        <span class="hidden w-3 shrink-0 text-Blue/600 tablet-md:inline" aria-hidden="true">›</span>
+                        <span>{{ $t(`forDevProblem.${q.id}`) }}</span>
                     </p>
                 </li>
             </ul>

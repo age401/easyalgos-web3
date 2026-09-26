@@ -19,14 +19,24 @@
 //   module Hero (3196:7953)                     ForDevHero
 //   module - How We Make It Easier (3191:11681) ForDevProblemSection
 //   module - The Solution (3199:8780)           ForDevSolutionSection
+//   section - Accolades (3281:23382)            AccoladesBand bare
+//   section - The Model (3281:24669)            ForDevModelSection
+//   section - Testimonials (3282:31975)         TestimonialsSection
+//   section - The Edge (3295:10242)             ForDevEdgeSection
+//   section - Requirements (3388:11825)         ForDevRequirementsSection
 //   Banner - Discover why traders choose us     ClosingBanner
 //   Footer                                      SiteFooter
+//
+// The sections from Accolades down are laid out in frame 3236:13737 ("EasyAlgos
+// for Developers"), the newer artboard on the ◽ For Developers page.
 //
 // Same assembly rules as pages/index.vue: the header and hero hydrate normally
 // because they are the first thing touched, and everything below hydrates on
 // visibility with a 300px margin, which is also what lets the v-reveal directive
 // arm its hidden state off-screen instead of the content flashing in
 // already-visible.
+import { FOR_DEV_TESTIMONIALS } from '~/data/content'
+
 const { t } = useI18n()
 
 useSeoMeta({
@@ -57,6 +67,22 @@ useSeoMeta({
                  darkening starts on the drawn ramp rather than on the frame the
                  section happens to hydrate. -->
             <LazyForDevSolutionSection :hydrate-on-visible="{ rootMargin: '300px' }" />
+            <!-- The home page's accolades band without its heading — the frame
+                 draws the two figures alone, as a 96px breath after The
+                 Solution. -->
+            <LazyAccoladesBand bare :hydrate-on-visible="{ rootMargin: '300px' }" />
+            <LazyForDevModelSection :hydrate-on-visible="{ rootMargin: '300px' }" />
+            <!-- The home page's dark testimonials band with this page's two
+                 developer quotes. It carries data-dark-band, so the header
+                 inverts over it exactly as it does on the home page. -->
+            <LazyTestimonialsSection
+                :items="FOR_DEV_TESTIMONIALS"
+                ns="forDevTestimonials"
+                dense
+                :hydrate-on-visible="{ rootMargin: '300px' }"
+            />
+            <LazyForDevEdgeSection :hydrate-on-visible="{ rootMargin: '300px' }" />
+            <LazyForDevRequirementsSection :hydrate-on-visible="{ rootMargin: '300px' }" />
             <!-- "Banner - Discover why traders choose us" (3191:11776) is this
                  codebase's ClosingBanner — same eyebrow, same headline, same live
                  trader count off SITE_STATS. It paints its own full-bleed gradient,

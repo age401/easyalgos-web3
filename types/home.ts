@@ -129,6 +129,14 @@ export interface Testimonial {
      *  feature cards are drawn with one, but it is stated rather than derived
      *  so a card can lose its headline without changing width. */
     headline?: boolean
+    /** Which of its row's two tracks the card takes. Defaults to the variant's
+     *  own width (feature = the 3fr track, compact = the 2fr one); stated when a
+     *  feature card is drawn in the narrow track, as the /for-developers pair
+     *  is. */
+    width?: 'wide' | 'narrow'
+    /** Indent the body quote 24px, as a headline card does, without a
+     *  headline — the /for-developers Paveludo card draws exactly that. */
+    indent?: boolean
     /** Testimonial clip. Undefined until the files exist, and the "Watch
      *  testimonial" affordance is withheld while it is — same rule as the
      *  How-it-works steps. */

@@ -66,9 +66,9 @@
     "forDevProblem": {
         "eyebrow": "The problem",
         "titleLine1": "Why building",
-        "titleAccent": "great EAs",
+        "titleAccent": "great Expert Advisors",
         "titleLine2": "isn’t enough anymore.",
-        "lead": "One-time sales, lifetime support, constant piracy — and the never-ending pressure to launch the “next” EA",
+        "lead": "One-time sales, lifetime support, constant piracy — and the never-ending pressure to launch the “next” Expert Advisor",
         "one": "Why do I get paid once, but support this EA forever?",
         "two": "Why is my EA being cracked and shared days after launch?",
         "three": "Why do I need to keep releasing “new” EAs just to maintain income?"
@@ -88,6 +88,103 @@
         "phrase3": "You get paid",
         "phrase3Accent": "on every trade, for life",
         "phrase3Lead": "Each trade generates commissions via broker IB rebates, which are shared directly with you"
+    },
+    "forDevModel": {
+        "eyebrow": "The model",
+        "titleLead": "Why developers are",
+        "titleAccent": "moving away from traditional EA sales",
+        "titleTail": ".",
+        "lead": "Put the two approaches side by side and the difference becomes obvious:",
+        "easyalgosLabel": "EasyAlgos",
+        "traditionalTitle": "Traditional EA Sales",
+        "easyalgos": {
+            "lifetime": "Lifetime revenue from each trade",
+            "volume": "Income grows with trading volume",
+            "locked": "Fully locked, closed infrastructure",
+            "code": "Your code never leaves the system",
+            "performance": "Performance-driven usage",
+            "focus": "Freedom to improve one system",
+            "reach": "Access thousands of EA traders"
+        },
+        "traditional": {
+            "oneTime": "One-time license payments",
+            "launches": "Income depends on new launches",
+            "piracy": "High piracy risk",
+            "cracked": "EAs get cracked and shared",
+            "marketing": "Marketing-driven sales",
+            "pressure": "Pressure to sell more licenses",
+            "userBase": "Build your own user base"
+        }
+    },
+    "forDevTestimonials": {
+        "items": {
+            "bogdan": {
+                "quote": "After 10 years of inconsistent results with manual trading and other EAs, EasyAlgos finally gave me the transparency and steady returns I was looking for. Low drawdown, clear support, and a system I actually trust.",
+                "name": "Bogdan Ion Puscasu",
+                "role": "Romania"
+            },
+            "paveludo": {
+                "quote": "I was the first third-party developer to join EasyAlgos. Because I was the very first, many of the integration issues for external developers were solved together with the EasyAlgos team for the first time, and throughout this process I was convinced of their professionalism and expertise. They're outstanding both on the technical side and in understanding what their clients really want—users who are looking for excellent tools for autonomous algorithmic trading without paying upfront for everything available on the platform. It's a win-win solution for users, third-party developers, and the platform itself. I'm glad my products are published on EasyAlgos, and I have no doubt that my partnership with EasyAlgos will be truly long-term.",
+                "name": "PAVELUDO",
+                "role": "Russia"
+            }
+        }
+    },
+    "forDevEdge": {
+        "eyebrow": "The edge",
+        "titleLead": "How EasyAlgos gives you",
+        "titleAccent": "an unfair advantage",
+        "titleTail": ".",
+        "lead": "This is where our model stops being good and starts being unfair:",
+        "cards": {
+            "referrals": {
+                "title": "Earn money from other developer’s EAs",
+                "description": "Every client you refer earns you commissions — even if they trade other developers’ EAs"
+            },
+            "rebates": {
+                "title": "Best IB deals in the industry",
+                "description": "You receive full-rate standard IB rebates, with no platform haircut or hidden fees"
+            },
+            "ai": {
+                "title": "Industry-leading AI technology",
+                "description": "AI-powered insights improve transparency and retention — without adding work for you"
+            },
+            "dashboard": {
+                "title": "World class user dashboard",
+                "description": "Your clients get performance tracking, trades history, analytics, and more"
+            },
+            "support": {
+                "title": "Remote desktop support",
+                "description": "Users get built-in remote access support to their trading environment"
+            }
+        }
+    },
+    "forDevRequirements": {
+        "eyebrow": "Requirements",
+        "title": "Do you have what it takes?",
+        "lead": "To protect performance and trust across the platform, all developers must meet the following requirements",
+        "items": {
+            "performance": {
+                "title": "Performance-Proven",
+                "description": "Your EA must have a verified MyFxBook track record on live accounts, with at least 6 months of trading history."
+            },
+            "reviews": {
+                "title": "Genuine Reviews",
+                "description": "You must have authentic client feedback on platforms such as MQL5, TrustPilot, or similar"
+            },
+            "original": {
+                "title": "Original Strategies",
+                "description": "Your EA must be based on original ideas and logic, with transparency around strategy, risk, and money management"
+            },
+            "backtesting": {
+                "title": "Long-Term Back-Testing",
+                "description": "You must provide at least 10 years of high-quality back-testing data"
+            },
+            "support": {
+                "title": "Direct support",
+                "description": "You must remain reachable and responsive to ensure users can get help when needed"
+            }
+        }
     },
     "trustpilot": {
         "excellent": "Excellent",

@@ -35,6 +35,13 @@
 // and these offsets are all that actually separates them.
 const { n } = useI18n()
 
+// /for-developers (3281:23382) draws the same two cards with NO heading, as a
+// plain 96px band between The Solution and The Model. `bare` drops the heading
+// and evens the padding out to that. Its phone frames (360 / 600) give the band
+// a taller 128 top and bottom, and at 360 stack the two cards 96 apart rather
+// than 40 — the pair reads as two separate beats, not one block.
+const props = withDefaults(defineProps<{ bare?: boolean }>(), { bare: false })
+
 /** ms card B trails card A by — half of --ea-mark-dur in main.css (3.64s).
  *  Change the duration there and this wants changing with it. */
 const CARD_B = 1820
@@ -46,9 +53,16 @@ const { visible } = useRevealOnce(row, { threshold: 0.2 })
 </script>
 
 <template>
-    <section class="bg-white pb-[72px] pt-[56px] tablet:pb-[96px] tablet:pt-[64px] tablet-wide:pb-[128px] tablet-wide:pt-[80px] desktop:pb-[192px] desktop:pt-[96px]">
+    <section
+        :class="[
+            'bg-white',
+            props.bare
+                ? 'py-[128px] tablet-wide:py-[80px] desktop:py-[96px]'
+                : 'pb-[72px] pt-[56px] tablet:pb-[96px] tablet:pt-[64px] tablet-wide:pb-[128px] tablet-wide:pt-[80px] desktop:pb-[192px] desktop:pt-[96px]'
+        ]"
+    >
         <div class="ea-container">
-            <SectionHeading align="center">
+            <SectionHeading v-if="!props.bare" align="center">
                 <template #title>
                     {{ $t('accolades.heading') }}
                 </template>
@@ -57,7 +71,8 @@ const { visible } = useRevealOnce(row, { threshold: 0.2 })
             <!-- 80px under the heading at desktop, as drawn. -->
             <div
                 ref="row"
-                class="mt-12 flex flex-col items-center gap-10 tablet-wide:mt-16 tablet-wide:flex-row tablet-wide:justify-center tablet-wide:gap-12 desktop:mt-20 desktop:gap-24"
+                :class="props.bare ? 'gap-24 tablet:gap-10' : 'mt-12 gap-10 tablet-wide:mt-16 desktop:mt-20'"
+                class="flex flex-col items-center tablet-wide:flex-row tablet-wide:justify-center tablet-wide:gap-12 desktop:gap-24"
             >
                 <!-- No v-reveal on the cards: the mark, the figure and the
                      phrase each own their entrance, and fading the container as

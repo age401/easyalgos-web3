@@ -2278,6 +2278,24 @@
     .ea-scroller > * {
         @apply snap-start;
     }
+    /* Opt-in click-and-pull for a mouse (see useDragScroll). Same two switches
+       as `.ea-reviews.is-dragging`, for the same reason: snapping and smooth
+       scrolling both fight a scrollLeft written every pointermove. Images are
+       made undraggable too, or the first pull on a card picks up its panel as a
+       ghost image instead of moving the row. */
+    .ea-scroller--drag {
+        cursor: grab;
+    }
+    .ea-scroller--drag img {
+        -webkit-user-drag: none;
+        user-select: none;
+    }
+    .ea-scroller--drag.is-dragging {
+        cursor: grabbing;
+        scroll-snap-type: none;
+        scroll-behavior: auto;
+        user-select: none;
+    }
 
     /* ------------------------------------------ Vue <Transition> names -- */
     .fade-enter-active,

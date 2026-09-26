@@ -66,9 +66,9 @@
     "forDevProblem": {
         "eyebrow": "Das Problem",
         "titleLine1": "Warum",
-        "titleAccent": "gute EAs zu bauen",
+        "titleAccent": "gute Expert Advisors zu bauen",
         "titleLine2": "heute nicht mehr reicht.",
-        "lead": "Einmalige Verkäufe, lebenslanger Support, ständige Raubkopien — und der endlose Druck, den „nächsten“ EA zu veröffentlichen",
+        "lead": "Einmalige Verkäufe, lebenslanger Support, ständige Raubkopien — und der endlose Druck, den „nächsten“ Expert Advisor zu veröffentlichen",
         "one": "Warum werde ich einmal bezahlt, betreue diesen EA aber für immer?",
         "two": "Warum wird mein EA wenige Tage nach dem Launch gecrackt und geteilt?",
         "three": "Warum muss ich immer wieder „neue“ EAs veröffentlichen, nur um mein Einkommen zu halten?"
@@ -88,6 +88,103 @@
         "phrase3": "Du wirst bezahlt",
         "phrase3Accent": "bei jedem Trade, ein Leben lang",
         "phrase3Lead": "Jeder Trade erzeugt Provisionen über die IB-Rebates des Brokers, die direkt mit dir geteilt werden"
+    },
+    "forDevModel": {
+        "eyebrow": "Das Modell",
+        "titleLead": "Warum Entwickler sich",
+        "titleAccent": "vom klassischen EA-Verkauf abwenden",
+        "titleTail": ".",
+        "lead": "Stellt man beide Ansätze nebeneinander, wird der Unterschied offensichtlich:",
+        "easyalgosLabel": "EasyAlgos",
+        "traditionalTitle": "Klassischer EA-Verkauf",
+        "easyalgos": {
+            "lifetime": "Lebenslange Einnahmen aus jedem Trade",
+            "volume": "Einkommen wächst mit dem Handelsvolumen",
+            "locked": "Vollständig geschlossene Infrastruktur",
+            "code": "Ihr Code verlässt nie das System",
+            "performance": "Nutzung getrieben von Performance",
+            "focus": "Freiheit, ein System zu verbessern",
+            "reach": "Zugang zu Tausenden EA-Tradern"
+        },
+        "traditional": {
+            "oneTime": "Einmalige Lizenzzahlungen",
+            "launches": "Einkommen hängt von neuen Launches ab",
+            "piracy": "Hohes Raubkopie-Risiko",
+            "cracked": "EAs werden gecrackt und geteilt",
+            "marketing": "Marketinggetriebene Verkäufe",
+            "pressure": "Druck, mehr Lizenzen zu verkaufen",
+            "userBase": "Eigene Nutzerbasis aufbauen"
+        }
+    },
+    "forDevTestimonials": {
+        "items": {
+            "bogdan": {
+                "quote": "Nach 10 Jahren unbeständiger Ergebnisse mit manuellem Trading und anderen EAs hat mir EasyAlgos endlich die Transparenz und die stetigen Renditen gegeben, nach denen ich gesucht habe. Geringer Drawdown, klarer Support und ein System, dem ich wirklich vertraue.",
+                "name": "Bogdan Ion Puscasu",
+                "role": "Rumänien"
+            },
+            "paveludo": {
+                "quote": "Ich war der erste Drittentwickler, der zu EasyAlgos kam. Weil ich der Allererste war, wurden viele Integrationsfragen für externe Entwickler zum ersten Mal gemeinsam mit dem EasyAlgos-Team gelöst, und in diesem ganzen Prozess habe ich mich von ihrer Professionalität und Kompetenz überzeugt. Sie sind herausragend – sowohl technisch als auch darin, zu verstehen, was ihre Kunden wirklich wollen: Nutzer, die exzellente Werkzeuge für autonomes algorithmisches Trading suchen, ohne im Voraus für alles zu bezahlen, was auf der Plattform verfügbar ist. Eine Win-win-Lösung für Nutzer, Drittentwickler und die Plattform selbst. Ich freue mich, dass meine Produkte auf EasyAlgos veröffentlicht sind, und habe keinen Zweifel, dass meine Partnerschaft mit EasyAlgos wirklich langfristig sein wird.",
+                "name": "PAVELUDO",
+                "role": "Russland"
+            }
+        }
+    },
+    "forDevEdge": {
+        "eyebrow": "Der Vorsprung",
+        "titleLead": "Wie EasyAlgos Ihnen",
+        "titleAccent": "einen unfairen Vorteil verschafft",
+        "titleTail": ".",
+        "lead": "Hier hört unser Modell auf, nur gut zu sein, und wird unfair:",
+        "cards": {
+            "referrals": {
+                "title": "Verdienen Sie an den EAs anderer Entwickler",
+                "description": "Jeder Kunde, den Sie vermitteln, bringt Ihnen Provisionen — selbst wenn er die EAs anderer Entwickler handelt"
+            },
+            "rebates": {
+                "title": "Die besten IB-Konditionen der Branche",
+                "description": "Sie erhalten die vollen Standard-IB-Rebates, ohne Plattformabzug oder versteckte Gebühren"
+            },
+            "ai": {
+                "title": "Branchenführende KI-Technologie",
+                "description": "KI-gestützte Einblicke verbessern Transparenz und Kundenbindung — ohne zusätzliche Arbeit für Sie"
+            },
+            "dashboard": {
+                "title": "Erstklassiges Nutzer-Dashboard",
+                "description": "Ihre Kunden erhalten Performance-Tracking, Handelshistorie, Analysen und mehr"
+            },
+            "support": {
+                "title": "Remote-Desktop-Support",
+                "description": "Nutzer erhalten integrierten Fernzugriff-Support für ihre Handelsumgebung"
+            }
+        }
+    },
+    "forDevRequirements": {
+        "eyebrow": "Voraussetzungen",
+        "title": "Haben Sie, was es braucht?",
+        "lead": "Um Performance und Vertrauen auf der gesamten Plattform zu schützen, müssen alle Entwickler die folgenden Voraussetzungen erfüllen",
+        "items": {
+            "performance": {
+                "title": "Nachgewiesene Performance",
+                "description": "Ihr EA muss eine verifizierte MyFxBook-Historie auf Live-Konten mit mindestens 6 Monaten Handelshistorie haben."
+            },
+            "reviews": {
+                "title": "Echte Bewertungen",
+                "description": "Sie müssen authentisches Kundenfeedback auf Plattformen wie MQL5, TrustPilot oder ähnlichen haben"
+            },
+            "original": {
+                "title": "Eigene Strategien",
+                "description": "Ihr EA muss auf eigenen Ideen und eigener Logik beruhen, mit Transparenz zu Strategie, Risiko und Money-Management"
+            },
+            "backtesting": {
+                "title": "Langfristiges Backtesting",
+                "description": "Sie müssen mindestens 10 Jahre hochwertige Backtesting-Daten vorlegen"
+            },
+            "support": {
+                "title": "Direkter Support",
+                "description": "Sie müssen erreichbar und reaktionsschnell bleiben, damit Nutzer bei Bedarf Hilfe bekommen"
+            }
+        }
     },
     "trustpilot": {
         "excellent": "Hervorragend",

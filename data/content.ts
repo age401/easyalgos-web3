@@ -58,6 +58,27 @@ export const TESTIMONIALS: Testimonial[] = [
     { id: 'developer', media: mediaAsset('people', 'wim-schrynemakers', 280, 280), variant: 'feature', headline: true }
 ]
 
+/** /for-developers' pair (Figma 3282:31975) — both drawn as feature cards with a
+ *  192px portrait and no headline, the first in the narrow track. The portraits
+ *  are the file's own black-and-white exports (632 image fills, encoded 2x of
+ *  192), not the colour Bogdan portrait /developer uses. Copy lives under
+ *  `forDevTestimonials.items`. */
+export const FOR_DEV_TESTIMONIALS: Testimonial[] = [
+    { id: 'bogdan', media: mediaAsset('people', 'bogdan-ion-puscasu-bw', 192, 192), variant: 'feature', width: 'narrow' },
+    { id: 'paveludo', media: mediaAsset('people', 'paveludo', 192, 192), variant: 'feature', width: 'wide', indent: true }
+]
+
+/** /for-developers "The Edge" (Figma 3295:10242) — five cards in a snap
+ *  scroller, drawn in this order. Panels are 2x rasters of the 416x400 slot
+ *  (scripts/optimize-assets.py). Copy lives under `forDevEdge.cards.<id>`. */
+export const FOR_DEV_EDGE = [
+    { id: 'referrals', media: mediaAsset('for-developers', 'edge-referrals', 416, 400) },
+    { id: 'rebates', media: mediaAsset('for-developers', 'edge-ib-rebates', 416, 400) },
+    { id: 'ai', media: mediaAsset('for-developers', 'edge-ai', 416, 400) },
+    { id: 'dashboard', media: mediaAsset('for-developers', 'edge-dashboard', 416, 400) },
+    { id: 'support', media: mediaAsset('for-developers', 'edge-remote-support', 416, 400) }
+] as const
+
 /** The three "win" rows inside the pricing section's free-model explainer. Ids
  *  are i18n key suffixes under `pricing.model.bullets`. */
 export const PRICING_MODEL_BULLETS = ['traders', 'developers', 'brokers'] as const

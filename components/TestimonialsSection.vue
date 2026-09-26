@@ -43,18 +43,47 @@
 // affordance is rendered — same rule as the How-it-works steps: an affordance that
 // does nothing is worse than none. Setting `video` on an entry in data/content.ts
 // is the only change needed to light it up.
+//
+// /for-developers (3282:31975) draws the same band with its own two quotes in one
+// 2fr/3fr row, so the cards are a prop and their copy lives under `ns`. The
+// eyebrow and title stay the home page's — both pages draw the same pair.
+//
+// `dense` is that page's own phone treatment (frames 3412:7945 at 360,
+// 3412:7990 at 600), held until `desktop`, where the feature layout takes over
+// again: a 128 portrait (8px corners on a phone, 12 from 600), 14 / 140% quote,
+// 12 / 140% attribution, 24 padding and 24 between cards, 48 from heading to
+// first card. At 360 the card is one column — portrait, quote, attribution; from
+// 600 the portrait sits left and the quote and attribution stack beside it, top
+// aligned, 16 apart. No indent, no rule. The home page does not pass it.
 import { TESTIMONIALS } from '~/data/content'
+import type { Testimonial } from '~/types/home'
 
-// Drawn order is 1-2-3-4 down the page; the rows only exist to carry the
-// alternating column template, so they are sliced once at module scope rather
-// than recomputed.
-const ROWS = [TESTIMONIALS.slice(0, 2), TESTIMONIALS.slice(2)]
+const props = withDefaults(
+    defineProps<{
+        items?: Testimonial[]
+        /** i18n namespace the item copy is read from: `<ns>.items.<id>.*`. */
+        ns?: string
+        /** /for-developers' phone layout below `desktop` — see above. */
+        dense?: boolean
+    }>(),
+    { items: () => TESTIMONIALS, ns: 'testimonials', dense: false }
+)
+
+// Drawn order runs down the page two at a time; the rows only exist to carry
+// the alternating column template.
+const rows = computed(() => {
+    const out: Testimonial[][] = []
+    for (let i = 0; i < props.items.length; i += 2) out.push(props.items.slice(i, i + 2))
+    return out
+})
+
+const isWide = (item: Testimonial) => (item.width ?? (item.variant === 'feature' ? 'wide' : 'narrow')) === 'wide'
 </script>
 
 <template>
     <section
         data-dark-band
-        class="ea-dark ea-section bg-Neutral/800"
+        class="ea-dark ea-section bg-Neutral/800 antialiased"
         :aria-label="$t('testimonials.srLabel')"
     >
         <div class="ea-container flex flex-col gap-12">
@@ -62,66 +91,77 @@ const ROWS = [TESTIMONIALS.slice(0, 2), TESTIMONIALS.slice(2)]
                  v3 reference draws the usual eyebrow + H2 pair, and the H2 is
                  plain white with no gradient run. `mb-4` on top of the stack's
                  48px gap gives the drawn 64px down to the first card. -->
-            <SectionHeading :eyebrow="$t('testimonials.eyebrow')" invert class="mb-4">
+            <SectionHeading :eyebrow="$t('testimonials.eyebrow')" invert :class="dense ? 'desktop:mb-4' : 'mb-4'">
                 <template #title>{{ $t('testimonials.title') }}</template>
             </SectionHeading>
 
             <div
-                v-for="(row, rowIndex) in ROWS"
+                v-for="(row, rowIndex) in rows"
                 :key="rowIndex"
-                class="grid gap-12"
-                :class="
-                    row[0].variant === 'feature'
-                        ? 'desktop:grid-cols-[3fr_2fr]'
-                        : 'desktop:grid-cols-[2fr_3fr]'
-                "
+                class="grid"
+                :class="[
+                    dense ? 'gap-6 desktop:gap-12' : 'gap-12',
+                    isWide(row[0]) ? 'desktop:grid-cols-[3fr_2fr]' : 'desktop:grid-cols-[2fr_3fr]'
+                ]"
             >
                 <figure
                     v-for="(item, index) in row"
                     :key="item.id"
                     v-reveal="(rowIndex * 2 + index) * 80"
-                    class="grid content-center gap-y-6 rounded-[20px] border-2 border-transparent p-6 tablet:p-[38px]
+                    class="grid content-center gap-y-6 rounded-[20px] border-2 border-transparent
                            [background:linear-gradient(#171717,#171717)_padding-box,linear-gradient(115deg,#404040,#262626)_border-box]
                            tablet:gap-x-10 desktop:min-h-[325px]"
-                    :class="
-                        item.variant === 'feature'
-                            ? 'tablet:grid-cols-[192px_minmax(0,640px)] tablet:gap-y-[21px] desktop:grid-cols-[192px_1fr]'
-                            : 'tablet:grid-cols-[128px_minmax(0,640px)] tablet:gap-y-0 desktop:grid-cols-[128px_1fr]'
-                    "
+                    :class="[
+                        dense ? 'p-[22px] desktop:p-[38px]' : 'p-6 tablet:p-[38px]',
+                        dense
+                            ? 'tablet:grid-cols-[128px_minmax(0,1fr)] tablet:gap-y-4 desktop:grid-cols-[192px_1fr] desktop:gap-y-[21px]'
+                            : item.variant === 'feature'
+                              ? 'tablet:grid-cols-[192px_minmax(0,640px)] tablet:gap-y-[21px] desktop:grid-cols-[192px_1fr]'
+                              : 'tablet:grid-cols-[128px_minmax(0,640px)] tablet:gap-y-0 desktop:grid-cols-[128px_1fr]'
+                    ]"
                 >
                     <AppPicture
                         :media="item.media"
                         loading="lazy"
                         :img-class="
-                            item.variant === 'feature'
-                                ? 'h-[128px] w-[128px] rounded-[12px] object-cover grayscale tablet:h-[192px] tablet:w-[192px]'
-                                : 'h-[112px] w-[112px] rounded-[12px] object-cover grayscale tablet:h-[128px] tablet:w-[128px]'
+                            dense
+                                ? 'h-[128px] w-[128px] rounded-[8px] object-cover grayscale tablet:rounded-[12px] desktop:h-[192px] desktop:w-[192px]'
+                                : item.variant === 'feature'
+                                  ? 'h-[128px] w-[128px] rounded-[12px] object-cover grayscale tablet:h-[192px] tablet:w-[192px]'
+                                  : 'h-[112px] w-[112px] rounded-[12px] object-cover grayscale tablet:h-[128px] tablet:w-[128px]'
                         "
-                        class="tablet:col-start-1 tablet:row-start-1"
+                        :class="dense ? 'tablet:col-start-1 tablet:row-span-2 tablet:row-start-1 desktop:row-span-1' : 'tablet:col-start-1 tablet:row-start-1'"
                     />
 
                     <blockquote
                         class="flex flex-col gap-4"
                         :class="
-                            item.variant === 'feature'
-                                ? 'tablet:col-start-2 tablet:row-span-2 tablet:row-start-1 tablet:self-center'
-                                : 'tablet:col-start-2 tablet:row-start-1'
+                            dense
+                                ? 'tablet:col-start-2 tablet:row-start-1 desktop:row-span-2 desktop:self-center'
+                                : item.variant === 'feature'
+                                  ? 'tablet:col-start-2 tablet:row-span-2 tablet:row-start-1 tablet:self-center'
+                                  : 'tablet:col-start-2 tablet:row-start-1'
                         "
                     >
                         <p
                             v-if="item.headline"
                             class="font-franklin text-[22px] font-medium leading-[26px] tracking-[0.01em] text-white"
                         >
-                            &ldquo;{{ $t(`testimonials.items.${item.id}.headline`) }}&rdquo;
+                            &ldquo;{{ $t(`${ns}.items.${item.id}.headline`) }}&rdquo;
                         </p>
                         <!-- The body quote is indented under its headline on the
                              feature cards; the compact cards have nothing to indent
                              from. -->
                         <p
-                            class="font-franklin text-[16px] leading-[24px] tracking-[0.01em] text-Neutral/50"
-                            :class="item.headline ? 'tablet:pl-6' : ''"
+                            class="font-franklin text-Neutral/50"
+                            :class="[
+                                dense
+                                    ? 'text-[14px] leading-[1.4] desktop:text-[16px] desktop:leading-[24px] desktop:tracking-[0.01em]'
+                                    : 'text-[16px] leading-[24px] tracking-[0.01em]',
+                                item.headline || item.indent ? (dense ? 'desktop:pl-6' : 'tablet:pl-6') : ''
+                            ]"
                         >
-                            &ldquo;{{ $t(`testimonials.items.${item.id}.quote`) }}&rdquo;
+                            &ldquo;{{ $t(`${ns}.items.${item.id}.quote`) }}&rdquo;
                         </p>
 
                         <!-- Withheld until a clip exists — see the header comment. -->
@@ -137,19 +177,27 @@ const ROWS = [TESTIMONIALS.slice(0, 2), TESTIMONIALS.slice(2)]
 
                     <figcaption
                         :class="
-                            item.variant === 'feature'
-                                ? 'tablet:col-start-1 tablet:row-start-2'
-                                : 'border-t border-Neutral/600 pt-8 tablet:col-start-2 tablet:row-start-2 tablet:mt-8'
+                            dense
+                                ? 'tablet:col-start-2 tablet:row-start-2 desktop:col-start-1'
+                                : item.variant === 'feature'
+                                  ? 'tablet:col-start-1 tablet:row-start-2'
+                                  : 'border-t border-Neutral/600 pt-8 tablet:col-start-2 tablet:row-start-2 tablet:mt-8'
                         "
                     >
                         <!-- Drawn SemiBold; rendered Medium. Only Roboto 500 is
                              self-hosted, and 600 would be synthesised — a real
                              500 reads closer to the drawing than a faked 600. -->
-                        <p class="font-franklin text-[14px] font-medium leading-[18px] text-Tinted/50">
-                            {{ $t(`testimonials.items.${item.id}.name`) }}
+                        <p
+                            class="font-franklin font-medium text-Tinted/50"
+                            :class="dense ? 'text-[12px] leading-[1.4] desktop:text-[14px] desktop:leading-[18px]' : 'text-[14px] leading-[18px]'"
+                        >
+                            {{ $t(`${ns}.items.${item.id}.name`) }}
                         </p>
-                        <p class="mt-0.5 font-franklin text-[13px] leading-4 text-Neutral/300">
-                            {{ $t(`testimonials.items.${item.id}.role`) }}
+                        <p
+                            class="mt-0.5 font-franklin text-Neutral/300"
+                            :class="dense ? 'text-[12px] leading-[1.4] desktop:text-[13px] desktop:leading-4' : 'text-[13px] leading-4'"
+                        >
+                            {{ $t(`${ns}.items.${item.id}.role`) }}
                         </p>
                     </figcaption>
                 </figure>
