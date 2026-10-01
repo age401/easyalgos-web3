@@ -359,6 +359,109 @@
             "outro": "There are no payments of any kind, and no hidden costs. If you succeed, everyone in the ecosystem benefits, and that's exactly how EasyAlgos was designed to be."
         }
     },
+    "pricingPage": {
+        "title": "Find the right account for you",
+        "seoDescription": "Compare the Starter, Pro and Elite accounts: the Expert Advisors, EasyVPS plan and support each one includes, with no payments of any kind.",
+        "minimumBalance": "Minimum balance",
+        "popular": "Popular",
+        "whatYouGet": "What you get",
+        "tableCaption": "What each EasyAlgos account includes",
+        "included": "Included",
+        "notIncluded": "Not included",
+        "value": "{amount} value",
+        "features": {
+            "portfolio": "7 Expert Advisors portfolio",
+            "licenses": "Unlimited MT5 licenses",
+            "thirdParty": "3rd-Party Expert Advisors",
+            "analytics": "Analytics / trade history",
+            "telegram": "Telegram community",
+            "remoteDesktop": "Remote desktop support",
+            "forecasts": "AI market forecasts",
+            "earlyAccess": "Early access to new EAs / tools",
+            "exclusiveTools": "Exclusive tools / utilities",
+            "setFiles": "Special set files",
+            "handsOff": "‘Hands-off’ experience"
+        },
+        "vps": {
+            "name": "EasyVPS",
+            "by": "by ForexVPS.net",
+            "viewSpecs": "view specs",
+            "hideSpecs": "hide specs",
+            "aboutPlan": "EasyVPS {plan} specifications",
+            "panelLabel": "EasyVPS specifications by account",
+            "closeSpecs": "Close specifications"
+        },
+        "specs": {
+            "platforms": "Trading platforms you can run",
+            "cpu": "CPU",
+            "memory": "Memory",
+            "storage": "Storage",
+            "os": "Operating system",
+            "locations": "Locations included",
+            "uptime": "100% Uptime guarantee*",
+            "dedicatedIp": "Dedicated IP address",
+            "allPlatforms": "All trading platforms",
+            "backups": "Automated backups"
+        },
+        "faq": {
+            "eyebrow": "Find answers",
+            "title": "Frequently asked questions",
+            "items": {
+                "freeTrial": {
+                    "q": "Is there a free trial available?",
+                    "a": "There is no trial because there is nothing to trial out of: EasyAlgos is free for every account that qualifies. Meet your tier's minimum balance and monthly trades and you have the full service for as long as you trade."
+                },
+                "changePlan": {
+                    "q": "Can I change my plan later?",
+                    "a": "Our service is completely free, and there are no hidden costs or upgrade fees. You can switch between our available tools and features at any time without restrictions. Since all features are provided at no cost, you can enjoy full flexibility and adapt your trading strategies as your needs evolve."
+                },
+                "cancellation": {
+                    "q": "What is your cancellation policy?",
+                    "a": "There is no contract to cancel. You can disconnect your trading account from EasyAlgos at any time, from your user dashboard, with no notice period and no fees."
+                },
+                "invoice": {
+                    "q": "Can other info be added to an invoice?",
+                    "a": "EasyAlgos never bills you, so there is no invoice to add to. Your trading costs are the broker's usual spreads and commissions, which appear on your broker statements."
+                }
+            }
+        },
+        "requirements": {
+            "eyebrow": "Requirements",
+            "title": "Do you have what it takes?",
+            "items": {
+                "qualify": {
+                    "title": "See if you qualify",
+                    "description": "Take just 5 minutes to fill out a short application and find out if you’re a good fit to join us."
+                },
+                "connect": {
+                    "title": "Connect your account",
+                    "description": "Once approved, access your user dashboard and link your MetaTrader account securely in a few clicks."
+                },
+                "amazed": {
+                    "title": "Get ready to be amazed",
+                    "description": "Sit back and let our Expert Advisors do the heavy lifting, while you track your results through the user dashboard."
+                }
+            }
+        },
+        "businessModel": {
+            "eyebrow": "The business model",
+            "titleLead": "Where’s the",
+            "titleAccent": "catch",
+            "titleEnd": "?",
+            "askIntro": "At EasyAlgos, people often ask:",
+            "askQuote": "\"If everything is free... what's the catch?\"",
+            "answer": "There isn’t one",
+            "answerEnd": ".",
+            "body": "You actually don’t pay us anything — no license fees, no subscriptions, no commissions, no hidden markups.",
+            "howTitle": "Here’s how developers get paid:",
+            "bullets": {
+                "traders": "You win because you get access to high-quality, verified EAs and infrastructure — completely free",
+                "developers": "Developers win because they earn long-term income based on real usage, not one-time sales",
+                "brokers": "Brokers win because they gain loyal, engaged clients who actually trade"
+            },
+            "outro": "There are no payments of any kind, and no hidden costs. If you succeed, everyone in the ecosystem benefits — and that’s exactly how EasyAlgos was designed to be."
+        }
+    },
     "research": {
         "titleLine1": "Behind the algorithms:",
         "titleLine2": "research, data, and AI",

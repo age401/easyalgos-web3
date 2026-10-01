@@ -1,4 +1,13 @@
-import type { HowItWorksStep, PricingTier, ResearchPost, SolutionItem, Testimonial } from '~/types/home'
+import type {
+    HowItWorksStep,
+    PricingFeature,
+    PricingTier,
+    PricingTierId,
+    ResearchPost,
+    SolutionItem,
+    Testimonial,
+    VpsPlan
+} from '~/types/home'
 import { mediaAsset } from '~/utils/media'
 
 // Section content: ids and assets only. Every id doubles as the i18n key suffix
@@ -47,6 +56,80 @@ export const PRICING_TIERS: PricingTier[] = [
     { id: 'pro', minimumBalance: 10000, minimumTrades: 10, featured: true },
     { id: 'elite', minimumBalance: 20000, minimumTrades: 10 }
 ]
+
+const ALL_TIERS: readonly PricingTierId[] = ['starter', 'pro', 'elite']
+const PRO_UP: readonly PricingTierId[] = ['pro', 'elite']
+const ELITE: readonly PricingTierId[] = ['elite']
+
+/** /pricing — "What you get", the comparison under the tier cards (Figma
+ *  3507:11752), in drawn order. The EasyVPS row is not in this list: it carries a
+ *  plan per tier and opens the specs panel, so the table draws it from
+ *  VPS_PLANS, after `thirdParty`. Copy lives under `pricingPage.features`. */
+export const PRICING_FEATURES: PricingFeature[] = [
+    { id: 'portfolio', tiers: ALL_TIERS, value: 19600 },
+    { id: 'licenses', tiers: ALL_TIERS },
+    { id: 'thirdParty', tiers: ALL_TIERS, value: 3808 }
+]
+export const PRICING_FEATURES_AFTER_VPS: PricingFeature[] = [
+    { id: 'analytics', tiers: ALL_TIERS },
+    { id: 'telegram', tiers: ALL_TIERS },
+    { id: 'remoteDesktop', tiers: PRO_UP },
+    { id: 'forecasts', tiers: PRO_UP },
+    { id: 'earlyAccess', tiers: ELITE },
+    { id: 'exclusiveTools', tiers: ELITE },
+    { id: 'setFiles', tiers: ELITE },
+    { id: 'handsOff', tiers: ELITE }
+]
+
+/** The EasyVPS plan each tier comes with, and the ten lines of its specs panel
+ *  (Figma 3507:10468, "sub Row"). Plan names are ForexVPS.net's own and are not
+ *  translated. `os` is the file's "2022/19/16" verbatim — Windows Server
+ *  2022 / 2019 / 2016. Spec labels live under `pricingPage.specs`. */
+export const VPS_SPEC_ROWS = [
+    'platforms',
+    'cpu',
+    'memory',
+    'storage',
+    'os',
+    'locations',
+    'uptime',
+    'dedicatedIp',
+    'allPlatforms',
+    'backups'
+] as const
+
+const VPS_INCLUDED = { uptime: true, dedicatedIp: true, allPlatforms: true, backups: true }
+
+export const VPS_PLANS: VpsPlan[] = [
+    {
+        tier: 'starter',
+        name: 'CORE',
+        value: 450,
+        specs: { platforms: '1-3', cpu: '2x', memory: '4 GB', storage: '100 GB', os: '2022/19/16', locations: 22, ...VPS_INCLUDED }
+    },
+    {
+        tier: 'pro',
+        name: 'EDGE',
+        value: 660,
+        specs: { platforms: '3-6', cpu: '4x', memory: '6 GB', storage: '150 GB', os: '2022/19/16', locations: 22, ...VPS_INCLUDED }
+    },
+    {
+        tier: 'elite',
+        name: 'PRIME',
+        value: 900,
+        specs: { platforms: '6+', cpu: '6x', memory: '8 GB', storage: '200 GB', os: '2022/19/16', locations: 22, ...VPS_INCLUDED }
+    }
+]
+
+/** /pricing FAQ (Figma 3507:11753), drawn order. Copy under `pricingPage.faq`. */
+export const PRICING_FAQ = ['freeTrial', 'changePlan', 'cancellation', 'invoice'] as const
+
+/** The three steps of the /pricing Requirements module (Figma 3507:11855). */
+export const PRICING_REQUIREMENTS = [
+    { id: 'qualify', icon: '/img/icons/check-list.svg' },
+    { id: 'connect', icon: '/img/icons/square-arrow-up.svg' },
+    { id: 'amazed', icon: '/img/icons/check-circle.svg' }
+] as const
 
 /** Testimonials — four quote cards, drawn in this order across a 2x2 grid whose
  *  two card widths swap sides on the second row (feature, compact / compact,

@@ -113,6 +113,25 @@ export interface PricingTier {
     featured?: boolean
 }
 
+export type PricingTierId = 'starter' | 'pro' | 'elite'
+
+/** One row of the /pricing comparison. `tiers` lists who gets it; `value` is the
+ *  "$N value" note under the feature name, in whole dollars. */
+export interface PricingFeature {
+    id: string
+    tiers: readonly PricingTierId[]
+    value?: number
+}
+
+/** The EasyVPS plan bundled with a tier, and the figures its specs panel lists.
+ *  Strings are drawn verbatim ("1-3", "2x"); booleans are a check or nothing. */
+export interface VpsPlan {
+    tier: PricingTierId
+    name: string
+    value: number
+    specs: Record<string, string | number | boolean>
+}
+
 /** One quote card on the dark band.
  *
  *  The four are drawn in a 2x2 grid of two widths that swap sides row to row —

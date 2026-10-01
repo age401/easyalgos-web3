@@ -359,6 +359,109 @@
             "outro": "Es gibt keinerlei Zahlungen und keine versteckten Kosten. Wenn Sie erfolgreich sind, profitieren alle im Ökosystem - und genau so wurde EasyAlgos von Anfang an konzipiert."
         }
     },
+    "pricingPage": {
+        "title": "Finden Sie das richtige Konto für sich",
+        "seoDescription": "Vergleichen Sie die Konten Starter, Pro und Elite: Expert Advisors, EasyVPS-Tarif und Support, die jeweils enthalten sind – ohne jegliche Zahlungen.",
+        "minimumBalance": "Mindestguthaben",
+        "popular": "Beliebt",
+        "whatYouGet": "Das erhalten Sie",
+        "tableCaption": "Was jedes EasyAlgos-Konto enthält",
+        "included": "Enthalten",
+        "notIncluded": "Nicht enthalten",
+        "value": "{amount} Wert",
+        "features": {
+            "portfolio": "Portfolio aus 7 Expert Advisors",
+            "licenses": "Unbegrenzte MT5-Lizenzen",
+            "thirdParty": "Expert Advisors von Drittanbietern",
+            "analytics": "Analysen / Handelshistorie",
+            "telegram": "Telegram-Community",
+            "remoteDesktop": "Remote-Desktop-Support",
+            "forecasts": "KI-Marktprognosen",
+            "earlyAccess": "Frühzugang zu neuen EAs / Tools",
+            "exclusiveTools": "Exklusive Tools / Utilities",
+            "setFiles": "Spezielle Set-Dateien",
+            "handsOff": "„Hands-off“-Erlebnis"
+        },
+        "vps": {
+            "name": "EasyVPS",
+            "by": "von ForexVPS.net",
+            "viewSpecs": "Specs ansehen",
+            "hideSpecs": "Specs ausblenden",
+            "aboutPlan": "Spezifikationen von EasyVPS {plan}",
+            "panelLabel": "EasyVPS-Spezifikationen nach Konto",
+            "closeSpecs": "Spezifikationen schließen"
+        },
+        "specs": {
+            "platforms": "Nutzbare Handelsplattformen",
+            "cpu": "CPU",
+            "memory": "Arbeitsspeicher",
+            "storage": "Speicherplatz",
+            "os": "Betriebssystem",
+            "locations": "Enthaltene Standorte",
+            "uptime": "100 % Verfügbarkeitsgarantie*",
+            "dedicatedIp": "Dedizierte IP-Adresse",
+            "allPlatforms": "Alle Handelsplattformen",
+            "backups": "Automatische Backups"
+        },
+        "faq": {
+            "eyebrow": "Antworten finden",
+            "title": "Häufig gestellte Fragen",
+            "items": {
+                "freeTrial": {
+                    "q": "Gibt es eine kostenlose Testphase?",
+                    "a": "Eine Testphase gibt es nicht, weil es nichts zu testen gibt: EasyAlgos ist für jedes qualifizierte Konto kostenlos. Erfüllen Sie das Mindestguthaben und die monatlichen Trades Ihrer Stufe, und Sie nutzen den vollen Service, solange Sie handeln."
+                },
+                "changePlan": {
+                    "q": "Kann ich meinen Tarif später ändern?",
+                    "a": "Unser Service ist völlig kostenlos, ohne versteckte Kosten oder Upgrade-Gebühren. Sie können jederzeit und ohne Einschränkungen zwischen unseren Tools und Funktionen wechseln. Da alle Funktionen kostenlos sind, bleiben Sie flexibel und können Ihre Handelsstrategien an Ihre Bedürfnisse anpassen."
+                },
+                "cancellation": {
+                    "q": "Wie sind Ihre Kündigungsbedingungen?",
+                    "a": "Es gibt keinen Vertrag, den Sie kündigen müssten. Sie können Ihr Handelskonto jederzeit über Ihr Dashboard von EasyAlgos trennen – ohne Kündigungsfrist und ohne Gebühren."
+                },
+                "invoice": {
+                    "q": "Können weitere Angaben auf einer Rechnung ergänzt werden?",
+                    "a": "EasyAlgos stellt Ihnen nie etwas in Rechnung, daher gibt es keine Rechnung zu ergänzen. Ihre Handelskosten sind die üblichen Spreads und Kommissionen des Brokers, die in Ihren Broker-Abrechnungen erscheinen."
+                }
+            }
+        },
+        "requirements": {
+            "eyebrow": "Voraussetzungen",
+            "title": "Haben Sie das Zeug dazu?",
+            "items": {
+                "qualify": {
+                    "title": "Prüfen Sie, ob Sie sich qualifizieren",
+                    "description": "Nehmen Sie sich nur 5 Minuten für eine kurze Bewerbung und finden Sie heraus, ob Sie zu uns passen."
+                },
+                "connect": {
+                    "title": "Verbinden Sie Ihr Konto",
+                    "description": "Nach der Freigabe öffnen Sie Ihr Dashboard und verknüpfen Ihr MetaTrader-Konto mit wenigen Klicks sicher."
+                },
+                "amazed": {
+                    "title": "Lassen Sie sich begeistern",
+                    "description": "Lehnen Sie sich zurück und lassen Sie unsere Expert Advisors die schwere Arbeit erledigen, während Sie Ihre Ergebnisse im Dashboard verfolgen."
+                }
+            }
+        },
+        "businessModel": {
+            "eyebrow": "Das Geschäftsmodell",
+            "titleLead": "Wo ist der",
+            "titleAccent": "Haken",
+            "titleEnd": "?",
+            "askIntro": "Bei EasyAlgos werden wir oft gefragt:",
+            "askQuote": "„Wenn alles kostenlos ist … wo ist der Haken?“",
+            "answer": "Es gibt keinen",
+            "answerEnd": ".",
+            "body": "Sie zahlen uns tatsächlich nichts – keine Lizenzgebühren, keine Abos, keine Provisionen, keine versteckten Aufschläge.",
+            "howTitle": "So werden Entwickler bezahlt:",
+            "bullets": {
+                "traders": "Sie gewinnen, weil Sie Zugang zu hochwertigen, verifizierten EAs und Infrastruktur erhalten – völlig kostenlos",
+                "developers": "Entwickler gewinnen, weil sie langfristige Einnahmen auf Basis echter Nutzung erzielen, nicht durch Einmalverkäufe",
+                "brokers": "Broker gewinnen, weil sie loyale, engagierte Kunden gewinnen, die tatsächlich handeln"
+            },
+            "outro": "Es gibt keinerlei Zahlungen und keine versteckten Kosten. Wenn Sie Erfolg haben, profitiert das gesamte Ökosystem – und genau so wurde EasyAlgos konzipiert."
+        }
+    },
     "research": {
         "titleLine1": "Hinter den Algorithmen:",
         "titleLine2": "Research, Daten und KI",

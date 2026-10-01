@@ -826,6 +826,50 @@
         }
     }
 
+    /* The /pricing table's CTAs drop the arrow at 769-1024 (annotation on
+       3514:19825). A class, not an arbitrary `[&_.ea-btn__arrow]` variant:
+       Tailwind reads the underscores in that selector as spaces. Below 769 the
+       phone cards have their own buttons, arrow included. */
+    @media (max-width: 1024px) {
+        .ea-btn--no-arrow-tablet .ea-btn__arrow {
+            display: none;
+        }
+    }
+
+    /* The /pricing "included" mark's disc — see PricingCheckBubble.vue. */
+    .ea-check-bubble {
+        background-color: #fff;
+        background-image: radial-gradient(
+            circle 18px at 50% 29.7%,
+            rgb(122 127 163 / 0) 0%,
+            rgb(122 127 163 / 0.2) 55%,
+            rgb(122 127 163 / 0.8) 90%
+        );
+        box-shadow: 0 0 0 2.4px rgb(98 103 143 / 0.1);
+    }
+
+    /* A height collapse with no JS measuring: 0fr -> 1fr on a one-row grid, the
+       same trick as .ea-solution-row__body below, for disclosures that are not
+       buttons themselves (the /pricing FAQ answers and EasyVPS specs). The
+       caller sets data-open and makes the closed content `inert`. */
+    .ea-collapse {
+        display: grid;
+        grid-template-rows: 0fr;
+        transition: grid-template-rows 0.5s theme('transitionTimingFunction.smooth');
+    }
+    .ea-collapse[data-open='true'] {
+        grid-template-rows: 1fr;
+    }
+    .ea-collapse > * {
+        min-height: 0;
+        overflow: hidden;
+    }
+    @media (prefers-reduced-motion: reduce) {
+        .ea-collapse {
+            transition: none;
+        }
+    }
+
     .ea-solution-row {
         @apply grid w-full grid-cols-[2rem_1fr] items-start gap-x-5 border-b py-3 text-left;
         border-color: theme('colors.Tinted/100');

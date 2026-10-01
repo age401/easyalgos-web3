@@ -1,0 +1,9 @@
+<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect x="1" y="1" width="18" height="18" rx="9" fill="white"/>
+<rect x="1" y="1" width="18" height="18" rx="9" stroke="url(#ring)" stroke-width="2"/>
+<path d="M8.99997 13.75C8.61497 13.75 8.22997 13.605 7.93997 13.31L5.43997 10.81C4.85497 10.225 4.85497 9.27497 5.43997 8.68997C6.02497 8.10497 6.97497 8.10497 7.55997 8.68997L8.99997 10.13L12.44 6.68997C13.025 6.10497 13.975 6.10497 14.56 6.68997C15.145 7.27497 15.145 8.22497 14.56 8.80997L10.06 13.31C9.76497 13.605 9.38497 13.75 8.99997 13.75Z" fill="url(#mark)"/>
+<defs>
+<linearGradient id="ring" x1="10" y1="0" x2="10" y2="20" gradientUnits="userSpaceOnUse"><stop stop-color="#B36DFF"/><stop offset="1" stop-color="#205EFB"/></linearGradient>
+<linearGradient id="mark" x1="9.99997" y1="6.25122" x2="8.43483" y2="13.4077" gradientUnits="userSpaceOnUse"><stop stop-color="#B36DFF"/><stop offset="1" stop-color="#205EFB"/></linearGradient>
+</defs>
+</svg>

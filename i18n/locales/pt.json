@@ -359,6 +359,109 @@
             "outro": "Não há pagamentos de qualquer tipo nem custos ocultos. Se tiver sucesso, todos no ecossistema beneficiam - e foi exatamente assim que a EasyAlgos foi concebida."
         }
     },
+    "pricingPage": {
+        "title": "Encontre a conta certa para si",
+        "seoDescription": "Compare as contas Starter, Pro e Elite: os Expert Advisors, o plano EasyVPS e o suporte incluídos em cada uma, sem pagamentos de qualquer tipo.",
+        "minimumBalance": "Saldo mínimo",
+        "popular": "Popular",
+        "whatYouGet": "O que recebe",
+        "tableCaption": "O que cada conta EasyAlgos inclui",
+        "included": "Incluído",
+        "notIncluded": "Não incluído",
+        "value": "{amount} de valor",
+        "features": {
+            "portfolio": "Portefólio de 7 Expert Advisors",
+            "licenses": "Licenças MT5 ilimitadas",
+            "thirdParty": "Expert Advisors de terceiros",
+            "analytics": "Análises / histórico de negociação",
+            "telegram": "Comunidade no Telegram",
+            "remoteDesktop": "Suporte por ambiente de trabalho remoto",
+            "forecasts": "Previsões de mercado com IA",
+            "earlyAccess": "Acesso antecipado a novos EAs / ferramentas",
+            "exclusiveTools": "Ferramentas / utilitários exclusivos",
+            "setFiles": "Ficheiros set especiais",
+            "handsOff": "Experiência «sem intervenção»"
+        },
+        "vps": {
+            "name": "EasyVPS",
+            "by": "da ForexVPS.net",
+            "viewSpecs": "ver specs",
+            "hideSpecs": "ocultar specs",
+            "aboutPlan": "Especificações do EasyVPS {plan}",
+            "panelLabel": "Especificações do EasyVPS por conta",
+            "closeSpecs": "Fechar especificações"
+        },
+        "specs": {
+            "platforms": "Plataformas de negociação que pode usar",
+            "cpu": "CPU",
+            "memory": "Memória",
+            "storage": "Armazenamento",
+            "os": "Sistema operativo",
+            "locations": "Localizações incluídas",
+            "uptime": "Garantia de disponibilidade de 100%*",
+            "dedicatedIp": "Endereço IP dedicado",
+            "allPlatforms": "Todas as plataformas de negociação",
+            "backups": "Cópias de segurança automáticas"
+        },
+        "faq": {
+            "eyebrow": "Encontre respostas",
+            "title": "Perguntas frequentes",
+            "items": {
+                "freeTrial": {
+                    "q": "Existe um período de teste gratuito?",
+                    "a": "Não há período de teste porque não é preciso: a EasyAlgos é gratuita para todas as contas que se qualificam. Cumpra o saldo mínimo e as operações mensais do seu nível e tem o serviço completo enquanto negociar."
+                },
+                "changePlan": {
+                    "q": "Posso mudar de plano mais tarde?",
+                    "a": "O nosso serviço é totalmente gratuito, sem custos ocultos nem taxas de upgrade. Pode alternar entre as nossas ferramentas e funcionalidades a qualquer momento, sem restrições. Como todas as funcionalidades são gratuitas, tem total flexibilidade para adaptar as suas estratégias à medida que as suas necessidades evoluem."
+                },
+                "cancellation": {
+                    "q": "Qual é a vossa política de cancelamento?",
+                    "a": "Não há contrato para cancelar. Pode desligar a sua conta de negociação da EasyAlgos a qualquer momento, a partir do seu painel, sem pré-aviso e sem taxas."
+                },
+                "invoice": {
+                    "q": "É possível acrescentar outras informações a uma fatura?",
+                    "a": "A EasyAlgos nunca lhe cobra nada, por isso não há fatura a que acrescentar informações. Os seus custos de negociação são os spreads e comissões habituais da corretora, que constam dos extratos dela."
+                }
+            }
+        },
+        "requirements": {
+            "eyebrow": "Requisitos",
+            "title": "Tem o que é preciso?",
+            "items": {
+                "qualify": {
+                    "title": "Veja se se qualifica",
+                    "description": "Demore apenas 5 minutos a preencher uma breve candidatura e descubra se é a pessoa certa para se juntar a nós."
+                },
+                "connect": {
+                    "title": "Ligue a sua conta",
+                    "description": "Depois de aprovado, aceda ao seu painel e associe a sua conta MetaTrader em segurança com poucos cliques."
+                },
+                "amazed": {
+                    "title": "Prepare-se para se surpreender",
+                    "description": "Relaxe e deixe os nossos Expert Advisors fazerem o trabalho pesado, enquanto acompanha os seus resultados no painel."
+                }
+            }
+        },
+        "businessModel": {
+            "eyebrow": "O modelo de negócio",
+            "titleLead": "Onde está o",
+            "titleAccent": "truque",
+            "titleEnd": "?",
+            "askIntro": "Na EasyAlgos, perguntam-nos muitas vezes:",
+            "askQuote": "«Se tudo é gratuito... onde está o truque?»",
+            "answer": "Não há nenhum",
+            "answerEnd": ".",
+            "body": "Na verdade, não nos paga nada: sem licenças, sem subscrições, sem comissões, sem margens ocultas.",
+            "howTitle": "É assim que os programadores são pagos:",
+            "bullets": {
+                "traders": "Você ganha porque tem acesso a EAs verificados de alta qualidade e à infraestrutura, totalmente grátis",
+                "developers": "Os programadores ganham porque obtêm rendimentos de longo prazo com base na utilização real, não em vendas únicas",
+                "brokers": "As corretoras ganham porque conquistam clientes fiéis e envolvidos que negoceiam de facto"
+            },
+            "outro": "Não há pagamentos de qualquer tipo, nem custos ocultos. Se tiver sucesso, todo o ecossistema beneficia — e foi exatamente assim que a EasyAlgos foi concebida."
+        }
+    },
     "research": {
         "titleLine1": "Por trás dos algoritmos:",
         "titleLine2": "investigação, dados e IA",
