@@ -2128,6 +2128,42 @@
     .is-dark-band .ea-header__burger:hover { @apply !bg-white/10; }
     .is-dark-band .ea-header__burger span { @apply !bg-white; }
 
+    /* ================================================= Topbar (Dark) == */
+    /* SiteHeader's `tone="dark"` — the Affiliates file's "Topbar (Dark)" set
+       (71:1288) and its parts: Topbar - Link (Dark) 71:699, Site Mode Switch
+       (Dark) 71:781 with its buttons 71:715, Button - Burger Menu (Dark)
+       71:770. Same geometry as the light bar, so every rule is a colour, and
+       each is scoped `.ea-header--dark …` (two classes) so it outranks the
+       one-class utilities and base rules above without an !important. */
+    .ea-header.ea-header--dark {
+        @apply border-Neutral/700 bg-Neutral/900;
+    }
+    .ea-header--dark .ea-header__logo--ink { opacity: 0; }
+    .ea-header--dark .ea-header__logo--white { opacity: 1; }
+    .ea-header--dark .ea-header__for { @apply text-Neutral/400; }
+    .ea-header--dark .ea-header__link { @apply text-white; }
+    .ea-header--dark .ea-header__link:hover { @apply bg-Neutral/800; }
+    .ea-header--dark .ea-header__link:active,
+    .ea-header--dark .ea-header__link[aria-current='page'] { @apply bg-Neutral/700; }
+    .ea-header--dark .ea-header__switch { @apply bg-Neutral/800; }
+    .ea-header--dark .ea-header__switch-item { @apply text-Neutral/300; }
+    .ea-header--dark .ea-header__switch-item--current {
+        @apply bg-Tinted/800 text-white;
+        filter: none;
+    }
+    .ea-header--dark .ea-header__switch-idle:hover { @apply text-white; }
+    .ea-header--dark .ea-header__burger { @apply bg-Neutral/900; }
+    .ea-header--dark .ea-header__burger:hover { @apply bg-Neutral/800; }
+    .ea-header--dark .ea-header__burger:active { @apply bg-Neutral/700; }
+    .ea-header--dark .ea-header__burger span { @apply bg-white; }
+    /* The folded-away menu was never drawn dark; it takes the bar's palette
+       rather than flashing a white sheet out of a black bar. */
+    .ea-header--dark .ea-header__menu { @apply bg-Neutral/900; }
+    .ea-header--dark .ea-header__rule { @apply bg-Neutral/700; }
+    @media (min-width: 841px) {
+        .ea-header--dark .ea-header__menu { @apply border border-Neutral/700; }
+    }
+
     /* ====================================================== Burger menu == */
     /* One element, two presentations. Below 841 it is a sheet filling what is
        left of the viewport under the bar (node 523:2717) with its sign-in block
@@ -2409,6 +2445,407 @@
     .page-enter-from,
     .page-leave-to {
         opacity: 0;
+    }
+
+    /* ============================================== Affiliates hero copy == */
+    /* The partner marks on dark: the home hero's greys at rest, but the hover
+       lifts the wordmark to white instead of near-black. */
+    .aff-hero-partners .ea-brand-logo {
+        --brand-word-hover: #FFFFFF;
+    }
+    /* The graphic's overrun: 224px at 1920 (an 844 stage beside a 680 copy
+       column), never more than the right gutter — 60px plus whatever the
+       viewport has beyond the 1480 container, i.e. 60 + (100vw - 1480) / 2.
+       Written flat, as max(-224, min(-60, 680 - 50vw)), because the build's
+       CSS minifier cannot parse that expression as nested calc/min/max.
+       Between `tablet-wide` and `desktop` the gutter is the container's 40,
+       and the overrun takes half of it so the cards keep off the edge. */
+    @media (min-width: 1024px) {
+        .aff-hero__graphic {
+            margin-right: -20px;
+        }
+    }
+    @media (min-width: 1280px) {
+        .aff-hero__graphic {
+            margin-right: max(-224px, min(-60px, 680px - 50vw));
+        }
+    }
+
+    /* ========================================= Affiliates hero graphic == */
+    /* AffiliateHeroGraphic.vue — "Animated Graphic" (18:6044). The component
+       explains the choreography; this is its paint. Values are the file's:
+       cards #1E2228 at 91% over a #343943 hairline, the core #252930 inside a
+       1.5px #2864FF rule with a 28px blue glow, 10px Poppins labels at 1.5px
+       tracking. Entrance states gate behind `.js` like every other reveal, and
+       resolve on `.is-loaded`. */
+    .aff-graphic {
+        @apply relative w-full;
+    }
+    .aff-graphic__stage {
+        @apply absolute left-0 top-0;
+        transform-origin: 0 0;
+    }
+    .aff-g-grid,
+    .aff-g-lines,
+    .aff-g-comets {
+        @apply pointer-events-none absolute inset-0 h-full w-full;
+        overflow: visible;
+    }
+    /* The tall layout's grid: the exports' 90px pitch in their #12121D ink,
+       faded out towards every edge the way their own gradients fade. */
+    .aff-g-grid--pattern {
+        background-image:
+            linear-gradient(#12121D 1px, transparent 1px),
+            linear-gradient(90deg, #12121D 1px, transparent 1px);
+        background-size: 90px 90px;
+        background-position: calc(var(--core-x) - 45px) calc(var(--core-y) - 45px);
+        mask-image: radial-gradient(closest-side, #000 60%, transparent 100%);
+    }
+    .aff-g-comets {
+        z-index: 1;
+    }
+    .aff-g-grid {
+        transition: opacity 1.2s theme('transitionTimingFunction.smooth');
+    }
+
+    /* Draw-ins. Every drawn stroke carries pathLength="1". */
+    .aff-g-draw {
+        stroke-dasharray: 1;
+        stroke-dashoffset: 0;
+        transition: stroke-dashoffset var(--draw, 1.6s) cubic-bezier(0.65, 0, 0.35, 1) var(--delay, 0ms);
+    }
+    .aff-g-orbit-a { --draw: 1.4s; --delay: 150ms; }
+    .aff-g-orbit-b { --draw: 1.6s; --delay: 300ms; }
+    .aff-g-compared { --draw: 1.8s; --delay: 300ms; }
+    .aff-g-market { --draw: 1.9s; --delay: 450ms; }
+    .js .aff-graphic:not(.is-loaded) .aff-g-draw { stroke-dashoffset: 1; }
+    .js .aff-graphic:not(.is-loaded) .aff-g-grid { opacity: 0; }
+
+    /* A highlight running the market trace, left to right, once every few
+       seconds — the market moving under the network. */
+    .aff-g-glint {
+        stroke-dasharray: 0.07 0.93;
+        stroke-dashoffset: 0.07;
+        opacity: 0;
+    }
+    .aff-graphic.is-loaded .aff-g-glint {
+        animation: aff-glint 6.5s linear 2.4s infinite;
+    }
+    @keyframes aff-glint {
+        0% { stroke-dashoffset: 0.07; opacity: 0; }
+        8% { opacity: 0.55; }
+        55% { stroke-dashoffset: -0.93; opacity: 0.55; }
+        60%, 100% { stroke-dashoffset: -0.93; opacity: 0; }
+    }
+
+    /* The orbit riders: recurring, literally. */
+    .aff-g-rider {
+        transform-box: view-box;
+        transform-origin: var(--core-x) var(--core-y);
+        opacity: 0;
+        transition: opacity 1s theme('transitionTimingFunction.smooth') 1.6s;
+        animation: aff-orbit 30s linear infinite;
+    }
+    .aff-g-rider--b {
+        animation-duration: 52s;
+        animation-direction: reverse;
+    }
+    .aff-graphic.is-loaded .aff-g-rider { opacity: 1; }
+    @keyframes aff-orbit {
+        to { transform: rotate(360deg); }
+    }
+
+    /* Small trades. */
+    .aff-g-trade {
+        @apply absolute flex items-center gap-2 whitespace-nowrap rounded-full p-2;
+        border: 2px solid #191B27;
+        background: rgba(14, 14, 16, 0.85);
+        transition: opacity 0.7s theme('transitionTimingFunction.smooth') var(--d),
+                    transform 0.7s theme('transitionTimingFunction.smooth') var(--d),
+                    border-color 0.4s theme('transitionTimingFunction.smooth');
+    }
+    .js .aff-graphic:not(.is-loaded) .aff-g-trade {
+        opacity: 0;
+        transform: scale(0.85);
+    }
+    .aff-g-trade__bubble {
+        @apply relative size-2 shrink-0 rounded-full;
+        background: radial-gradient(circle at 50% 30%, rgba(120, 124, 154, 0) 0%, rgba(55, 63, 120, 0.2) 55%, rgba(68, 77, 141, 0.8) 90%), #6B6CA9;
+        box-shadow: 0 0 0 4px rgba(98, 103, 143, 0.1);
+    }
+    .aff-g-trade__pair,
+    .aff-g-trade__move {
+        @apply font-franklin text-[10px] font-medium leading-[10px] tracking-[0.5px];
+        transition: color 0.4s theme('transitionTimingFunction.smooth');
+    }
+    .aff-g-trade__pair { color: #7469D7; }
+    .aff-g-trade__move { color: #433E68; }
+    .aff-g-trade__move.is-down { color: #4A3550; }
+    .aff-g-trade.is-firing { border-color: #433E68; }
+    .aff-g-trade.is-firing .aff-g-trade__move { color: #69E6B4; }
+    .aff-g-trade.is-firing .aff-g-trade__move.is-down { color: #F068A0; }
+    /* Closed: the trade folds away once its commission has left, and the pill
+       reopens on a new pair (AffiliateHeroGraphic's `closeAndReopen`). */
+    .aff-g-trade.is-closed {
+        opacity: 0;
+        transform: scale(0.82);
+    }
+    .aff-g-trade.is-firing .aff-g-trade__bubble::after {
+        content: '';
+        @apply absolute inset-0 rounded-full;
+        border: 1.5px solid #8B7EFF;
+        animation: aff-ping 0.9s cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
+    }
+    @keyframes aff-ping {
+        from { transform: scale(1); opacity: 0.9; }
+        to { transform: scale(3.4); opacity: 0; }
+    }
+
+    /* Commissions in flight. */
+    .aff-g-comet,
+    .aff-g-comet__head {
+        opacity: 0;
+    }
+
+    /* Partner nodes. */
+    .aff-g-partner {
+        @apply absolute z-[4] flex w-[222px] flex-col gap-2.5 overflow-hidden rounded-[10px] py-3.5 pl-4 pr-3.5;
+        border: 1px solid #343943;
+        background: rgba(30, 34, 40, 0.91);
+        box-shadow: 0 18px 40px -8px rgba(0, 0, 0, 0.32);
+        transition: opacity 0.9s theme('transitionTimingFunction.smooth') var(--d),
+                    transform 0.9s theme('transitionTimingFunction.smooth') var(--d);
+    }
+    .aff-g-partner--under { @apply z-[2]; }
+    .js .aff-graphic:not(.is-loaded) .aff-g-partner {
+        opacity: 0;
+        transform: translate3d(var(--from-x), var(--from-y), 0);
+    }
+    .aff-g-partner__edge {
+        @apply pointer-events-none absolute -bottom-px -left-px -top-px w-10 rounded-lg;
+        border-left: 4px solid var(--c);
+    }
+    .aff-g-partner__head,
+    .aff-g-partner__row {
+        @apply relative flex w-full items-center justify-between;
+    }
+    .aff-g-partner__id {
+        @apply flex items-center gap-2;
+    }
+    .aff-g-partner__id,
+    .aff-g-partner__cvr {
+        @apply font-poppins text-[10px] font-medium uppercase leading-[1.4] tracking-[1.5px] text-Neutral/300;
+    }
+    .aff-g-partner__cvr { color: var(--c); }
+    .aff-g-partner__dot {
+        @apply size-2 rounded-full;
+        background: var(--c);
+        box-shadow: 0 0 14px rgba(40, 100, 255, 0.32);
+    }
+    .aff-g-partner__value {
+        @apply font-poppins text-[20px] font-semibold tracking-[-0.4px];
+        color: #F7F8FC;
+        line-height: 1.5;
+        transition: color 0.5s theme('transitionTimingFunction.smooth');
+    }
+    .aff-g-spark { overflow: visible; }
+    .aff-g-spark__line {
+        stroke-dasharray: 1;
+        stroke-dashoffset: 0;
+        transition: stroke-dashoffset 1s cubic-bezier(0.65, 0, 0.35, 1) calc(var(--d) + 300ms);
+    }
+    .js .aff-graphic:not(.is-loaded) .aff-g-spark__line { stroke-dashoffset: 1; }
+    .aff-g-spark__tip {
+        transform-box: fill-box;
+        transform-origin: center;
+        opacity: 0;
+    }
+    /* Credited: the card's rule and figure take its colour for a beat and the
+       spark-line's tip flares — the commission has landed. */
+    .aff-g-partner.is-credited {
+        animation: aff-credit 1s theme('transitionTimingFunction.smooth');
+    }
+    .aff-g-partner.is-credited .aff-g-partner__value { color: var(--c); }
+    .aff-g-partner.is-credited .aff-g-spark__tip {
+        animation: aff-tip 1s theme('transitionTimingFunction.smooth');
+    }
+    @keyframes aff-credit {
+        0% { border-color: #343943; }
+        25% { border-color: color-mix(in srgb, var(--c) 55%, #343943); }
+        100% { border-color: #343943; }
+    }
+    @keyframes aff-tip {
+        0% { opacity: 0; transform: scale(0.4); }
+        25% { opacity: 1; transform: scale(1.5); }
+        100% { opacity: 0; transform: scale(1); }
+    }
+
+    /* Revenue core. */
+    .aff-g-core {
+        @apply absolute z-[3] flex w-[280px] flex-col gap-4 overflow-hidden rounded-2xl px-6 pb-4 pt-6;
+        left: var(--core-x);
+        top: var(--core-y);
+        background: #252930;
+        border: 1.5px solid #2864FF;
+        box-shadow: 0 0 28px rgba(40, 100, 255, 0.32), 0 18px 40px -8px rgba(0, 0, 0, 0.32);
+        transform: translate3d(-50%, -50%, 0);
+        transition: opacity 0.9s theme('transitionTimingFunction.smooth') 520ms,
+                    transform 0.9s theme('transitionTimingFunction.smooth') 520ms;
+    }
+    .js .aff-graphic:not(.is-loaded) .aff-g-core {
+        opacity: 0;
+        transform: translate3d(-50%, -50%, 0) scale(0.94);
+    }
+    .aff-g-core.is-credited {
+        animation: aff-core-credit 1.1s theme('transitionTimingFunction.smooth');
+    }
+    @keyframes aff-core-credit {
+        0% { box-shadow: 0 0 28px rgba(40, 100, 255, 0.32), 0 18px 40px -8px rgba(0, 0, 0, 0.32); border-color: #2864FF; }
+        22% { box-shadow: 0 0 52px rgba(40, 100, 255, 0.62), 0 18px 40px -8px rgba(0, 0, 0, 0.32); border-color: #6C93FF; }
+        100% { box-shadow: 0 0 28px rgba(40, 100, 255, 0.32), 0 18px 40px -8px rgba(0, 0, 0, 0.32); border-color: #2864FF; }
+    }
+    .aff-g-core__head,
+    .aff-g-core__foot {
+        @apply flex w-full items-center justify-between;
+    }
+    .aff-g-core__id {
+        @apply flex items-center gap-[9px] font-poppins text-[13px] font-semibold text-white;
+    }
+    /* The EasyAlgos mark on its white tile (18:6048), as exported; the tile's
+       two 4% blue drops are drawn here so the SVG stays filter-free. */
+    .aff-g-core__mark {
+        @apply size-7 shrink-0 rounded-md;
+        box-shadow: 0 16px 16px rgba(84, 107, 197, 0.04), 0 6px 8px rgba(84, 107, 197, 0.04);
+    }
+    .aff-g-core__payout {
+        @apply flex flex-col gap-[3px];
+    }
+    .aff-g-core__label,
+    .aff-g-core__foot {
+        @apply font-poppins text-[10px] font-medium uppercase leading-[1.4] tracking-[1.5px];
+    }
+    .aff-g-core__label { @apply text-Neutral/300; }
+    .aff-g-core__foot { @apply text-Tinted/500; }
+    .aff-g-core__value {
+        @apply font-poppins text-[36px] font-semibold leading-[1.5] tracking-[-1.44px] text-white;
+    }
+    .aff-g-core__up {
+        @apply flex items-center gap-1.5;
+        color: #69E6B4;
+    }
+    /* The live dot: always pinging, quietly. */
+    .aff-g-live {
+        @apply relative size-2 rounded-full;
+        background: #69E6B4;
+    }
+    .aff-g-live::after {
+        content: '';
+        @apply absolute inset-0 rounded-full;
+        background: #69E6B4;
+        animation: aff-live 2.4s cubic-bezier(0, 0, 0.2, 1) infinite;
+    }
+    @keyframes aff-live {
+        0% { transform: scale(1); opacity: 0.6; }
+        70%, 100% { transform: scale(2.6); opacity: 0; }
+    }
+
+    /* Network halo + ambient spectrum. */
+    .aff-g-halo {
+        @apply pointer-events-none absolute z-[5] h-[600px] w-[600px];
+        left: var(--core-x);
+        top: var(--core-y);
+        transform: translate3d(-50%, -50%, 0);
+        transition: opacity 1.4s theme('transitionTimingFunction.smooth') 600ms;
+    }
+    .js .aff-graphic:not(.is-loaded) .aff-g-halo { opacity: 0; }
+    .aff-g-halo.is-credited {
+        animation: aff-halo 1.4s theme('transitionTimingFunction.smooth');
+    }
+    @keyframes aff-halo {
+        0% { transform: translate3d(-50%, -50%, 0) scale(1); }
+        30% { transform: translate3d(-50%, -50%, 0) scale(1.07); }
+        100% { transform: translate3d(-50%, -50%, 0) scale(1); }
+    }
+    .aff-g-ambient {
+        @apply pointer-events-none absolute inset-0 z-[6];
+        /* Drawn 17px right of and 53px above the core's centre. */
+        background: radial-gradient(405px 388px at calc(var(--core-x) + 17px) calc(var(--core-y) - 53px), rgba(40, 100, 255, 0.09) 0%, rgba(157, 92, 255, 0.04) 50%, rgba(21, 22, 24, 0) 100%);
+    }
+
+    /* ============================================ Affiliates sections == */
+    /* Proof metrics' live dot — the hero core's, at the strip's 7px. */
+    .aff-live-dot {
+        @apply relative size-[7px] shrink-0 rounded-full;
+        background: #69E6B4;
+    }
+    .aff-live-dot::after {
+        content: '';
+        @apply absolute inset-0 rounded-full;
+        background: #69E6B4;
+        animation: aff-live 2.4s cubic-bezier(0, 0, 0.2, 1) infinite;
+    }
+
+    /* Step cards (22:1623): the result card (22:1639) is a lavender frame
+       round an inset panel. The icon bubble is ForDevIconBubble. */
+    .aff-step--result {
+        background: linear-gradient(95.7deg, #F6F7FF 0%, #E7E9F9 39.4%, #F2F3FF 100%);
+    }
+    .aff-step__panel {
+        background: linear-gradient(-33.3deg, theme('colors.Tinted/25') 0%, #fff 50%);
+    }
+
+    /* Tier table (26:1682). */
+    .aff-tiers {
+        background: linear-gradient(105.2deg, #F6F7FF 0%, #E7E9F9 39.4%, #F2F3FF 100%);
+    }
+    .aff-tiers__row {
+        background: linear-gradient(-3.4deg, theme('colors.Tinted/25') 0%, #fff 50%);
+    }
+    tr.aff-tiers__row + tr.aff-tiers__row {
+        border-top: 1px solid theme('colors.Tinted/50');
+    }
+    tbody tr.aff-tiers__row:first-child {
+        border-top: 1px solid theme('colors.Tinted/50');
+    }
+    /* Every figure in the table (18 / 140% at -0.5px) and its unit line. */
+    .aff-tiers__figure {
+        @apply font-poppins text-[18px] font-semibold leading-[1.4] tracking-[-0.5px];
+    }
+    .aff-tiers__unit {
+        @apply font-franklin text-[12px] leading-[1.4] text-Tinted/500;
+    }
+    /* The tier tag hugs its name, chevrons after it. */
+    .aff-tier-pill {
+        @apply inline-flex items-center gap-2 whitespace-nowrap rounded-full bg-Tinted/900 px-4 py-1
+               font-poppins text-[18px] font-semibold uppercase leading-[1.4] tracking-[-1px] text-white;
+    }
+    .aff-tier-pill--vip {
+        background: linear-gradient(137.3deg, #205EFB 8.3%, #5959FF 46.7%, #B36DFF 91.7%);
+    }
+
+    /* "7 Reasons" perks (36:2046). */
+    .aff-perk-bubble {
+        border: 4px solid rgb(98 103 143 / 0.1);
+        background: radial-gradient(circle 22.5px at 50% 29.7%, rgb(122 127 163 / 0) 0%, rgb(122 127 163 / 0.2) 55%, rgb(122 127 163 / 0.8) 90%) #fff;
+        background-clip: padding-box;
+    }
+
+    /* Affiliate quotes (48:1571): the review strip's scroller with 600px cards
+       and the drawn 20px gap. */
+    .aff-quotes {
+        --ea-review-w: 86vw;
+        --ea-review-gap: 12px;
+    }
+    @media (min-width: 600px) {
+        .aff-quotes {
+            --ea-review-w: 540px;
+            --ea-review-gap: 20px;
+        }
+    }
+    @media (min-width: 1024px) {
+        .aff-quotes {
+            --ea-review-w: 600px;
+        }
     }
 }
 

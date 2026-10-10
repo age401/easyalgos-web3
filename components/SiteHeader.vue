@@ -34,6 +34,18 @@
 //   <=  840   logo, a solid "Log in" pill and the burger; the menu is a sheet
 // 68 is the bar's drawn height at every breakpoint — 4px of padding around a
 // 42px pill above 840, 20/12 around a 36px one below it.
+//
+// `tone="dark"` is the bar drawn over a dark hero — the "Topbar (Dark)" set in
+// the Affiliates file (Xwelw9D6Cg9wBKI7snTnnb, 71:1288), which is this same bar
+// recoloured: Neutral/900 ground over a Neutral/700 hairline, white links on
+// Neutral/800/700 chips, a Neutral/800 switch with a Tinted/800 current half.
+// The one structural difference is Apply now, which takes the gradient pill the
+// hero's own CTA uses instead of the ink one — ink on Neutral/900 all but
+// disappears. Everything else is colour, so it is one modifier class in main.css
+// rather than a second header.
+const props = withDefaults(defineProps<{ tone?: 'light' | 'dark' }>(), { tone: 'light' })
+const dark = computed(() => props.tone === 'dark')
+
 useDarkBand(68)
 
 const menuOpen = ref(false)
@@ -86,7 +98,10 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-    <header ref="root" class="ea-header relative z-50 w-full border-b border-Tinted/100 bg-white">
+    <header
+        ref="root"
+        :class="['ea-header relative z-50 w-full border-b border-Tinted/100 bg-white', { 'ea-header--dark': dark }]"
+    >
         <div class="ea-header__inner">
             <!-- Wordmark + audience switch -->
             <div class="flex shrink-0 items-center gap-6">
@@ -111,7 +126,7 @@ onBeforeUnmount(() => {
                 <!-- Audience switch. This is the traders site, so Traders is the
                      current segment and Developers is the link away. -->
                 <div class="hidden items-center gap-2 min-[841px]:flex">
-                    <span class="font-franklin text-[12px] leading-4 text-Tinted/400">{{ $t('common.for') }}</span>
+                    <span class="ea-header__for font-franklin text-[12px] leading-4 text-Tinted/400">{{ $t('common.for') }}</span>
                     <div class="ea-header__switch">
                         <span aria-current="page" class="ea-header__switch-item ea-header__switch-item--current">
                             {{ $t('common.traders') }}
@@ -163,9 +178,9 @@ onBeforeUnmount(() => {
                 <AppButton
                     :label="$t('common.applyNow')"
                     :href="APPLY_HREF"
-                    variant="ink"
+                    :variant="dark ? 'primary' : 'ink'"
                     size="sm"
-                    :arrow="false"
+                    :arrow="dark"
                     class="ea-header__bar-only"
                 />
 
@@ -218,7 +233,7 @@ onBeforeUnmount(() => {
 
                 <div>
                     <div class="py-3">
-                        <div class="h-px w-full bg-Tinted/100" />
+                        <div class="ea-header__rule h-px w-full bg-Tinted/100" />
                     </div>
                     <div class="flex flex-col gap-4">
                         <a :href="LOGIN_HREF" class="ea-header__link flex w-full" @click="close">
@@ -227,7 +242,7 @@ onBeforeUnmount(() => {
                         <AppButton
                             :label="$t('common.applyNow')"
                             :href="APPLY_HREF"
-                            variant="ink"
+                            :variant="dark ? 'primary' : 'ink'"
                             size="sm"
                             :arrow="false"
                             class="w-full"

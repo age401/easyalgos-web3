@@ -16,9 +16,23 @@
 // that is the initial state here too.
 //
 // The column is the page container's 1360 (it was 1440 in the first frame).
+//
+// The Affiliates page (65:1555) draws the same module with its own six
+// questions, again with the second one open — so the list, its copy namespace
+// and the initially open row are props, defaulting to /pricing's.
 import { PRICING_FAQ } from '~/data/content'
 
-const openIds = ref(new Set<string>(['changePlan']))
+const props = withDefaults(
+    defineProps<{
+        items?: readonly string[]
+        /** i18n namespace: `<ns>.eyebrow`, `<ns>.title`, `<ns>.items.<id>.{q,a}`. */
+        ns?: string
+        initialOpen?: string
+    }>(),
+    { items: () => PRICING_FAQ, ns: 'pricingPage.faq', initialOpen: 'changePlan' }
+)
+
+const openIds = ref(new Set<string>([props.initialOpen]))
 
 function toggle(id: string) {
     const next = new Set(openIds.value)
@@ -31,13 +45,13 @@ function toggle(id: string) {
 <template>
     <section class="bg-white pb-[72px] pt-[56px] tablet:pb-[96px] tablet:pt-[72px] tablet-wide:pb-[128px] tablet-wide:pt-[96px] desktop:pb-[192px]">
         <div class="ea-container">
-            <p v-reveal class="ea-eyebrow ea-eyebrow--brand">{{ $t('pricingPage.faq.eyebrow') }}</p>
+            <p v-reveal class="ea-eyebrow ea-eyebrow--brand">{{ $t(`${ns}.eyebrow`) }}</p>
 
-            <h2 v-reveal="90" class="ea-module-heading mt-6">{{ $t('pricingPage.faq.title') }}</h2>
+            <h2 v-reveal="90" class="ea-module-heading mt-6">{{ $t(`${ns}.title`) }}</h2>
 
             <div v-reveal="160" class="mt-6">
                 <div
-                    v-for="id in PRICING_FAQ"
+                    v-for="id in items"
                     :key="id"
                     :class="[
                         'transition-[border-color] duration-500',
@@ -54,7 +68,7 @@ function toggle(id: string) {
                             @click="toggle(id)"
                         >
                             <span class="min-w-0 flex-1 font-poppins text-[15px] font-medium leading-[1.4] text-Tinted/950 tablet:text-[16px]">
-                                {{ $t(`pricingPage.faq.items.${id}.q`) }}
+                                {{ $t(`${ns}.items.${id}.q`) }}
                             </span>
                             <span
                                 class="relative grid size-6 shrink-0 place-items-center rounded-full transition-colors group-hover:bg-[rgb(105_115_175/0.1)]"
@@ -78,7 +92,7 @@ function toggle(id: string) {
                     >
                         <div>
                             <p class="max-w-[840px] pb-7 pr-11 font-franklin text-[14px] leading-[1.55] text-Neutral/500">
-                                {{ $t(`pricingPage.faq.items.${id}.a`) }}
+                                {{ $t(`${ns}.items.${id}.a`) }}
                             </p>
                         </div>
                     </div>

@@ -79,6 +79,8 @@ export default <Partial<Config>>{
             'Neutral/600': '#404040',
             'Neutral/700': '#262626',
             'Neutral/800': '#171717',
+            // The Affiliates page's dark hero and its topbar (Figma Neutral/900).
+            'Neutral/900': '#0A0A0A',
             'Tinted/25': '#F7F7FB',
             'Tinted/50': '#F0F1F7',
             'Tinted/100': '#E4E6F0',

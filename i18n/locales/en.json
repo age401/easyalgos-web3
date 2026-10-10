@@ -557,5 +557,149 @@
         "copyright": "Copyright (c) {year}. All rights reserved.",
         "srNav": "Footer navigation",
         "language": "Change language, current language {language}"
+    },
+    "affiliates": {
+        "seoTitle": "Affiliate Program",
+        "hero": {
+            "titleLine1": "Earn passive",
+            "titleLine2": "recurring revenue",
+            "titleLine3": "from every trade",
+            "titleLine4": "placed with our EAs.",
+            "lead": "Promote top-performing, free-to-use Expert Advisors with verified track records and earn up to 50% in lifetime commissions from every single trade placed by your referrals.",
+            "partners": "#1 Algo-trading partner",
+            "graphicLabel": "Illustration: trades placed by your referrals flow into referral links and on into your commission total, which grows with every trade.",
+            "network": "EasyAlgos Network",
+            "commissions": "Revenue-share commissions",
+            "last30": "Last 30 days",
+            "ref": "Ref / {id}",
+            "cvr": "{n}% CVR"
+        },
+        "metrics": {
+            "title": "Network performance",
+            "body": "Verified affiliate activity across the EasyAlgos partner network.",
+            "updated": "Updated 02 Oct 2026 / 06:22 UTC",
+            "items": {
+                "share": {
+                    "value": "50%",
+                    "label": "Commissions",
+                    "caption": "Up to 50% commissions"
+                },
+                "paid": {
+                    "value": "$400k+",
+                    "label": "Verified",
+                    "caption": "Paid out to affiliates"
+                },
+                "active": {
+                    "value": "400+",
+                    "label": "Active",
+                    "caption": "Affiliates"
+                }
+            }
+        },
+        "steps": {
+            "eyebrow": "How it works",
+            "titleBefore": "Getting ",
+            "titleAccent": "passive income",
+            "titleAfter": " for life with our affiliate program is this easy:",
+            "items": {
+                "apply": {
+                    "title": "Apply to become an affiliate",
+                    "body": "Submit your application by filling out a brief form. Our team will evaluate your application and ensure you meet our affiliate criteria."
+                },
+                "share": {
+                    "title": "Share your referral link",
+                    "body": "Access your link through your affiliate portal and pass it on to your network through your website, groups and social channels."
+                },
+                "earn": {
+                    "title": "Earn up to 50% commissions",
+                    "body": "Receive revenue-share commissions of up to 50% for every single trade placed with our Expert Advisors by your referred clients."
+                }
+            }
+        },
+        "tiers": {
+            "titleBefore": "Get up to ",
+            "titleAccent": "50% in recurring commissions",
+            "titleAfter": " - for life",
+            "lead": "One-time sales, lifetime support, constant piracy — and the never-ending pressure to launch the “next” Expert Advisor",
+            "tierColumn": "Tier",
+            "reachColumn": "Reach",
+            "bandUnit": "USD Commissions",
+            "bandCurrency": "USD",
+            "bandUnitShort": "Commissions",
+            "shareUnit": "Profit share",
+            "reach": "website visits / social media followers / trading community members",
+            "names": {
+                "vip": "VIP",
+                "tier2": "Tier 2",
+                "tier1": "Tier 1"
+            }
+        },
+        "reasons": {
+            "titleBefore": "7 Reasons why our affiliate program is ",
+            "titleAccent": "unbeatable",
+            "lead": "See why affiliates are calling this the most profitable program in the Expert Advisors trading Industry:",
+            "items": {
+                "everyTrade": "Earn from every single trade placed with our Expert Advisors",
+                "lifetime": "Lifetime commissions on every referred user",
+                "highest": "Highest commission rates in the industry",
+                "trackRecords": "Top-performing EAs with up to 7 years of live track records",
+                "free": "Completely free-to-use Expert Advisors",
+                "vps": "EasyVPS sponsored by the brokers",
+                "flexible": "Flexible tier system based on your reach and performance"
+            }
+        },
+        "testimonials": {
+            "eyebrow": "Don't just take our word for it",
+            "title": "See why industry leaders trust us.",
+            "website": "Affiliate’s website",
+            "goTo": "Show testimonial {n}",
+            "items": {
+                "sommer": {
+                    "name": "Michael Sommer",
+                    "role": "Best Forex EAs",
+                    "quote": "Partnering with EasyAlgos AI been an outstanding experience. The team's commitment to innovation and transparency truly sets them apart in the industry. I've seen tremendous value in promoting their trading solutions, and my audience has responded very positively. I'm proud to recommend EasyAlgos AI to anyone looking for leading-edge trading technology and a supportive partnership."
+                },
+                "ameed": {
+                    "name": "Hossam Ameed",
+                    "role": "MyFxBots",
+                    "quote": "We've found partnering with them to be a game changer for our affiliate journey. Their Expert Advisors aren't just innovative — they're true reflections of forward-thinking in the trading space. It's thrilling to be part of a venture that not only values transparency and precision but actively drives the future of algorithmic trading."
+                },
+                "petko": {
+                    "name": "Petko Alexandrov",
+                    "role": "EA Trading Academy",
+                    "quote": "As a YouTuber focused on Forex trading, I've tested countless tools and strategies over the years. Working with EasyAlgos AI has truly set a new standard. Their algorithms are not only efficient and reliable but also backed by real data and consistent performance. I confidently recommend them to anyone serious about automating their trading."
+                }
+            }
+        },
+        "faq": {
+            "eyebrow": "Find answers",
+            "title": "Frequently asked questions",
+            "items": {
+                "whoCanJoin": {
+                    "q": "Who can join the EasyAlgos AI Affiliate Program?",
+                    "a": "Anyone with an audience of traders: website owners, content creators, community and group admins, and trading educators. Your tier is set by your reach, from Tier 1 (up to 50K) through VIP (500K and above)."
+                },
+                "howCommissions": {
+                    "q": "How do commissions work?",
+                    "a": "You earn a share of the revenues EasyAlgos AI generates through the broker's Introducing Broker (IB) model, based on the trading volume of your referred clients. As long as they keep trading with our Expert Advisors and under our IB, you keep earning."
+                },
+                "rate": {
+                    "q": "What's the commission rate?",
+                    "a": "Between 10% and 50% profit share, depending on your tier and on the USD commissions your referrals generate. The table above lists every combination."
+                },
+                "payment": {
+                    "q": "How do I get paid?",
+                    "a": "Commissions are tracked in your affiliate portal and paid out to the method you set up there."
+                },
+                "minimum": {
+                    "q": "Is there a minimum payout amount?",
+                    "a": "Your affiliate portal shows the current payout threshold and schedule."
+                },
+                "lifetime": {
+                    "q": "Are commissions lifetime?",
+                    "a": "Yes. You keep earning on every referred user for as long as they keep trading with our Expert Advisors under our IB."
+                }
+            }
+        }
     }
 }

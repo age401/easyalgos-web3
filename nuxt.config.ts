@@ -39,7 +39,7 @@ export default defineNuxtConfig({
     },
 
     nitro: {
-        prerender: { routes: ['/', '/developer', '/for-developers', '/results', '/pricing'], crawlLinks: false },
+        prerender: { routes: ['/', '/developer', '/for-developers', '/results', '/pricing', '/affiliates'], crawlLinks: false },
         compressPublicAssets: { gzip: true, brotli: true }
     },
 
@@ -56,6 +56,9 @@ export default defineNuxtConfig({
         '/results': { prerender: true },
         // The account tiers. Every figure on it is static content.
         '/pricing': { prerender: true },
+        // The affiliate program. Static too: the hero's figures are
+        // illustrative and animate client-side from drawn values.
+        '/affiliates': { prerender: true },
         // Static assets are content-addressed by the optimize script or stable by
         // name; a year of immutable caching is safe and removes revalidation RTTs.
         '/fonts/**': { headers: { 'cache-control': 'public,max-age=31536000,immutable' } },
