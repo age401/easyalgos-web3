@@ -74,6 +74,8 @@
             "seoDescription": "Browse {count} top-performing MetaTrader Expert Advisors, each scored by AlgoScore and backed by a verified live track record. Qualified traders get them for free.",
             "titleLead": "Get access to the market's",
             "titleAccent": "top-performing Expert Advisors",
+            "titleAccentCycle1": "highest-scoring trading robots",
+            "titleAccentCycle2": "longest-running live strategies",
             "titlePunctuation": ",",
             "titleTail": "for free",
             "lead": "Get the world's best Expert Advisors, backed by up to {years}+ years of unmatched live track records — without paying a cent.",

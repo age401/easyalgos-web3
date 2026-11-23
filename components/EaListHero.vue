@@ -24,6 +24,14 @@ onMounted(() => {
     })
 })
 
+// The heading's gradient run, in the order it cycles. The first is the one
+// screen readers and reduced-motion visitors get.
+const accents = computed(() => [
+    t('ea.list.titleAccent'),
+    t('ea.list.titleAccentCycle1'),
+    t('ea.list.titleAccentCycle2')
+])
+
 const top = EXPERT_ADVISORS[0]
 const longest = [...EXPERT_ADVISORS].sort((a, b) => b.monthsTotal - a.monthsTotal)[0]
 const longestYears = Math.floor(longest.monthsTotal / 12)
@@ -54,19 +62,18 @@ const stats = computed(() => [
                    desktop:flex-row desktop:items-end desktop:justify-between desktop:gap-9 desktop:pt-24"
         >
             <div class="flex max-w-[760px] flex-col items-start">
-                <!-- One <h1>, three drawn lines from 600px up. Below that the two
-                     forced breaks go: on a phone the first two lines each wrap
-                     on their own, and forcing a third and fourth break on top
-                     leaves a five-line heading with two one-word lines. Left to
-                     flow it sets in four. `.ea-grad` is `inline` with a cloned
-                     box decoration, so the gradient run wraps mid-phrase. -->
+                <!-- One <h1>: the lead, the gradient run, the tail, each on its
+                     own line(s). The run scrambles out of each phrase and into
+                     the next (`EaScrambleSwap`), which renders the whole
+                     heading so it can reserve the height of its tallest
+                     version: the content under it never moves. -->
                 <h1 class="hero-fade ea-module-heading">
-                    {{ $t('ea.list.titleLead') }}
-                    <br class="max-tablet:hidden" />
-                    <span class="ea-grad">{{ $t('ea.list.titleAccent') }}</span
-                    >{{ $t('ea.list.titlePunctuation') }}
-                    <br class="max-tablet:hidden" />
-                    {{ $t('ea.list.titleTail') }}
+                    <EaScrambleSwap
+                        :lead="$t('ea.list.titleLead')"
+                        :phrases="accents"
+                        :suffix="$t('ea.list.titlePunctuation')"
+                        :tail="$t('ea.list.titleTail')"
+                    />
                 </h1>
 
                 <p
