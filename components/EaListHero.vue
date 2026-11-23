@@ -63,13 +63,13 @@ const stats = computed(() => [
         >
             <div class="flex max-w-[760px] flex-col items-start">
                 <!-- One <h1> in three parts: the lead, the gradient run, the
-                     tail. The run morphs into each of three phrases letter by letter
-                     (`EaLetterMorph`), and is a block sized to the longest of
+                     tail. The run decodes into each of three phrases in turn
+                     (`EaHyperText`), and is a block sized to the longest of
                      them, so it always sits on a line of its own and the
                      heading never reflows as the phrase changes. -->
                 <h1 class="hero-fade ea-module-heading">
                     {{ $t('ea.list.titleLead') }}
-                    <EaLetterMorph :phrases="accents" :suffix="$t('ea.list.titlePunctuation')" />
+                    <EaHyperText :phrases="accents" :suffix="$t('ea.list.titlePunctuation')" />
                     {{ $t('ea.list.titleTail') }}
                 </h1>
 
