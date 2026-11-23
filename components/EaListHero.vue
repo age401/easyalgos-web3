@@ -24,6 +24,14 @@ onMounted(() => {
     })
 })
 
+// The heading's gradient run, in the order it cycles. The first is the one
+// screen readers and reduced-motion visitors get.
+const accents = computed(() => [
+    t('ea.list.titleAccent'),
+    t('ea.list.titleAccentCycle1'),
+    t('ea.list.titleAccentCycle2')
+])
+
 const top = EXPERT_ADVISORS[0]
 const longest = [...EXPERT_ADVISORS].sort((a, b) => b.monthsTotal - a.monthsTotal)[0]
 const longestYears = Math.floor(longest.monthsTotal / 12)
@@ -54,18 +62,14 @@ const stats = computed(() => [
                    desktop:flex-row desktop:items-end desktop:justify-between desktop:gap-9 desktop:pt-24"
         >
             <div class="flex max-w-[760px] flex-col items-start">
-                <!-- One <h1>, three drawn lines from 600px up. Below that the two
-                     forced breaks go: on a phone the first two lines each wrap
-                     on their own, and forcing a third and fourth break on top
-                     leaves a five-line heading with two one-word lines. Left to
-                     flow it sets in four. `.ea-grad` is `inline` with a cloned
-                     box decoration, so the gradient run wraps mid-phrase. -->
+                <!-- One <h1> in three parts: the lead, the gradient run, the
+                     tail. The run cycles through three phrases letter by letter
+                     (`EaLetterCycle`), and is a block sized to the longest of
+                     them, so it always sits on a line of its own and the
+                     heading never reflows as the phrase changes. -->
                 <h1 class="hero-fade ea-module-heading">
                     {{ $t('ea.list.titleLead') }}
-                    <br class="max-tablet:hidden" />
-                    <span class="ea-grad">{{ $t('ea.list.titleAccent') }}</span
-                    >{{ $t('ea.list.titlePunctuation') }}
-                    <br class="max-tablet:hidden" />
+                    <EaLetterCycle :phrases="accents" :suffix="$t('ea.list.titlePunctuation')" />
                     {{ $t('ea.list.titleTail') }}
                 </h1>
 

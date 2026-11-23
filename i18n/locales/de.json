@@ -74,6 +74,8 @@
             "seoDescription": "Entdecke {count} leistungsstarke MetaTrader Expert Advisors, jeder mit AlgoScore bewertet und durch einen verifizierten Live-Track-Record belegt. Qualifizierte Trader erhalten sie kostenlos.",
             "titleLead": "Erhalte Zugang zu den",
             "titleAccent": "leistungsstärksten Expert Advisors",
+            "titleAccentCycle1": "bestbewerteten Handelsalgorithmen",
+            "titleAccentCycle2": "am längsten laufenden Live-Strategien",
             "titlePunctuation": "",
             "titleTail": "des Marktes, kostenlos",
             "lead": "Erhalte die besten Expert Advisors der Welt, belegt durch bis zu {years}+ Jahre unerreichter Live-Track-Records — ohne einen Cent zu zahlen.",
