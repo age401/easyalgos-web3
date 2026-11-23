@@ -45,17 +45,178 @@
         "eaOfTheMonth": "EA of the month",
         "trackRecord": "Track Record"
     },
-    "devHero": {
-        "eyebrow": "Choice Expert Advisor",
-        "title": "Get {name}’s Expert Advisors, Without Paying For Them"
-    },
-    "devCard": {
-        "role": "Developer",
-        "website": "Developer website"
-    },
-    "devBanner": {
-        "title": "Want to trade with {name}’s Expert Advisors at no cost?",
-        "cta": "Join EasyAlgos"
+    "ea": {
+        "by": "by {name}",
+        "allExpertAdvisors": "All Expert Advisors",
+        "band": {
+            "excellent": "Excellent",
+            "good": "Good",
+            "fair": "Fair",
+            "poor": "Poor"
+        },
+        "score": {
+            "label": "AlgoScore {score} out of 100, {band}",
+            "rank": "#{rank} of {total}",
+            "howCalculated": "How is AlgoScore calculated?"
+        },
+        "card": {
+            "allTimeGrowth": "All-time growth",
+            "live": "Live · {period}",
+            "monthly": "Monthly",
+            "maxDd": "Max DD",
+            "maxDdValue": "Max DD {value}",
+            "inProfit": "In profit",
+            "algoscore": "Algoscore",
+            "trackRecord": "Track Record"
+        },
+        "list": {
+            "seoTitle": "Expert Advisors with verified live track records",
+            "seoDescription": "Browse {count} top-performing MetaTrader Expert Advisors, each scored by AlgoScore and backed by a verified live track record. Qualified traders get them for free.",
+            "titleLead": "Get access to the market's",
+            "titleAccent": "top-performing Expert Advisors",
+            "titlePunctuation": ",",
+            "titleTail": "for free",
+            "lead": "Get the world's best Expert Advisors, backed by up to {years}+ years of unmatched live track records — without paying a cent.",
+            "stats": {
+                "available": "EAs available",
+                "availableCaption": "verified track records",
+                "topScore": "Top AlgoScore",
+                "longest": "Longest record",
+                "longestValue": "{years}+ yrs",
+                "longestCaption": "live, since {year}"
+            },
+            "search": {
+                "label": "Search Expert Advisors",
+                "placeholder": "Search",
+                "clear": "Clear search"
+            },
+            "filter": {
+                "label": "Filter by AlgoScore",
+                "all": "All",
+                "help": "What is AlgoScore?"
+            },
+            "view": {
+                "label": "List view",
+                "cards": "Card view",
+                "compact": "Compact view"
+            },
+            "empty": {
+                "title": "No Expert Advisors match",
+                "body": "Nothing fits that search and filter together. Try a different name, developer or currency pair.",
+                "reset": "Clear search and filter"
+            },
+            "loadMore": "Load more ({count} remaining)",
+            "showing": "Showing {count} of {total} Expert Advisors",
+            "showingAll": "Showing all {count} Expert Advisors · sorted by AlgoScore",
+            "showingFiltered": "{count} of {total} Expert Advisors match · sorted by AlgoScore"
+        },
+        "detail": {
+            "breadcrumb": "Breadcrumb",
+            "seoTitle": "{name} by {developer}",
+            "seoDescription": "{name} is an Expert Advisor by {developer} with {growth} all-time growth on a verified live track record and an AlgoScore of {score}. Qualified traders get it for free with EasyAlgos.",
+            "genericDescription": "{name} is a {style} Expert Advisor by {developer}, trading {pairs}. Its live track record has been verified since {date}.",
+            "specs": {
+                "style": "Trading style",
+                "pairs": "Supported pairs",
+                "timeframe": "Timeframe",
+                "trackRecord": "Track record"
+            },
+            "liveSince": "Live since {date}",
+            "cta": "Get this EA for free",
+            "ctaShort": "Get it free",
+            "ctaNote": "Trade with this Expert Advisor for free in a safe environment",
+            "backtesting": "Backtesting data",
+            "stickyCaption": "{growth} all-time · AlgoScore {score}",
+            "kpi": {
+                "since": "since {date}",
+                "compounded": "compounded avg.",
+                "maxDrawdown": "Max drawdown",
+                "peakToValley": "peak to valley",
+                "ofMonths": "{profit} of {total}"
+            },
+            "chart": {
+                "title": "Live track record",
+                "verified": "Verified by Myfxbook & FX Blue",
+                "range": "Time range",
+                "ranges": {
+                    "3m": "3M",
+                    "6m": "6M",
+                    "1y": "1Y",
+                    "all": "All"
+                },
+                "updated": "Live · updated {stamp}",
+                "source": "Gain chart verified by Myfxbook.com",
+                "aria": "{name} equity curve: {growth} from {from} to {to}"
+            },
+            "heatmap": {
+                "title": "Monthly performance",
+                "loss": "Loss",
+                "gain": "Gain",
+                "year": "Year",
+                "best": "Best month",
+                "worst": "Worst month",
+                "winRate": "Win rate",
+                "winRateCaption": "{profit} of {total} months in profit",
+                "monthsLive": "{count} months live",
+                "noTrading": "{month} {year}: no trading",
+                "showEarlier": "Show {count} earlier year | Show {count} earlier years",
+                "showLess": "Show fewer years"
+            },
+            "inside": {
+                "title": "Inside the EA",
+                "open": "Enlarge screenshot {index} of {total} of {name}",
+                "enlarge": "Enlarge",
+                "alt": "{name}, screenshot {index}"
+            }
+        },
+        "dev": {
+            "seoTitle": "{name}, Expert Advisor developer",
+            "eyebrow": "Expert Advisor developer",
+            "website": "Developer website",
+            "viewProfile": "View developer profile",
+            "genericBio": "{name} publishes {count} Expert Advisor on EasyAlgos, with a verified live track record. | {name} publishes {count} Expert Advisors on EasyAlgos, each with a verified live track record.",
+            "cta": "Get {name}'s EAs for free",
+            "ctaShort": "Get them free",
+            "meta": {
+                "since": "Developing EAs since {year}",
+                "count": "{count} EA on EasyAlgos | {count} EAs on EasyAlgos"
+            },
+            "stats": {
+                "count": "EAs on EasyAlgos",
+                "average": "Avg. AlgoScore",
+                "averageCaptionShort": "across scored EAs",
+                "averageCaption": "across {count} scored EA | across {count} scored EAs",
+                "bestGrowth": "Best all-time growth",
+                "bestGrowthCaption": "{name} · since {year}",
+                "longest": "Longest live record",
+                "longestValue": "{years} yrs"
+            },
+            "plot": {
+                "title": "Risk vs. return",
+                "lead": "Each dot is one Expert Advisor. Up and to the left is better.",
+                "leadNumbered": "Each dot is one Expert Advisor, numbered as in the ranking. Up and to the left is better.",
+                "sweetSpot": "Higher return · lower drawdown",
+                "sweetSpotShort": "Sweet spot",
+                "yAxis": "Monthly gain",
+                "xAxis": "Max drawdown",
+                "view": "View Expert Advisor",
+                "point": "{name}: AlgoScore {score}, monthly gain {monthly}, max drawdown {drawdown}"
+            },
+            "ranking": {
+                "title": "AlgoScore ranking",
+                "lead": "Six dimensions of every track record, compressed into one score."
+            },
+            "portfolio": {
+                "title": "Expert Advisors by {name}.",
+                "sorted": "Sorted by AlgoScore"
+            }
+        },
+        "more": {
+            "eyebrow": "Free access",
+            "pitch": "Trade with {name}'s Expert Advisor without paying for it. | Trade with all {count} of {name}'s Expert Advisors without paying for them.",
+            "title": "More from {name}.",
+            "seeAll": "See the Expert Advisor | See all {count} Expert Advisors"
+        }
     },
     "forDevHero": {
         "titleLine1": "Build Expert Advisors once.",

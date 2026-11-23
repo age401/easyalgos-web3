@@ -45,17 +45,178 @@
         "eaOfTheMonth": "EA do mês",
         "trackRecord": "Histórico"
     },
-    "devHero": {
-        "eyebrow": "Expert Advisor em destaque",
-        "title": "Obtenha os Expert Advisors de {name}, sem pagar por eles"
-    },
-    "devCard": {
-        "role": "Desenvolvedor",
-        "website": "Site do desenvolvedor"
-    },
-    "devBanner": {
-        "title": "Quer negociar com os Expert Advisors de {name} sem pagar por eles?",
-        "cta": "Junte-se à EasyAlgos"
+    "ea": {
+        "by": "por {name}",
+        "allExpertAdvisors": "Todos os Expert Advisors",
+        "band": {
+            "excellent": "Excelente",
+            "good": "Bom",
+            "fair": "Razoável",
+            "poor": "Fraco"
+        },
+        "score": {
+            "label": "AlgoScore {score} em 100, {band}",
+            "rank": "N.º {rank} de {total}",
+            "howCalculated": "Como é calculado o AlgoScore?"
+        },
+        "card": {
+            "allTimeGrowth": "Crescimento total",
+            "live": "Em direto · {period}",
+            "monthly": "Mensal",
+            "maxDd": "DD máx.",
+            "maxDdValue": "DD máx. {value}",
+            "inProfit": "Em lucro",
+            "algoscore": "Algoscore",
+            "trackRecord": "Track Record"
+        },
+        "list": {
+            "seoTitle": "Expert Advisors com históricos reais verificados",
+            "seoDescription": "Explore {count} Expert Advisors de MetaTrader de alto desempenho, cada um pontuado pelo AlgoScore e apoiado por um histórico real verificado. Os traders qualificados obtêm-nos gratuitamente.",
+            "titleLead": "Aceda aos",
+            "titleAccent": "Expert Advisors com melhor desempenho",
+            "titlePunctuation": "",
+            "titleTail": "do mercado, gratuitamente",
+            "lead": "Obtenha os melhores Expert Advisors do mundo, apoiados por até {years}+ anos de históricos reais inigualáveis — sem pagar um cêntimo.",
+            "stats": {
+                "available": "EAs disponíveis",
+                "availableCaption": "históricos verificados",
+                "topScore": "Melhor AlgoScore",
+                "longest": "Histórico mais longo",
+                "longestValue": "{years}+ anos",
+                "longestCaption": "em direto, desde {year}"
+            },
+            "search": {
+                "label": "Pesquisar Expert Advisors",
+                "placeholder": "Pesquisar",
+                "clear": "Limpar pesquisa"
+            },
+            "filter": {
+                "label": "Filtrar por AlgoScore",
+                "all": "Todos",
+                "help": "O que é o AlgoScore?"
+            },
+            "view": {
+                "label": "Vista da lista",
+                "cards": "Vista de cartões",
+                "compact": "Vista compacta"
+            },
+            "empty": {
+                "title": "Nenhum Expert Advisor corresponde",
+                "body": "Nada corresponde a essa pesquisa e a esse filtro em conjunto. Experimente outro nome, programador ou par de moedas.",
+                "reset": "Limpar pesquisa e filtro"
+            },
+            "loadMore": "Carregar mais ({count} restantes)",
+            "showing": "A mostrar {count} de {total} Expert Advisors",
+            "showingAll": "A mostrar os {count} Expert Advisors · ordenados por AlgoScore",
+            "showingFiltered": "{count} de {total} Expert Advisors correspondem · ordenados por AlgoScore"
+        },
+        "detail": {
+            "breadcrumb": "Caminho de navegação",
+            "seoTitle": "{name} por {developer}",
+            "seoDescription": "{name} é um Expert Advisor de {developer} com um crescimento total de {growth} num histórico real verificado e um AlgoScore de {score}. Os traders qualificados obtêm-no gratuitamente com a EasyAlgos.",
+            "genericDescription": "{name} é um Expert Advisor de {developer} de estilo {style}, que negoceia {pairs}. O seu histórico real está verificado desde {date}.",
+            "specs": {
+                "style": "Estilo de negociação",
+                "pairs": "Pares suportados",
+                "timeframe": "Intervalo temporal",
+                "trackRecord": "Histórico"
+            },
+            "liveSince": "Em direto desde {date}",
+            "cta": "Obter este EA gratuitamente",
+            "ctaShort": "Obter grátis",
+            "ctaNote": "Negoceie com este Expert Advisor gratuitamente num ambiente seguro",
+            "backtesting": "Dados de backtesting",
+            "stickyCaption": "{growth} total · AlgoScore {score}",
+            "kpi": {
+                "since": "desde {date}",
+                "compounded": "média composta",
+                "maxDrawdown": "Drawdown máx.",
+                "peakToValley": "do pico ao vale",
+                "ofMonths": "{profit} de {total}"
+            },
+            "chart": {
+                "title": "Histórico em direto",
+                "verified": "Verificado por Myfxbook & FX Blue",
+                "range": "Intervalo de tempo",
+                "ranges": {
+                    "3m": "3M",
+                    "6m": "6M",
+                    "1y": "1A",
+                    "all": "Tudo"
+                },
+                "updated": "Em direto · atualizado a {stamp}",
+                "source": "Gráfico de ganhos verificado por Myfxbook.com",
+                "aria": "Curva de capital de {name}: {growth} de {from} a {to}"
+            },
+            "heatmap": {
+                "title": "Desempenho mensal",
+                "loss": "Perda",
+                "gain": "Ganho",
+                "year": "Ano",
+                "best": "Melhor mês",
+                "worst": "Pior mês",
+                "winRate": "Taxa de sucesso",
+                "winRateCaption": "{profit} de {total} meses em lucro",
+                "monthsLive": "{count} meses em direto",
+                "noTrading": "{month} de {year}: sem negociação",
+                "showEarlier": "Mostrar {count} ano anterior | Mostrar {count} anos anteriores",
+                "showLess": "Mostrar menos anos"
+            },
+            "inside": {
+                "title": "O EA por dentro",
+                "open": "Ampliar a captura {index} de {total} de {name}",
+                "enlarge": "Ampliar",
+                "alt": "{name}, captura {index}"
+            }
+        },
+        "dev": {
+            "seoTitle": "{name}, programador de Expert Advisors",
+            "eyebrow": "Programador de Expert Advisors",
+            "website": "Site do programador",
+            "viewProfile": "Ver perfil do programador",
+            "genericBio": "{name} publica {count} Expert Advisor na EasyAlgos, com um histórico real verificado. | {name} publica {count} Expert Advisors na EasyAlgos, cada um com um histórico real verificado.",
+            "cta": "Obter os EAs de {name} gratuitamente",
+            "ctaShort": "Obter grátis",
+            "meta": {
+                "since": "Desenvolve EAs desde {year}",
+                "count": "{count} EA na EasyAlgos | {count} EAs na EasyAlgos"
+            },
+            "stats": {
+                "count": "EAs na EasyAlgos",
+                "average": "AlgoScore médio",
+                "averageCaptionShort": "entre os EAs pontuados",
+                "averageCaption": "em {count} EA pontuado | entre {count} EAs pontuados",
+                "bestGrowth": "Melhor crescimento total",
+                "bestGrowthCaption": "{name} · desde {year}",
+                "longest": "Histórico em direto mais longo",
+                "longestValue": "{years} anos"
+            },
+            "plot": {
+                "title": "Risco vs. retorno",
+                "lead": "Cada ponto é um Expert Advisor. Mais acima e mais à esquerda é melhor.",
+                "leadNumbered": "Cada ponto é um Expert Advisor, numerado como no ranking. Mais acima e mais à esquerda é melhor.",
+                "sweetSpot": "Mais retorno · menos drawdown",
+                "sweetSpotShort": "Zona ideal",
+                "yAxis": "Ganho mensal",
+                "xAxis": "Drawdown máx.",
+                "view": "Ver Expert Advisor",
+                "point": "{name}: AlgoScore {score}, ganho mensal {monthly}, drawdown máximo {drawdown}"
+            },
+            "ranking": {
+                "title": "Ranking de AlgoScore",
+                "lead": "Seis dimensões de cada histórico, condensadas numa única pontuação."
+            },
+            "portfolio": {
+                "title": "Expert Advisors de {name}.",
+                "sorted": "Ordenados por AlgoScore"
+            }
+        },
+        "more": {
+            "eyebrow": "Acesso gratuito",
+            "pitch": "Negoceie com o Expert Advisor de {name} sem pagar por ele. | Negoceie com os {count} Expert Advisors de {name} sem pagar por eles.",
+            "title": "Mais de {name}.",
+            "seeAll": "Ver o Expert Advisor | Ver os {count} Expert Advisors"
+        }
     },
     "forDevHero": {
         "titleLine1": "Crie Expert Advisors uma vez.",
