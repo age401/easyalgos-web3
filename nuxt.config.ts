@@ -8,6 +8,8 @@
 //    one fewer dependency and no runtime transform;
 //  - only the above-the-fold font faces are preloaded;
 //  - long-lived immutable cache headers on every static asset directory.
+import { EA_PRERENDER_ROUTES } from './data/expertAdvisors'
+
 export default defineNuxtConfig({
     compatibilityDate: '2025-06-01',
     devtools: { enabled: false },
@@ -39,16 +41,34 @@ export default defineNuxtConfig({
     },
 
     nitro: {
-        prerender: { routes: ['/', '/developer', '/for-developers', '/results', '/pricing', '/affiliates'], crawlLinks: false },
+        prerender: {
+            routes: [
+                '/',
+                '/for-developers',
+                '/results',
+                '/pricing',
+                '/affiliates',
+                // The Expert Advisors list, one page per EA and one per developer.
+                // Listed from the data module itself, so publishing an EA is one
+                // entry there and its page is built without touching this file.
+                ...EA_PRERENDER_ROUTES
+            ],
+            crawlLinks: false
+        },
         compressPublicAssets: { gzip: true, brotli: true }
     },
 
     routeRules: {
         '/': { prerender: true },
-        // The developer landing page. Same terms as the home page: its figures
-        // and the developer's own profile are baked in at build time, so there
-        // is no server work to do per request.
-        '/developer': { prerender: true },
+        // Expert Advisors: the list, the EA pages and the developer pages. Same
+        // terms as the home page - every figure is baked in at build time from
+        // the daily publish (data/expertAdvisors.ts), so there is no server work
+        // per request. The old single-developer landing page at /developer is
+        // superseded by /expert-advisors/developers/<slug> and redirects to the
+        // list rather than 404, since it has been linked from outside.
+        '/expert-advisors': { prerender: true },
+        '/expert-advisors/**': { prerender: true },
+        '/developer': { redirect: { to: '/expert-advisors', statusCode: 301 } },
         // "EasyAlgos for Developers" — a different page from the above, aimed at
         // EA developers rather than traders (see pages/for-developers.vue). Static
         // for the same reason: nothing on it is per-request.

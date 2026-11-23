@@ -120,6 +120,29 @@ JOBS = [
     # Black-and-white, as drawn — not the colour portrait /developer uses.
     ('testimonial-bogdan-bw.png', 'people/bogdan-ion-puscasu-bw', None, (384, 384)),
     ('testimonial-paveludo.png', 'people/paveludo', None, (384, 384)),
+    # --- /expert-advisors thumbnails (2x of the 128px compact-tile slot) ------
+    # The image fills behind "EA image" on the Expert Advisors redesign page
+    # (Figma 3913:15396). Their own directory rather than img/ea, because that
+    # one holds the home hero's 64px avatars under some of the same names. The
+    # fills come in two native sizes: 320 (encoded at 256, the largest slot at
+    # 2x) and 128, which is left alone - upscaling adds bytes and no detail.
+    ('xa-goldtrade-pro.png', 'expert-advisors/goldtrade-pro', None, (256, 256)),
+    ('xa-the-gold-reaper.png', 'expert-advisors/the-gold-reaper', None, (256, 256)),
+    ('xa-range-breakout-ea.png', 'expert-advisors/range-breakout-ea', None, None),
+    ('xa-byrdi.png', 'expert-advisors/byrdi', None, None),
+    ('xa-daytrade-pro.png', 'expert-advisors/daytrade-pro', None, (256, 256)),
+    ('xa-goldbot-one.png', 'expert-advisors/goldbot-one', None, (256, 256)),
+    ('xa-the-gold-phantom.png', 'expert-advisors/the-gold-phantom', None, (256, 256)),
+    ('xa-the-bitcoin-core.png', 'expert-advisors/the-bitcoin-core', None, None),
+    ('xa-gold-atlas.png', 'expert-advisors/gold-atlas', None, None),
+    ('xa-the-orb-master.png', 'expert-advisors/the-orb-master', None, (256, 256)),
+    # --- Developer portrait (320 fill, shown at 96 at most) -------------------
+    ('xa-dev-wim-schrynemakers.png', 'expert-advisors/developers/wim-schrynemakers', None, (192, 192)),
+    # --- "Inside the EA" screenshots (920x600 fills, shown ~284 wide) ---------
+    # Kept at their native size: the same file is what the lightbox opens.
+    ('xa-inside-1.png', 'expert-advisors/inside/the-gold-reaper-1', None, None),
+    ('xa-inside-2.png', 'expert-advisors/inside/the-gold-reaper-2', None, None),
+    ('xa-inside-3.png', 'expert-advisors/inside/the-gold-reaper-3', None, None),
 ]
 
 # Panels with no usable Figma export yet. Rendered as a flat tinted card so the

@@ -66,3 +66,37 @@ existing brand library (Poppins / Roboto, EasyAlgos tokens).
 | `VoicesSection` | 06 / In their words — two references |
 | `ClosingSection` | Ink panel, single gradient hairline, final CTA |
 | `SiteFooter` | Link columns + prominent risk disclosure |
+
+## Expert Advisors
+
+`/expert-advisors`, `/expert-advisors/<ea>` and `/expert-advisors/developers/<developer>`
+(Figma "EasyAlgos - WEB3", page `3913:15396`, the four "v2" frames). All three
+use `layouts/page.vue` and are prerendered from `data/expertAdvisors.ts`.
+
+| Route | Page | Modules |
+| --- | --- | --- |
+| `/expert-advisors` | `pages/expert-advisors/index.vue` | `EaListHero`, `EaListSection` (toolbar, card and compact views, pager) |
+| `/expert-advisors/<ea>` | `pages/expert-advisors/[slug].vue` | `EaIdentityCard`, `EaKpiStrip`, `EaTrackRecord`, `EaMonthlyHeatmap`, `EaInsideGallery`, `EaDeveloperPanel`, `EaMoreFrom`, `EaStickyCta` |
+| `/expert-advisors/developers/<developer>` | `pages/expert-advisors/developers/[slug].vue` | `EaDeveloperHero`, `EaPortfolio` (`EaRiskReturn`, `EaScoreRanking`, cards) |
+
+Shared pieces: `EaCard`, `EaTile`, `EaScoreRing`, `EaSparkline`, `EaThumb`,
+`EaStatGroup`, `EaCtaTile`, `EaCount`, `EaIcon`; `useEaList` (list state);
+`utils/eaFormat.ts` (figures, axes, paths); `plugins/inview.ts` (`v-inview`).
+Styles are the `xa-` block in `assets/css/main.css`.
+
+- **Data.** `data/expertAdvisors.ts` is the seam for the daily publish. Its header
+  comment lists exactly which figures are drawn in Figma and which are generated
+  sample data; the generator keeps the heatmap, the chart and the card sparkline
+  consistent with the headline figures.
+- **Responsive.** Modules re-lay by the width they are given (container queries),
+  not the viewport, because the same module sits in a 936px column on a wide
+  desktop, a 600px one at 1024 and a 280px one on a phone. Each component's
+  header comment states its forms and the width each one starts at.
+- **Motion.** Entrances hang off `.xa-in`, a class in the server markup, revealed
+  by `v-inview`. Rings sweep, sparklines and the chart wipe in, bars fill, scatter
+  dots pop, all keyed to that one class and all off under
+  `prefers-reduced-motion`.
+- **Assets.** Thumbnails, the developer portrait and the screenshots are encoded
+  by `scripts/optimize-assets.py` into `public/img/expert-advisors/`.
+- The old single-developer page at `/developer` is retired and redirects to the
+  list.

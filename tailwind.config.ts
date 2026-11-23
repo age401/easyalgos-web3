@@ -323,6 +323,15 @@ export default <Partial<Config>>{
                     '0 0 250px 0 rgba(128, 123, 143, 0.12), 0 0 96px 0 rgba(37, 32, 51, 0.04), 0 0 48px 0 rgba(37, 32, 51, 0.02), -6px 0 12px 0 rgba(84, 107, 197, 0.04)',
                 'ea-card-hover':
                     '0 0 250px 0 rgba(128, 123, 143, 0.16), 0 24px 48px -24px rgba(37, 32, 51, 0.18), 0 0 48px 0 rgba(37, 32, 51, 0.03), -6px 0 12px 0 rgba(84, 107, 197, 0.05)',
+                // Expert Advisors pages. `ea-sheet` is the Figma effect style
+                // "shadow Card EA" (also published as Shadows/card-shadow-md):
+                // two soft blue-grey drops, no spread. `-hover` is its lifted
+                // state, which is not drawn - same hue, deeper and tighter under
+                // the card so it reads as raised rather than as a darker card.
+                'ea-sheet': '0 6px 8px 0 rgba(84, 107, 197, 0.04), 0 16px 16px 0 rgba(84, 107, 197, 0.04)',
+                'ea-sheet-hover': '0 10px 14px 0 rgba(84, 107, 197, 0.07), 0 28px 40px -10px rgba(84, 107, 197, 0.16)',
+                // "Shadows/button-shadow-xs": a 1px drop and a 3px inner lip.
+                'ea-key': '0 1px 2px 0 rgba(0, 0, 0, 0.05), inset 0 -3px 0 0 rgba(0, 0, 0, 0.05)',
                 // Halo around a role chip's bubble.
                 'ea-bubble': '0 0 0 4px rgba(98, 103, 143, 0.1)',
                 // The burger's dropdown card, floating clear of the topbar.
