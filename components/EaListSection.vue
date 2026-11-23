@@ -10,10 +10,11 @@
 // needs. The DOM order stays search, filter, switch throughout; only the grid
 // placement changes, so the tab order never does.
 //
-// GRID. Columns follow the width a card needs to stay legible, not the drawn
-// four: 4 from 1400, 3 from 1024, 2 from 600, 1 below. The compact view runs on
-// a wider container (1800 at 1920, as drawn) and auto-fills, landing on the
-// drawn five columns there and stepping down by itself.
+// GRID. Both views run on the wide stage (1800 at 1920, as drawn) rather than
+// the 1360 text column, so the list takes whatever width the screen gives it.
+// Cards hold 2 columns from 600 and 3 from 1024, then auto-fill from 1280 at a
+// 300px floor: 4 from ~1400, the drawn five at 1920, and more on wider screens.
+// Compact auto-fills the same way at its own floor, landing on five at 1920.
 //
 // MOTION. Cards arrive through `v-inview` (fade, rise, then the ring sweeps and
 // the sparkline wipes in), staggered by column. Filtering re-flows the grid
@@ -96,14 +97,14 @@ onBeforeUnmount(() => groupObserver?.disconnect())
 
 // ---- Grid ------------------------------------------------------------------
 const GRID_CLASS: Record<EaListView, string> = {
-    cards: 'grid grid-cols-1 gap-4 tablet:grid-cols-2 tablet:gap-5 tablet-wide:grid-cols-3 desktop:gap-6 min-[1400px]:grid-cols-4',
+    cards: 'grid grid-cols-1 gap-4 tablet:grid-cols-2 tablet:gap-5 tablet-wide:grid-cols-3 desktop:grid-cols-[repeat(auto-fill,minmax(300px,1fr))] desktop:gap-6',
     compact:
         'grid grid-cols-1 gap-2.5 tablet:grid-cols-[repeat(auto-fill,minmax(248px,1fr))] tablet:gap-4 desktop:grid-cols-[repeat(auto-fill,minmax(300px,1fr))]'
 }
 
 /** Stagger by position in the row, so a row arrives as a left-to-right ripple
  *  and a freshly loaded page does not wait behind the twelve before it. */
-const staggerDelay = (index: number) => `${(index % 4) * 70}ms`
+const staggerDelay = (index: number) => `${(index % 5) * 70}ms`
 
 const filtering = computed(() => band.value !== 'all' || query.value.trim() !== '')
 
@@ -120,7 +121,7 @@ const phoneProgress = computed(() => t('ea.list.showing', { count: phoneVisibleC
 
 <template>
     <section id="list" class="bg-Tinted/25 pb-16 pt-6 tablet:pt-8 tablet-wide:pb-24 tablet-wide:pt-10 desktop:pb-32">
-        <div :class="['ea-container xa-list-container', { 'xa-list-container--wide': view === 'compact' }]">
+        <div class="ea-container xa-list-container">
             <!-- Toolbar -->
             <div
                 v-inview

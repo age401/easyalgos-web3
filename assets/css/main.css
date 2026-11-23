@@ -1597,11 +1597,8 @@
     }
 
     /* ---- List ----------------------------------------------------------- */
-    /* The compact view runs on the wide stage: 1800px at 1920, as drawn. */
+    /* Both views run on the wide stage: 1800px at 1920, as drawn. */
     .xa-list-container {
-        transition: max-width 0.6s theme('transitionTimingFunction.smooth');
-    }
-    .xa-list-container--wide {
         max-width: 1920px;
     }
     /* FLIP move when the grid re-flows. `!important` on purpose: the items are
