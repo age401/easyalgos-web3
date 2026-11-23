@@ -62,15 +62,18 @@ const stats = computed(() => [
                    desktop:flex-row desktop:items-end desktop:justify-between desktop:gap-9 desktop:pt-24"
         >
             <div class="flex max-w-[760px] flex-col items-start">
-                <!-- One <h1> in three parts: the lead, the gradient run, the
-                     tail. The run scrambles out of each phrase and into the next
-                     (`EaScrambleSwap`), and is a block sized to the longest of
-                     them, so it always sits on a line of its own and the
-                     heading never reflows as the phrase changes. -->
+                <!-- One <h1>: the lead, the gradient run, the tail, each on its
+                     own line(s). The run scrambles out of each phrase and into
+                     the next (`EaScrambleSwap`), which renders the whole
+                     heading so it can reserve the height of its tallest
+                     version: the content under it never moves. -->
                 <h1 class="hero-fade ea-module-heading">
-                    {{ $t('ea.list.titleLead') }}
-                    <EaScrambleSwap :phrases="accents" :suffix="$t('ea.list.titlePunctuation')" />
-                    {{ $t('ea.list.titleTail') }}
+                    <EaScrambleSwap
+                        :lead="$t('ea.list.titleLead')"
+                        :phrases="accents"
+                        :suffix="$t('ea.list.titlePunctuation')"
+                        :tail="$t('ea.list.titleTail')"
+                    />
                 </h1>
 
                 <p
