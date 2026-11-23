@@ -63,12 +63,12 @@ const stats = computed(() => [
         >
             <div class="flex max-w-[760px] flex-col items-start">
                 <!-- One <h1>: the lead, the gradient run, the tail, each on its
-                     own line(s). The run scrambles out of each phrase and into
-                     the next (`EaScrambleSwap`), which renders the whole
+                     own line(s). The run rolls out of each phrase and into
+                     the next (`EaCascadeText`), which renders the whole
                      heading so it can reserve the height of its tallest
                      version: the content under it never moves. -->
                 <h1 class="hero-fade ea-module-heading">
-                    <EaScrambleSwap
+                    <EaCascadeText
                         :lead="$t('ea.list.titleLead')"
                         :phrases="accents"
                         :suffix="$t('ea.list.titlePunctuation')"
