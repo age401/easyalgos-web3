@@ -1,19 +1,19 @@
 <script setup lang="ts">
 // A gradient phrase that cycles through alternatives by DECODING into each one:
 // the run switches to the next phrase's shape with every letter scrambling
-// through random glyphs, and the real letters lock in from left to right.
+// through random digits, and the real letters lock in from left to right.
 // After the last one lands the phrase holds, then decodes into the next. The
 // first phrase decodes once on load too.
 //
-// Modelled on Magic UI's HyperText. That one sets uppercase monospace, where a
-// random glyph is always the same width as the real one. This heading is
-// mixed-case Poppins, so two things change:
-//   - the random pool follows the real letter's case (upper for upper, lower
-//     for lower), so a word keeps its silhouette while it scrambles; hyphens,
+// Modelled on Magic UI's HyperText, with two changes:
+//   - the scramble is numeric: every letter flickers through random digits
+//     (a nod to the track records the page is about) until it locks; hyphens,
 //     spaces and punctuation never scramble.
-//   - every letter is a cell locked to the width of its REAL glyph, measured
-//     from an invisible copy of the phrase, so a wide random "W" in an "i" cell
-//     overlaps its neighbours for a frame instead of shoving the whole line.
+//   - HyperText sets uppercase monospace, where a random glyph is always as
+//     wide as the real one. This heading is proportional Poppins, so every
+//     letter is a cell locked to the width of its REAL glyph, measured from an
+//     invisible copy of the phrase: a digit in an "i" cell overlaps its
+//     neighbours for a frame instead of shoving the whole line.
 //     The phrase therefore takes its final shape the moment it starts
 //     decoding, and nothing re-flows while it does.
 //
@@ -42,20 +42,17 @@ const props = withDefaults(defineProps<Props>(), { suffix: '', hold: 2600 })
 const DURATION = 900 // ms from the first letter locking to the last
 const FLICKER = 45 // ms between random glyph changes
 
-const UPPER = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-const LOWER = 'abcdefghijklmnopqrstuvwxyz'
+const DIGITS = '0123456789'
 
 /** Which glyphs a character scrambles through, or null if it never does. */
 function poolFor(ch: string): string | null {
-    if (/\p{Lu}/u.test(ch)) return UPPER
-    if (/\p{Ll}/u.test(ch)) return LOWER
-    return null
+    return /\p{L}/u.test(ch) ? DIGITS : null
 }
 const randomFrom = (pool: string) => pool[Math.floor(Math.random() * pool.length)]!
 
 const current = ref(0)
 const chars = computed(() => [...props.phrases[current.value]!])
-/** What each cell shows right now: the real letter, or a random one. */
+/** What each cell shows right now: the real letter, or a random digit. */
 const shown = ref<string[]>([...chars.value])
 
 /** The live run's words, as character indices into the phrase. */
