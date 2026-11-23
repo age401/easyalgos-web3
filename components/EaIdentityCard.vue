@@ -90,7 +90,7 @@ const description = computed(
                 <div
                     v-for="spec in specs"
                     :key="spec.label"
-                    class="flex items-start justify-between gap-4 border-t border-Tinted/50 py-3"
+                    class="flex items-start justify-between gap-4 border-t border-Tinted/50 py-2 tablet:py-3"
                 >
                     <dt class="shrink-0 text-Tinted/500">{{ spec.label }}</dt>
                     <dd class="text-right font-medium text-Tinted/950">{{ spec.value }}</dd>

@@ -69,7 +69,8 @@ const since = computed(() => `${eaMonthName(locale.value, props.ea.startMonth)} 
                 </dd>
             </div>
 
-            <div class="xa-kpi xa-kpi--score">
+            <!-- Hidden on a phone: the identity card above already leads with the ring. -->
+            <div class="xa-kpi xa-kpi--score max-tablet:hidden">
                 <dt class="xa-label">{{ $t('card.algoScore') }}</dt>
                 <dd class="flex items-center gap-2.5">
                     <EaScoreRing :score="ea.score" size="md" />

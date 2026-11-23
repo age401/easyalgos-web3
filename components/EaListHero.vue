@@ -5,7 +5,9 @@
 // right of a 1360px container. That only holds while both fit side by side:
 // the tiles need 564px, and under 1280 that leaves the 48px heading less than
 // 600. So below `desktop` the tiles drop UNDER the copy and stretch to the
-// container, and EaStatGroup takes them from tiles to a ledger on a phone.
+// container. From 1024 down they are hidden altogether (Figma annotation on
+// 3939:19354): the lead paragraph already says how many EAs and how long the
+// records run, and the list itself starts a screen sooner without them.
 //
 // The entrance is the site's first-paint one (`.hero-fade` on `.is-loaded`),
 // not a scroll reveal: this is the top of the page, so it should arrive with
@@ -82,7 +84,7 @@ const stats = computed(() => [
 
             <EaStatGroup
                 :stats="stats"
-                class="hero-fade w-full desktop:w-[564px] desktop:shrink-0"
+                class="hero-fade w-full max-[1024px]:hidden desktop:w-[564px] desktop:shrink-0"
                 :style="{ '--reveal-delay': '250ms' }"
             />
         </div>

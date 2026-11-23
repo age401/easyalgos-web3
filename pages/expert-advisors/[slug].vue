@@ -73,8 +73,17 @@ useSeoMeta({
                         <EaIcon name="chevronLeft" class="size-4" />
                         {{ $t('ea.allExpertAdvisors') }}
                     </NuxtLink>
-                    <a :href="EA_ROUTES.algoscore" class="xa-link text-Blue/600 hover:text-Blue/100">
-                        {{ $t('ea.score.howCalculated') }}
+                    <!-- On a phone the link shortens to the product name and a help
+                         icon (Figma annotation on the 390 frame); the full question
+                         stays the accessible name. -->
+                    <a
+                        :href="EA_ROUTES.algoscore"
+                        class="xa-link text-Blue/600 hover:text-Blue/100"
+                        :aria-label="$t('ea.score.howCalculated')"
+                    >
+                        <span class="max-tablet:hidden">{{ $t('ea.score.howCalculated') }}</span>
+                        <span class="tablet:hidden">{{ $t('card.algoScore') }}</span>
+                        <EaIcon name="help" class="size-4 tablet:hidden" />
                     </a>
                 </nav>
 
@@ -95,7 +104,13 @@ useSeoMeta({
 
                     <div class="flex min-w-0 flex-col gap-4">
                         <EaKpiStrip v-inview :ea="ea" class="xa-in" :style="{ '--reveal-delay': '160ms' }" />
-                        <EaTrackRecord v-inview :ea="ea" class="xa-in" :style="{ '--reveal-delay': '240ms' }" />
+                        <!-- On a phone the chart leads and the KPI tiles follow it. -->
+                        <EaTrackRecord
+                            v-inview
+                            :ea="ea"
+                            class="xa-in max-tablet:-order-1"
+                            :style="{ '--reveal-delay': '240ms' }"
+                        />
                         <EaMonthlyHeatmap v-inview :ea="ea" class="xa-in" />
                         <EaInsideGallery
                             v-if="ea.screenshots?.length"

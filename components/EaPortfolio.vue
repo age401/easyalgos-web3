@@ -33,7 +33,6 @@ const remaining = computed(() => Math.max(0, total.value - INITIAL))
 const hidesFourth = computed(() => !expanded.value && total.value > INITIAL - 1 && visible.value.length === INITIAL)
 const remainingAtThree = computed(() => remaining.value + (hidesFourth.value ? 1 : 0))
 
-const callName = computed(() => props.developer.givenName ?? props.developer.name)
 </script>
 
 <template>
@@ -55,7 +54,7 @@ const callName = computed(() => props.developer.givenName ?? props.developer.nam
                     <h2 class="xa-heading">
                         <i18n-t keypath="ea.dev.portfolio.title" tag="span" scope="global">
                             <template #name>
-                                <span class="ea-grad">{{ callName }}</span>
+                                <span class="ea-grad">{{ developer.name }}</span>
                             </template>
                         </i18n-t>
                     </h2>

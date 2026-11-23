@@ -19,8 +19,8 @@
 //     the separators are drawn by the gap, so a dot can never end up first on
 //     a line.
 //
-// The gradient lands on the family name, as drawn ("Wim Schrynemakers."). A
-// studio or a handle has no family name, and takes the gradient whole.
+// The name is set in one colour (Figma annotation on 3923:16281); the gradient
+// highlight is kept for the portfolio heading further down.
 import type { EaDeveloper } from '~/types/expertAdvisors'
 
 interface Props {
@@ -40,12 +40,6 @@ onMounted(() => {
 const portrait = computed(() =>
     props.developer.avatar ? mediaAsset('expert-advisors/developers', props.developer.avatar, 88, 88) : null
 )
-
-const nameParts = computed(() => {
-    const words = props.developer.name.split(' ')
-    if (!props.developer.givenName || words.length < 2) return { lead: '', accent: props.developer.name }
-    return { lead: `${words[0]} `, accent: words.slice(1).join(' ') }
-})
 
 const callName = computed(() => props.developer.givenName ?? props.developer.name)
 const count = computed(() => props.developer.eas.length)
@@ -134,8 +128,7 @@ const stats = computed(() => {
 
                         <div class="flex min-w-0 flex-col gap-2 tablet:pt-1.5 desktop:pt-0.5">
                             <h1 class="ea-module-heading">
-                                {{ nameParts.lead }}<span class="ea-grad">{{ nameParts.accent }}</span
-                                >.
+                                {{ developer.name }}.
                             </h1>
                             <ul class="xa-meta">
                                 <li v-if="developer.country" class="flex items-center gap-1.5">
