@@ -67,7 +67,8 @@
             "maxDdValue": "Max. DD {value}",
             "inProfit": "Im Gewinn",
             "algoscore": "Algoscore",
-            "trackRecord": "Track Record"
+            "trackRecord": "Track Record",
+            "myfxbook": "{name} auf myfxbook.com (öffnet in einem neuen Tab)"
         },
         "list": {
             "seoTitle": "Expert Advisors mit verifizierten Live-Track-Records",
@@ -138,7 +139,6 @@
             },
             "chart": {
                 "title": "Live-Track-Record",
-                "verified": "Verifiziert von Myfxbook & FX Blue",
                 "range": "Zeitraum",
                 "ranges": {
                     "3m": "3M",
@@ -147,8 +147,11 @@
                     "all": "Alle"
                 },
                 "updated": "Live · aktualisiert {stamp}",
-                "source": "Gewinnkurve verifiziert von Myfxbook.com",
-                "aria": "Kapitalkurve von {name}: {growth} von {from} bis {to}"
+                "growth": "Wachstum",
+                "equity": "Kapital",
+                "verifiedBy": "Live-Track-Record verifiziert von",
+                "myfxbook": "Myfxbook (öffnet in einem neuen Tab)",
+                "aria": "Wachstumskurve von {name} mit Kapitallinie: {growth} von {from} bis {to}"
             },
             "heatmap": {
                 "title": "Monatliche Performance",

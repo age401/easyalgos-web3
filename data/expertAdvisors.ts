@@ -27,9 +27,14 @@ import type {
 //   - `monthly`, `monthsInProfit` and `monthsTotal` on the nine EAs that only
 //     appear in the compact frame (flagged `// sample` below);
 //   - `style`, `pairs` and `timeframe` on every EA but The Gold Reaper;
-//   - every monthly table and equity curve but The Gold Reaper's, which
-//     `buildRecord` generates deterministically from the headline figures so
-//     that the heatmap, the chart and the card sparkline all agree with them.
+//   - every monthly table, growth curve and equity line but The Gold
+//     Reaper's, which `buildRecord` generates deterministically from the
+//     headline figures so that the heatmap, the chart and the card sparkline
+//     all agree with them;
+//   - The Gold Reaper's equity line too: the design itself labels it
+//     "illustrative series".
+//   - `myfxbook`, the EA's own Myfxbook page, is not drawn for any EA, so the
+//     card label and the chart's "verified by" logo fall back to the site.
 // No developer bio, country or start year is invented: where the design draws
 // none, the field is left out and the page says less.
 //
@@ -131,7 +136,7 @@ const EA_SEEDS: EaSeed[] = [
             2025: [6.79, -6.63, 6.35, 19.85, 15.18, 9.85, 1.56, 2.75, 12.61, -4.57, 8.36, 4.33],
             2024: [null, null, null, null, null, null, null, null, null, -0.43, 11.34, 5.0]
         },
-        // The ninety points of the drawn equity curve (3959:4669), read off its
+        // The ninety points of the drawn growth curve (3959:4671), read off its
         // path and rescaled so the last one lands on the published +341.31%.
         series: [
             0, 0.1, 7.5, 0.7, 1.7, 3.7, 11.5, 20.1, 20.9, 22.3, 31.9, 36.9, 28, 35.7, 42.1, 34, 41.2, 41.7, 38.4,
@@ -140,6 +145,17 @@ const EA_SEEDS: EaSeed[] = [
             160.4, 170.7, 161.1, 164.8, 172.9, 177.9, 178, 184.4, 194.5, 197.7, 206.5, 213.2, 217.7, 227.6, 228.9,
             229.3, 237.7, 246.8, 255.8, 248.9, 253.7, 256.8, 264.2, 262.1, 269.4, 277.6, 288.1, 297.6, 308, 312.5,
             316, 326, 336.2, 325.2, 328.5, 330.8, 331.2, 341.31
+        ],
+        // The drawn equity line (4049:30939, "Equity — illustrative series"),
+        // read off its path on the same scale as the growth curve above.
+        equity: [
+            0, 0, 2.84, 0, 0, 0, 1.89, 12.17, 4.6, 0, 7.23, 15.1, 5.79, 10.26, 17.63, 15.57, 24.48, 14.93, 4.37,
+            2.54, 9.63, 13.64, 15.69, 25.56, 21.07, 26.3, 31.75, 32.86, 42.48, 59.19, 71.55, 69.05, 57.22, 56.41,
+            58.03, 62.81, 65.16, 64.64, 64.76, 68.28, 68.82, 60.32, 73.72, 72.28, 71.22, 68.61, 60.02, 56.88, 55.91,
+            67.46, 82.26, 88.51, 98.25, 114.02, 109.05, 109.78, 115.75, 128.48, 124.49, 131.69, 144.75, 149.42,
+            160.62, 157.62, 165.99, 165.91, 160.13, 157.42, 157.12, 163.97, 173.79, 164.71, 176.35, 185.21, 194.21,
+            193.45, 204.4, 217.6, 229.78, 232.75, 233.98, 230.07, 227.58, 233.9, 251.74, 251.93, 263.04, 264.26,
+            262.02, 266.06
         ]
     },
     {
@@ -562,6 +578,28 @@ function buildSeries(seed: EaSeed, flat: number[]): number[] {
     return series
 }
 
+/** The equity line under a growth curve: the same balance less what is open
+ *  at each point, so it runs at or below growth and meets it whenever the
+ *  book is flat. The open share wanders, mean-reverting, up to a little over
+ *  half the record's max drawdown - a cap the drawn line respects too - and,
+ *  like the drawn line, it stays at or above 0% while growth does. */
+function buildEquity(seed: EaSeed, series: number[]): number[] {
+    if (seed.equity && seed.equity.length === series.length) return seed.equity
+    const random = seededRandom(`${seed.slug}:equity`)
+    const cap = (Math.min(seed.maxDrawdown, 30) / 100) * 0.6
+    let open = 0
+    return series.map((growth, index) => {
+        if (index === 0) return 0
+        const target = cap * (0.25 + random() * 0.6)
+        open = Math.min(cap, Math.max(0, open + (target - open) * 0.18 + (random() - 0.5) * cap * 0.22))
+        // Now and then every position is closed and the two lines meet.
+        if (random() < 0.06) open = 0
+        const equity = round2(((1 + growth / 100) * (1 - open) - 1) * 100)
+        // As drawn: while growth is above water, equity does not go under it.
+        return growth >= 0 ? Math.max(0, equity) : equity
+    })
+}
+
 /** Thin a curve to at most `count` points, always keeping both ends. */
 function thin(series: number[], count: number): number[] {
     if (series.length <= count) return series
@@ -605,6 +643,7 @@ function buildRecord(seed: EaSeed, rank: number): ExpertAdvisor {
         worst: extreme(years, (a, b) => a < b),
         winRate: Math.round((seed.monthsInProfit / seed.monthsTotal) * 100),
         series,
+        equity: buildEquity(seed, series),
         spark: thin(series, 36)
     }
 }
@@ -657,7 +696,10 @@ export const EA_ROUTES = {
     // resolve to the 404 page; they are written to its route scheme so they
     // connect the moment the two are merged.
     algoscore: '/algoscore',
-    algoscoreEa: (slug: string) => `/algoscore/ea/${slug}`
+    algoscoreEa: (slug: string) => `/algoscore/ea/${slug}`,
+    // Off-site: the EA's own Myfxbook record, or Myfxbook itself until one is
+    // published for it.
+    myfxbook: (ea: { myfxbook?: string }) => ea.myfxbook ?? 'https://www.myfxbook.com'
 } as const
 
 export const EA_PRERENDER_ROUTES: string[] = [

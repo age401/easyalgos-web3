@@ -1494,8 +1494,7 @@
     .xa-card {
         @apply border border-Tinted/100 bg-white shadow-ea-sheet;
         container-type: inline-size;
-        transition: transform 0.5s theme('transitionTimingFunction.smooth'),
-                    box-shadow 0.5s theme('transitionTimingFunction.smooth'),
+        transition: box-shadow 0.5s theme('transitionTimingFunction.smooth'),
                     border-color 0.5s theme('transitionTimingFunction.smooth');
     }
     /* A module panel on the tinted sections: white, 2px Tinted/100, 24px radius,
@@ -1505,9 +1504,9 @@
                tablet:rounded-3xl tablet:px-8 tablet:py-7;
     }
     @media (hover: hover) {
+        /* No lift: the card answers a hover with its border and shadow only. */
         .xa-card--hover:hover {
             @apply border-Tinted/200 shadow-ea-sheet-hover;
-            transform: translateY(-4px);
         }
     }
     /* The card's one link, stretched over the whole card. Its focus ring is
@@ -1551,8 +1550,8 @@
 
     /* ---- Controls ------------------------------------------------------- */
     /* "Buttons/Button": the 40px keycap - 2px Tinted/100, 12px radius, a 1px
-       drop and a 3px inner lip. It presses like a key: lifts a pixel on hover,
-       sinks and loses its lip when held. */
+       drop and a 3px inner lip. It presses like a key: it sinks and loses its
+       lip when held. Hover only darkens the border - nothing moves. */
     .xa-key {
         @apply relative inline-flex h-10 select-none items-center justify-center gap-1 whitespace-nowrap rounded-xl
                border-2 border-Tinted/100 bg-white px-3 font-franklin text-[14px] font-medium leading-[1.4]
@@ -1564,7 +1563,6 @@
     }
     .xa-key:hover {
         @apply border-Tinted/200;
-        transform: translateY(-1px);
     }
     .xa-key:active {
         @apply shadow-none;
@@ -1854,7 +1852,32 @@
     }
     /* The end marker's halo: the record is live, and this is where it is now. */
     .xa-chart__ping {
-        background: rgba(168, 85, 247, 0.35);
+        background: rgba(255, 21, 25, 0.3);
+    }
+    /* The background grid under both charts (Figma "Grid Pattern"): square
+       cells of 1px Tinted/25 lines that run through each cell's middle, as
+       the drawn tile does. 33px on the card, 57px on the EA page. */
+    .xa-grid {
+        --xa-grid-cell: 33px;
+        --xa-grid-line: theme('colors.Tinted/25');
+        background-image:
+            linear-gradient(to right, transparent calc(var(--xa-grid-cell) / 2 - 0.5px), var(--xa-grid-line) 0,
+                var(--xa-grid-line) calc(var(--xa-grid-cell) / 2 + 0.5px), transparent 0),
+            linear-gradient(to bottom, transparent calc(var(--xa-grid-cell) / 2 - 0.5px), var(--xa-grid-line) 0,
+                var(--xa-grid-line) calc(var(--xa-grid-cell) / 2 + 0.5px), transparent 0);
+        background-size: var(--xa-grid-cell) var(--xa-grid-cell);
+        background-origin: border-box;
+    }
+    /* The date axis thins with the PLOT's width, not the viewport's: nine
+       dates need about 480px, five about 300. */
+    .xa-track {
+        container-type: inline-size;
+    }
+    @container (max-width: 500px) {
+        .xa-track__date--odd { display: none; }
+    }
+    @container (max-width: 300px) {
+        .xa-track__date--half { display: none; }
     }
     @media (prefers-reduced-motion: no-preference) {
         .xa-chart__ping {

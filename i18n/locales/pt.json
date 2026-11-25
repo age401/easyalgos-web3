@@ -67,7 +67,8 @@
             "maxDdValue": "DD máx. {value}",
             "inProfit": "Em lucro",
             "algoscore": "Algoscore",
-            "trackRecord": "Track Record"
+            "trackRecord": "Track Record",
+            "myfxbook": "{name} no myfxbook.com (abre num novo separador)"
         },
         "list": {
             "seoTitle": "Expert Advisors com históricos reais verificados",
@@ -138,7 +139,6 @@
             },
             "chart": {
                 "title": "Histórico em direto",
-                "verified": "Verificado por Myfxbook & FX Blue",
                 "range": "Intervalo de tempo",
                 "ranges": {
                     "3m": "3M",
@@ -147,8 +147,11 @@
                     "all": "Tudo"
                 },
                 "updated": "Em direto · atualizado a {stamp}",
-                "source": "Gráfico de ganhos verificado por Myfxbook.com",
-                "aria": "Curva de capital de {name}: {growth} de {from} a {to}"
+                "growth": "Crescimento",
+                "equity": "Capital",
+                "verifiedBy": "Histórico ao vivo verificado por",
+                "myfxbook": "Myfxbook (abre num novo separador)",
+                "aria": "Curva de crescimento de {name}, com a linha de capital: {growth} de {from} a {to}"
             },
             "heatmap": {
                 "title": "Desempenho mensal",
