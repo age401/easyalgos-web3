@@ -110,6 +110,13 @@ export default <Partial<Config>>{
             'Red/200': '#DC2626',
             'Gray/200': '#787878',
             'Orange/100': '#FB951E',
+            // The Myfxbook-style chart colours: `Indicators/Red Poor 50|100` and
+            // `Indicators/Orange Fair 50` in the WEB3 file, spaces as hyphens.
+            // Red/100 above is the same colour as Red-Poor-100; it keeps its name
+            // where it already means "loss".
+            'Indicators/Red-Poor-50': '#FF4D50',
+            'Indicators/Red-Poor-100': '#FF1519',
+            'Indicators/Orange-Fair-50': '#FFAA40',
             // v2 "Ledger" additions — the institutional ink ramp, anchored to the
             // wordmark ink (#0B1125). Used for dark surfaces instead of pure black.
             'Ink/950': '#0B1125',

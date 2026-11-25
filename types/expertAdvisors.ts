@@ -74,8 +74,12 @@ export interface EaSeed {
     screenshots?: string[]
     /** Drawn monthly returns, newest year first. When absent they are generated. */
     monthlyReturns?: Record<number, (number | null)[]>
-    /** Drawn equity series (growth percent, evenly spaced). Generated when absent. */
+    /** Drawn growth series (percent, evenly spaced). Generated when absent. */
     series?: number[]
+    /** Drawn equity series on the same points and scale. Generated when absent. */
+    equity?: number[]
+    /** The EA's own Myfxbook page. The site's home stands in when absent. */
+    myfxbook?: string
 }
 
 export interface EaYearRow {
@@ -108,6 +112,8 @@ export interface ExpertAdvisor extends EaSeed {
     winRate: number
     /** Growth percent over the whole record, evenly spaced, starting at 0. */
     series: number[]
+    /** Equity percent on the same points: growth less what is open. */
+    equity: number[]
     /** The same curve thinned out for the card sparkline. */
     spark: number[]
 }

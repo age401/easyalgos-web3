@@ -76,7 +76,11 @@ const period = computed(() =>
                 </p>
             </div>
 
-            <EaSparkline :points="ea.spark" />
+            <EaSparkline
+                :points="ea.spark"
+                :href="EA_ROUTES.myfxbook(ea)"
+                :label="$t('ea.card.myfxbook', { name: ea.name })"
+            />
         </div>
 
         <dl class="grid grid-cols-3 gap-3 rounded-xl bg-Tinted/25 px-3.5 py-3">
